@@ -1,0 +1,26 @@
+{
+    "name": "ssh521/laravel-admin-ui",
+    "description": "Reusable Blade and asset package for ssh521 Laravel Admin.",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ssh521\\LaravelAdminUi\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.3",
+        "illuminate/support": "^13.0",
+        "illuminate/view": "^13.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ssh521\\LaravelAdminUi\\LaravelAdminUiServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
