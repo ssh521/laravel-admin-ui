@@ -9,10 +9,23 @@
             "Ssh521\\LaravelAdminUi\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Ssh521\\LaravelAdminUi\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "php": "^8.3",
         "illuminate/support": "^13.0",
         "illuminate/view": "^13.0"
+    },
+    "require-dev": {
+        "laravel/framework": "^13.0",
+        "orchestra/testbench": "^11.0",
+        "phpunit/phpunit": "^12.0"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --configuration phpunit.xml.dist"
     },
     "extra": {
         "laravel": {
