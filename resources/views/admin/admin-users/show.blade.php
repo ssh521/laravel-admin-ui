@@ -12,68 +12,94 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
-    <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900">
-        <div class="min-h-[450px] bg-white px-6 py-8 sm:px-12 lg:px-16 dark:bg-gray-800">
-            <div class="mb-8">
-                <h1 class="text-[22px] font-bold leading-none text-[#222222] dark:text-gray-100">{{ __('Admin User Information') }}</h1>
-            </div>
-
-            <div class="border border-dashed border-[#bdbdbd] bg-[#f7f7f7] px-6 py-8 text-base font-bold text-[#222222] sm:px-12 lg:px-16 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
-                <div class="mx-auto max-w-[800px]">
-                    <div class="space-y-3">
-                        <div class="flex min-h-[24px] flex-col sm:flex-row">
-                            <div class="w-[120px] shrink-0 text-right sm:pr-3">{{ __('이름') }} :</div>
-                            <div>{{ $adminUser->name }}</div>
-                        </div>
-                        <div class="flex min-h-[24px] flex-col sm:flex-row">
-                            <div class="w-[120px] shrink-0 text-right sm:pr-3">{{ __('E-mail') }} :</div>
-                            <div>{{ $adminUser->email }}</div>
-                        </div>
-                        <div class="flex min-h-[24px] flex-col sm:flex-row">
-                            <div class="w-[120px] shrink-0 text-right sm:pr-3">{{ __('인증상태') }} :</div>
-                            <div>
-                                @if ($adminUser->email_verified_at)
-                                    {{ __('Verified') }} : {{ $adminUser->email_verified_at->format('Y-m-d H:i:s') }}
-                                @else
-                                    {{ __('Not Verified') }}
-                                @endif
-                            </div>
-                        </div>
+    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+        <div class="min-h-[450px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+            <div class="mx-auto max-w-4xl">
+                <div class="sm:flex sm:items-start sm:justify-between">
+                    <div class="sm:flex-auto">
+                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Admin User Information') }}</h1>
+                        <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                            {{ __('관리자 계정의 기본 정보, 권한, 상태 정보를 확인합니다.') }}
+                        </p>
                     </div>
-
-                    <div class="my-6 border-t border-[#8d8d8d]"></div>
-
-                    <div class="space-y-3">
-                        <div class="flex min-h-[24px] flex-col sm:flex-row">
-                            <div class="w-[120px] shrink-0 text-right sm:pr-3">{{ __('역할') }} :</div>
-                            <div>
-                                @forelse ($adminUser->getRoleNames() as $role)
-                                    <span>{{ $role }}</span>@if (! $loop->last)<span>, </span>@endif
-                                @empty
-                                    {{ __('No roles assigned') }}
-                                @endforelse
-                            </div>
-                        </div>
-                        <div class="flex min-h-[24px] flex-col sm:flex-row">
-                            <div class="w-[120px] shrink-0 text-right sm:pr-3">{{ __('등록일') }} :</div>
-                            <div>{{ $adminUser->created_at?->format('Y-m-d H:i:s') }}</div>
-                        </div>
-                        <div class="flex min-h-[24px] flex-col sm:flex-row">
-                            <div class="w-[120px] shrink-0 text-right sm:pr-3">{{ __('수정일') }} :</div>
-                            <div>{{ $adminUser->updated_at?->format('Y-m-d H:i:s') }}</div>
-                        </div>
+                    <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-6">
+                        <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('목록보기') }}
+                        </a>
+                        <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                            <i class="fa-regular fa-pen-to-square mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('수정하기') }}
+                        </a>
                     </div>
-
                 </div>
             </div>
 
-            <div class="mt-6 flex flex-wrap justify-center gap-2">
-                <a href="{{ route('admin.admin-users.index') }}" class="inline-flex items-center justify-center min-w-[104px] px-5 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                    {{ __('목록보기') }}
-                </a>
-                <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="inline-flex items-center justify-center min-w-[120px] px-5 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs uppercase tracking-widest !text-white dark:!text-gray-800 hover:bg-gray-700 dark:hover:bg-gray-100 focus:bg-gray-700 dark:focus:bg-gray-100 active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                    {{ __('수정하기') }}
-                </a>
+            <div class="mx-auto mt-8 max-w-4xl overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <div class="border-b border-gray-200 px-4 py-5 sm:px-6 dark:border-gray-700">
+                    <div class="flex items-center gap-4">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-base font-semibold text-indigo-700 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20">
+                            {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($adminUser->name, 0, 1)) }}
+                        </div>
+                        <div class="min-w-0">
+                            <h2 class="truncate text-base font-semibold leading-7 text-gray-900 dark:text-white">{{ $adminUser->name }}</h2>
+                            <p class="truncate text-sm leading-6 text-gray-500 dark:text-gray-400">{{ $adminUser->email }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-4 py-6 sm:px-6">
+                    <dl class="grid grid-cols-1 sm:grid-cols-2">
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('이름') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $adminUser->name }}</dd>
+                        </div>
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('E-mail') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $adminUser->email }}</dd>
+                        </div>
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('인증상태') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 sm:mt-2">
+                                @if ($adminUser->email_verified_at)
+                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20">{{ __('Verified') }}</span>
+                                    <span class="ml-2 text-gray-500 dark:text-gray-400">{{ $adminUser->email_verified_at->format('Y-m-d H:i:s') }}</span>
+                                @else
+                                    <span class="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-amber-600/20 ring-inset dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">{{ __('Not Verified') }}</span>
+                                @endif
+                            </dd>
+                        </div>
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('역할') }}</dt>
+                            <dd class="mt-1 flex flex-wrap gap-1.5 text-sm leading-6 sm:mt-2">
+                                @forelse ($adminUser->getRoleNames() as $role)
+                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">{{ $role }}</span>
+                                @empty
+                                    <span class="text-gray-500 dark:text-gray-400">{{ __('No roles assigned') }}</span>
+                                @endforelse
+                            </dd>
+                        </div>
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('등록일') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $adminUser->created_at?->format('Y-m-d H:i:s') }}</dd>
+                        </div>
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('수정일') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $adminUser->updated_at?->format('Y-m-d H:i:s') }}</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 dark:border-gray-700 dark:bg-gray-800/70">
+                    <div class="flex flex-wrap justify-end gap-2">
+                        <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                            {{ __('목록보기') }}
+                        </a>
+                        <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                            {{ __('수정하기') }}
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

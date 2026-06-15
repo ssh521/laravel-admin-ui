@@ -12,13 +12,16 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
-    <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900 dark:border-gray-700">
-        <div class="min-h-[450px] bg-white px-6 py-8 sm:px-12 lg:px-16 dark:bg-gray-800 dark:border-gray-700">
-            <div class="mb-8">
-                <h1 class="text-[22px] font-bold leading-none text-[#222222] dark:text-gray-100">{{ __('Admin User Information') }}</h1>
+    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+        <div class="min-h-[450px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+            <div class="mx-auto max-w-4xl">
+                <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Admin User Information') }}</h1>
+                <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                    {{ __('새 관리자 계정의 기본 정보, 비밀번호, 권한을 설정합니다.') }}
+                </p>
             </div>
 
-            <form action="{{ route('admin.admin-users.store') }}" method="POST">
+            <form action="{{ route('admin.admin-users.store') }}" method="POST" class="mt-8">
                 @csrf
 
                 @include('laravel-admin::admin.admin-users.partials.form', [
