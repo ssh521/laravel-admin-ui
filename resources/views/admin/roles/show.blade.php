@@ -12,99 +12,111 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
-    <div class="w-full lg:max-w-5xl mx-auto">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl px-5 py-2">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h3 class="text-lg font-medium dark:text-white">
-                        {{ __('Role Information') }}
-                    </h3>
-                    <p class="mt-1 text-sm dark:text-gray-400">
-                        {{ __('역할 상세 정보를 확인합니다.') }}
-                    </p>
-                </div>
-                <div>
-                    <a href="{{ route('admin.roles.index') }}" class="inline-flex items-center justify-center min-w-[104px] px-5 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-500 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                        ← {{ __('Back to Roles') }}
-                    </a>
+    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+            <div class="mx-auto max-w-4xl">
+                <div class="sm:flex sm:items-start sm:justify-between">
+                    <div class="sm:flex-auto">
+                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Role Information') }}</h1>
+                        <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                            {{ __('역할의 기본 정보와 연결된 권한을 확인합니다.') }}
+                        </p>
+                    </div>
+                    <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-6">
+                        <a href="{{ route('admin.roles.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('Back to Roles') }}
+                        </a>
+                        @can('update', $role)
+                            <a href="{{ route('admin.roles.edit', $role) }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                                <i class="fa-regular fa-pen-to-square mr-2 text-xs" aria-hidden="true"></i>
+                                {{ __('Edit Role') }}
+                            </a>
+                        @endcan
+                    </div>
                 </div>
             </div>
 
             <x-laravel-admin::admin.session-messages />
 
-            <div class="space-y-6">
-                <!-- Role Basic Information -->
-                <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-6">
-                            <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">{{ __('Basic Information') }}</h4>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <x-laravel-admin::admin.label for="role_name" :value="__('Role Name')" />
-                                    <p class="mt-1 text-base text-gray-900 dark:text-white font-medium">{{ $role->name }}</p>
-                                </div>
-
-                                @if($role->description)
-                                <div>
-                                    <x-laravel-admin::admin.label for="role_description" :value="__('Description')" />
-                                    <p class="mt-1 text-base text-gray-900 dark:text-white">{{ $role->description }}</p>
-                                </div>
-                                @endif
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                                <div>
-                                    <x-laravel-admin::admin.label for="created_at" :value="__('Created At')" />
-                                    <p class="mt-1 text-base text-gray-900 dark:text-white">{{ $role->created_at->format('Y-m-d H:i:s') }}</p>
-                                </div>
-
-                                <div>
-                                    <x-laravel-admin::admin.label for="updated_at" :value="__('Updated At')" />
-                                    <p class="mt-1 text-base text-gray-900 dark:text-white">{{ $role->updated_at->format('Y-m-d H:i:s') }}</p>
-                                </div>
+            <div class="mx-auto mt-8 max-w-4xl overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                <div class="border-b border-gray-200 px-4 py-5 sm:px-6 dark:border-gray-700">
+                    <div class="min-w-0">
+                        <h2 class="truncate text-base font-semibold leading-7 text-gray-900 dark:text-white">{{ $role->name }}</h2>
+                        <p class="truncate text-sm leading-6 text-gray-500 dark:text-gray-400">
+                            {{ $role->permissions->count() }} {{ __('permissions') }}
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <x-laravel-admin::admin.section-border />
+                <div class="px-4 py-6 sm:px-6">
+                    <dl class="grid grid-cols-1 sm:grid-cols-2">
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Role Name') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->name }}</dd>
+                        </div>
 
-            <!-- Permissions Section -->
-            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-6">
-                            <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">{{ __('Assigned Permissions') }}</h4>
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Description') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->description ?: __('설명이 없습니다.') }}</dd>
+                        </div>
 
-                            @if($role->permissions->count() > 0)
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                    @foreach($role->permissions as $permission)
-                                        <div class="flex items-center">
-                                            <span class="px-3 py-1 text-sm bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Created At') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->created_at->format('Y-m-d H:i:s') }}</dd>
+                        </div>
+
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Updated At') }}</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->updated_at->format('Y-m-d H:i:s') }}</dd>
+                        </div>
+
+                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-2 sm:px-0 dark:border-gray-800">
+                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Assigned Permissions') }}</dt>
+                            <dd class="mt-2">
+                                @if($role->permissions->count() > 0)
+                                    <div class="flex flex-wrap gap-1.5">
+                                        @foreach($role->permissions as $permission)
+                                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">
                                                 {{ $permission->name }}
                                             </span>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('이 역할에 할당된 권한이 없습니다.') }}</p>
-            @endif
-        </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('이 역할에 할당된 권한이 없습니다.') }}</p>
+                                @endif
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
 
-        <!-- Action Buttons -->
-        <div class="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-600">
-                            @can('update', $role)
-                            <a href="{{ route('admin.roles.edit', $role) }}"
-                               class="inline-flex items-center justify-center min-w-[120px] px-5 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs uppercase tracking-widest !text-white dark:!text-gray-800 hover:bg-gray-700 dark:hover:bg-gray-100 focus:bg-gray-700 dark:focus:bg-gray-100 active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 dark:border-gray-700 dark:bg-gray-800/70">
+                    <div class="flex flex-wrap justify-end gap-2">
+                        <a href="{{ route('admin.roles.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                            {{ __('Back to Roles') }}
+                        </a>
+
+                        @can('update', $role)
+                            <a href="{{ route('admin.roles.edit', $role) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
                                 {{ __('Edit Role') }}
                             </a>
-                            @endcan
+                        @endcan
 
-                            @can('delete', $role)
-                            <form action="{{ route('admin.roles.destroy', $role) }}" method="POST" class="inline">
+                        @can('delete', $role)
+                            <form action="{{ route('admin.roles.destroy', $role) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <x-laravel-admin::admin.danger-button type="submit"
-                                        onclick="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">
+                                <button type="submit"
+                                        onclick="return confirm('{{ __('정말 삭제하시겠습니까?') }}')"
+                                        class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
+                                    <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
                                     {{ __('Delete Role') }}
-                                </x-laravel-admin::admin.danger-button>
-    </form>
-    @endcan
-    </div>
+                                </button>
+                            </form>
+                        @endcan
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </x-laravel-admin::admin.layouts.admin>

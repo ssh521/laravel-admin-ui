@@ -1,6 +1,6 @@
 # Admin Design Rules
 
-This document records the UI direction used for the `admin-users` pilot screens.
+This document records the UI direction used for the `admin-users` and `roles` pilot screens.
 Use it as the baseline when modernizing other admin list, form, and detail pages.
 
 ## References
@@ -14,7 +14,7 @@ Use it as the baseline when modernizing other admin list, form, and detail pages
 - Keep admin screens quiet, structured, and task-focused.
 - Prefer Tailwind Plus Application UI patterns over legacy dashed boxes and dense 12px table layouts.
 - Use restrained neutral surfaces with clear borders, subtle shadows, and indigo as the primary action color.
-- Keep layout width consistent across related screens. For resource management pages, use `max-w-4xl` for forms/detail and full-width table layouts for lists.
+- Keep layout width consistent across related screens. For resource management pages, use `max-w-4xl` for forms/detail. Lists may be full-width tables or card grids depending on the data shape.
 - Preserve existing routes, authorization checks, validation, and data behavior when changing presentation.
 
 ## Page Structure
@@ -27,16 +27,25 @@ Use it as the baseline when modernizing other admin list, form, and detail pages
 
 ## Lists
 
-- Base list screens on Tailwind table patterns:
+- Use a table when each row is mostly comparable scalar data, such as users with name, email, status, and row actions.
+- Use a card grid when each item has a variable-length collection, such as roles with many permission badges.
+- Base table screens on Tailwind table patterns:
   - `flow-root` wrapper
   - responsive horizontal overflow
   - `divide-y` table separators
   - compact text with `text-sm`
-- Put the primary identity field first. For users, show name, email, and a small initial avatar.
+- Base card list screens on:
+  - `ul role="list"`
+  - `grid grid-cols-1 gap-4 lg:grid-cols-2`
+  - card items with border, white/dark background, subtle shadow, and hover state
+- Put the primary identity field first.
+- Use avatars only when they add recognition value, such as user records. Do not add decorative avatars to abstract records like roles.
 - Hide secondary columns on small screens and repeat critical secondary info inside the first column when needed.
 - Render statuses and roles as small badges, not plain comma-separated text.
-- Use icon+text action links for row actions such as view and edit.
-- Keep search and filters in a compact bordered filter bar above the table.
+- Use icon+text actions for view and edit.
+- If a name opens a quick modal, keep that behavior on the name and make the explicit `상세보기` action navigate to the show page.
+- Keep search and filters in a compact bordered filter bar above the list.
+- Search controls should be one line on desktop and stack cleanly on small screens, for example `flex flex-col sm:flex-row`.
 
 ## Forms
 
@@ -51,6 +60,10 @@ Use it as the baseline when modernizing other admin list, form, and detail pages
   - white/dark background
   - indigo focus ring
 - Put related checkbox options in bordered selectable rows or grids.
+- Let large checkbox groups use the full form width. Do not keep them inside a narrow right column when labels are long.
+- For permission grids, use responsive columns such as `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`.
+- Long option labels should stay on one line with `truncate`, and the full value should be available through `title`.
+- Use `textarea` for description fields, not single-line inputs.
 - Keep submit/cancel actions right-aligned at the bottom.
 - Preserve locked states with disabled controls plus muted color and helper text.
 
@@ -62,6 +75,15 @@ Use it as the baseline when modernizing other admin list, form, and detail pages
 - Use two columns on wider screens, one column on mobile.
 - Render status values and roles as badges.
 - Put repeated page actions in a footer action area when the detail card is the main focus.
+
+## Modals
+
+- Modal content should follow the same design language as pages: quiet card surfaces, section headers, badges, and consistent action buttons.
+- Preserve all JavaScript and Livewire hooks when restyling modals. Keep existing `id`, `class`, `data-*`, and `wire:*` attributes unless the behavior is intentionally changed.
+- Use modals for quick inspection and short editing flows. Provide a clear route to the full show or edit page when deeper work is available.
+- For draggable modals, choose a width and height that fits the content without forcing cramped grids. Roles and menu category management modals should be wider than legacy 500px layouts when they contain badges or checkbox grids.
+- Keep modal footers right-aligned and visually separated with a top border.
+- Use bordered selectable rows for checkbox lists in modals, matching the page form checkbox style.
 
 ## Buttons And Links
 
