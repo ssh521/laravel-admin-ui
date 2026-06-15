@@ -12,7 +12,7 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
-    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+    <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900">
         <div class="min-h-[450px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="mx-auto max-w-4xl">
                 <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Admin User Information') }}</h1>
@@ -28,7 +28,7 @@
                     : route('admin.admin-users.update', $adminUser->getKey());
             @endphp
 
-            <form action="{{ $formRoute }}" method="POST" class="mt-8">
+            <form id="admin-user-edit-form" action="{{ $formRoute }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -37,22 +37,36 @@
                     'roles' => $roles,
                     'isProfile' => $isProfile,
                     'submitLabel' => __('수정하기'),
+                    'showActions' => $isProfile,
                 ])
             </form>
 
+            @unless ($isProfile)
+                <div class="mx-auto mt-6 flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex justify-start">
+                        <form action="{{ route('admin.admin-users.destroy', $adminUser->getKey()) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete this admin user?') }}');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
+                                <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
+                                {{ __('삭제하기') }}
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="flex flex-wrap justify-end gap-3">
+                        <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                            {{ __('취소') }}
+                        </a>
+                        <button type="submit" form="admin-user-edit-form" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                            {{ __('수정하기') }}
+                        </button>
+                    </div>
+                </div>
+            @endunless
+
         </div>
     </div>
-
-    @unless ($isProfile)
-        <form action="{{ route('admin.admin-users.destroy', $adminUser->getKey()) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete this admin user?') }}');" class="mx-auto mt-3 flex w-full max-w-4xl justify-end px-2">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
-                <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
-                {{ __('삭제하기') }}
-            </button>
-        </form>
-    @endunless
 
     @if ($isProfile && session('success'))
         <script>

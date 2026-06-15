@@ -12,7 +12,7 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
-    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+    <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900">
         <div class="min-h-[450px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="mx-auto max-w-4xl">
                 <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Admin User Information') }}</h1>
@@ -21,7 +21,7 @@
                 </p>
             </div>
 
-            <form action="{{ route('admin.admin-users.store') }}" method="POST" class="mt-8">
+            <form action="{{ route('admin.admin-users.store') }}" method="POST">
                 @csrf
 
                 @include('laravel-admin::admin.admin-users.partials.form', [
