@@ -24,7 +24,8 @@ Packages that adopt this contract should:
 
 Every resource page should use the same structural rhythm:
 
-- Page canvas: `mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900`.
+- Page canvas for forms and details: `mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900`.
+- Page canvas for lists: `w-full bg-white px-2 py-2 dark:bg-gray-900`.
 - Inner page padding: `px-4 py-6 sm:px-6 lg:px-8`.
 - Forms and detail cards should align on `mx-auto max-w-4xl`.
 - Page title should be concise, with one short helper sentence below it.
