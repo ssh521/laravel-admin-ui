@@ -15,173 +15,172 @@
     </x-slot>
 
 
-    <div class="w-full bg-white border border-[#d8d8d0] px-2 py-2 dark:bg-gray-900 dark:border-gray-700">
-        <div class="min-h-[560px] border border-[#d9d9d9] bg-white px-6 py-7 sm:px-10 sm:py-10 dark:bg-gray-800 dark:border-gray-700">
-            <div class="mb-2">
-                <h1 class="text-[26px] font-bold leading-none text-[#222222] dark:text-gray-100">{{ __('Permissions') }}</h1>
+    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+            <div class="sm:flex sm:items-center sm:justify-between">
+                <div class="sm:flex-auto">
+                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Permissions') }}</h1>
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
+                        {{ __('관리자 권한 이름, 설명, 정렬 순서를 관리합니다.') }}
+                    </p>
+                    @if(request('search'))
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">"{{ request('search') }}" 검색 결과</p>
+                    @endif
+                </div>
 
-                <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-base font-semibold">
+                <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
                     @can('viewAny', Ssh521\LaravelAdmin\Models\Menu::class)
-                    <a href="{{ route('admin.permissions.index') }}">{{ __('목록보기') }}</a>
-                    <span class="text-[#222222] dark:text-gray-400">|</span>
+                        <a href="{{ route('admin.permissions.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('목록보기') }}
+                        </a>
                     @endcan
 
                     @can('create', arguments: Ssh521\LaravelAdmin\Models\Menu::class)
-                    <a href="{{ route('admin.permissions.create') }}">{{ __('등록하기') }}</a>
+                        <a href="{{ route('admin.permissions.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                            <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('등록하기') }}
+                        </a>
                     @endcan
                 </div>
-
-                @if(request('search'))
-                    <p class="mt-3 text-[13px] font-semibold text-[#555555] dark:text-gray-400">"{{ request('search') }}" 검색 결과</p>
-                @endif
             </div>
 
             <x-laravel-admin::admin.session-messages />
 
-            <form class="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end" action="{{ route('admin.permissions.index') }}" method="GET">
-                    @if(request('sort'))
-                        <input type="hidden" name="sort" value="{{ request('sort') }}">
+            <form class="mt-6 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center dark:border-gray-700 dark:bg-gray-800/70" action="{{ route('admin.permissions.index') }}" method="GET">
+                @if(request('sort'))
+                    <input type="hidden" name="sort" value="{{ request('sort') }}">
+                @endif
+                @if(request('direction'))
+                    <input type="hidden" name="direction" value="{{ request('direction') }}">
+                @endif
+                <label for="permission-search" class="sr-only">권한 검색</label>
+                <div class="relative min-w-0 flex-1">
+                    <input id="permission-search" type="text" name="search" value="{{ request('search') }}"
+                        class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 pr-9 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                        placeholder="권한 이름 또는 설명 검색">
+                    @if(request('search'))
+                        <a href="{{ route('admin.permissions.index') }}"
+                           class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
+                            <i class="fa-solid fa-xmark text-sm" aria-hidden="true"></i>
+                        </a>
                     @endif
-                    @if(request('direction'))
-                        <input type="hidden" name="direction" value="{{ request('direction') }}">
-                    @endif
-                    <label for="permission-search" class="sr-only">권한 검색</label>
-                    <div class="relative w-full sm:w-[260px]">
-                        <input id="permission-search" type="text" name="search" value="{{ request('search') }}"
-                            class="admin-focus-border h-[28px] w-full rounded-sm border border-[#7d7d7d] bg-white px-2 pr-8 text-base text-[#111111] outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            onfocus="this.style.borderColor='#005fcc'; this.style.boxShadow='0 0 0 1px #005fcc';"
-                            onblur="this.style.borderColor='#7d7d7d'; this.style.boxShadow='none';"
-                            placeholder="권한 이름 또는 설명 검색">
-                        @if(request('search'))
-                            <a href="{{ route('admin.permissions.index') }}"
-                               class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </a>
-                        @endif
+                </div>
+
+                <button type="submit"
+                    class="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 sm:w-auto dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
+                    <i class="fa-solid fa-magnifying-glass mr-2 text-xs" aria-hidden="true"></i>
+                    {{ __('검색') }}
+                </button>
+            </form>
+
+            <div class="mt-6" x-data="permissionSortable()" x-init="initSortable()">
+                <div class="mb-4 flex flex-col gap-3 rounded-lg border border-gray-200 bg-white p-3 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-900">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('정렬 방식') }}</span>
+                        <button type="button" @click="setSortMode('drag')"
+                                :class="sortMode === 'drag' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-600 dark:hover:bg-gray-700'"
+                                class="inline-flex h-8 cursor-pointer items-center rounded-md px-3 text-sm font-semibold shadow-sm">
+                            <i class="fa-solid fa-grip-vertical mr-1.5 text-xs" aria-hidden="true"></i>
+                            {{ __('Drag Sort') }}
+                        </button>
+                        <button type="button" @click="setSortMode('click')"
+                                :class="sortMode === 'click' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-600 dark:hover:bg-gray-700'"
+                                class="inline-flex h-8 cursor-pointer items-center rounded-md px-3 text-sm font-semibold shadow-sm">
+                            <i class="fa-solid fa-arrow-up-wide-short mr-1.5 text-xs" aria-hidden="true"></i>
+                            {{ __('Click Sort') }}
+                        </button>
                     </div>
+                    <div x-show="sortMode === 'drag'" class="text-sm text-gray-500 dark:text-gray-400">
+                        {{ __('Drag rows to reorder') }}
+                    </div>
+                </div>
 
-                    <button type="submit"
-                        class="h-[28px] cursor-pointer rounded-sm border border-[#7d7d7d] bg-[#eeeeee] px-4 text-base font-semibold text-[#222222] hover:bg-[#e3e3e3] dark:bg-gray-700 dark:text-gray-100">
-                        {{ __('검색') }}
-                    </button>
-                </form>
-
-            <div
-                class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800"
-                x-data="permissionSortable()"
-                x-init="initSortable()">
-
-                        <div class="mb-2 flex flex-wrap items-center justify-between gap-2 text-[13px] font-semibold">
-                            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-                                <span class="text-[#555555] dark:text-gray-300">{{ __('정렬 방식') }} :</span>
-                                <button @click="setSortMode('drag')"
-                                        :class="sortMode === 'drag' ? 'underline' : ''"
-                                        class="cursor-pointer font-semibold text-[#003399] hover:underline dark:text-[#e7e7d6]">
-                                    {{ __('Drag Sort') }}
-                                </button>
-                                <span class="text-[#222222] dark:text-gray-400">|</span>
-                                <button @click="setSortMode('click')"
-                                        :class="sortMode === 'click' ? 'underline' : ''"
-                                        class="cursor-pointer font-semibold text-[#003399] hover:underline dark:text-[#e7e7d6]">
-                                    {{ __('Click Sort') }}
-                                </button>
-                            </div>
-                            <div x-show="sortMode === 'drag'" class="text-[12px] text-gray-600 dark:text-gray-400">
-                                {{ __('Drag rows to reorder') }}
-                            </div>
+                <div class="flow-root">
+                    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                            <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="w-10 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
+                                            <span x-show="sortMode === 'drag'" class="text-gray-400">⋮⋮</span>
+                                        </th>
+                                        <th scope="col" class="py-3.5 pr-3 pl-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                                            <button type="button" x-show="sortMode === 'click'"
+                                                    @click="sortBy('name')"
+                                                    class="inline-flex cursor-pointer items-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
+                                                <span>{{ __('Permission Name') }}</span>
+                                                <i x-show="sortField === 'name' && sortDirection === 'asc'" class="fa-solid fa-arrow-up text-xs" aria-hidden="true"></i>
+                                                <i x-show="sortField === 'name' && sortDirection === 'desc'" class="fa-solid fa-arrow-down text-xs" aria-hidden="true"></i>
+                                                <i x-show="sortField !== 'name'" class="fa-solid fa-sort text-xs text-gray-400" aria-hidden="true"></i>
+                                            </button>
+                                            <span x-show="sortMode === 'drag'">{{ __('Permission Name') }}</span>
+                                        </th>
+                                        <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
+                                            <button type="button" x-show="sortMode === 'click'"
+                                                    @click="sortBy('description')"
+                                                    class="inline-flex cursor-pointer items-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
+                                                <span>{{ __('Permission Description') }}</span>
+                                                <i x-show="sortField === 'description' && sortDirection === 'asc'" class="fa-solid fa-arrow-up text-xs" aria-hidden="true"></i>
+                                                <i x-show="sortField === 'description' && sortDirection === 'desc'" class="fa-solid fa-arrow-down text-xs" aria-hidden="true"></i>
+                                                <i x-show="sortField !== 'description'" class="fa-solid fa-sort text-xs text-gray-400" aria-hidden="true"></i>
+                                            </button>
+                                            <span x-show="sortMode === 'drag'">{{ __('Permission Description') }}</span>
+                                        </th>
+                                        <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
+                                            <span class="sr-only">Actions</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sortable-permissions" class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">
+                                    @forelse ($data as $permission)
+                                        <tr data-id="{{ $permission->id }}"
+                                            class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/80"
+                                            :class="sortMode === 'drag' ? 'cursor-move' : 'cursor-default'">
+                                            <td class="py-4 pr-3 pl-4 text-sm sm:pl-0">
+                                                <span x-show="sortMode === 'drag'" class="cursor-move text-gray-400">⋮⋮</span>
+                                            </td>
+                                            <th scope="row" class="py-4 pr-3 pl-3 text-left text-sm">
+                                                <div class="font-medium text-gray-900 dark:text-white">{{ $permission->name }}</div>
+                                                <div class="mt-1 text-xs text-gray-500 md:hidden dark:text-gray-400">{{ $permission->description ?: '설명 없음' }}</div>
+                                            </th>
+                                            <td class="hidden px-3 py-4 text-sm text-gray-500 md:table-cell dark:text-gray-400">
+                                                {{ $permission->description ?: '설명 없음' }}
+                                            </td>
+                                            <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                                                @can('update', $permission)
+                                                    <a class="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10"
+                                                        href="{{ route('admin.permissions.edit', $permission) }}">
+                                                        <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        {{ __('Edit') }}
+                                                    </a>
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="px-3 py-16 text-center text-sm text-gray-500 dark:text-gray-400">
+                                                @if(request('search'))
+                                                    {{ __('No search results found for') }} "{{ request('search') }}".
+                                                @else
+                                                    {{ __('No permissions registered.') }}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-            <table class="min-w-full border-collapse text-base text-[#111111] dark:text-gray-100">
-                <thead
-                    class="border-y border-[#cfcfcf] bg-[#dedede] text-[#555555] dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                    <tr>
-                        <th scope="col" class="h-10 px-2 text-left font-bold w-8 whitespace-nowrap">
-                            <span x-show="sortMode === 'drag'" class="text-gray-400">⋮⋮</span>
-                        </th>
-                        <th scope="col" class="h-10 px-2 text-left font-bold whitespace-nowrap">
-                                        <button x-show="sortMode === 'click'"
-                                                @click="sortBy('name')"
-                                                class="flex items-center space-x-1 text-[#555555] hover:text-[#111111] dark:text-gray-200 dark:hover:text-white">
-                                            <span>{{ __('Permission Name') }}</span>
-                                            <svg x-show="sortField === 'name' && sortDirection === 'asc'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            <svg x-show="sortField === 'name' && sortDirection === 'desc'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            <svg x-show="sortField !== 'name'" class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </button>
-                            <span x-show="sortMode === 'drag'" class="text-gray-700 dark:text-gray-300">{{ __('Permission Name') }}</span>
-                        </th>
-                        <th scope="col" class="h-10 px-2 text-left font-bold whitespace-nowrap">
-                                        <button x-show="sortMode === 'click'"
-                                                @click="sortBy('description')"
-                                                class="flex items-center space-x-1 text-[#555555] hover:text-[#111111] dark:text-gray-200 dark:hover:text-white">
-                                            <span>{{ __('Permission Description') }}</span>
-                                            <svg x-show="sortField === 'description' && sortDirection === 'asc'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            <svg x-show="sortField === 'description' && sortDirection === 'desc'" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            <svg x-show="sortField !== 'description'" class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </button>
-                            <span x-show="sortMode === 'drag'" class="text-gray-700 dark:text-gray-300">{{ __('Permission Description') }}</span>
-                        </th>
-                        <th scope="col" class="h-10 px-2 text-right font-bold whitespace-nowrap">
-                            <span class="sr-only">Edit</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="sortable-permissions">
-                    @forelse ($data as $permission)
-                    <tr data-id="{{ $permission->id }}"
-                        class="border-b border-[#e6e6e6] bg-[#fbfbfb] transition-colors hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 cursor-move"
-                        :class="sortMode === 'drag' ? 'cursor-move' : 'cursor-default'">
-                                    <td class="h-10 px-2 w-8">
-                                        <span x-show="sortMode === 'drag'" class="text-gray-400 cursor-move">⋮⋮</span>
-                                    </td>
-                                    <th scope="row"
-                                        class="h-10 px-4 text-left font-bold whitespace-nowrap">
-                                        {{ $permission->name }}
-                                    </th>
-                                    <td class="h-10 px-4 text-left">
-                                        {{ $permission->description ?: '설명 없음' }}
-                                    </td>
-                                    <td class="h-10 px-4 text-right">
-
-                                        @can('update', $permission)
-                                        <a class="font-semibold text-[#003399] hover:underline dark:text-[#e7e7d6]"
-                                            href="{{ route('admin.permissions.edit', $permission) }}">{{ __('Edit') }}</a>
-                                        @endcan
-                                    </td>
-                                </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="h-10 px-4 text-center text-gray-500 dark:text-gray-400">
-                                @if(request('search'))
-                                    {{ __('No search results found for') }} "{{ request('search') }}".
-                                @else
-                                    {{ __('No permissions registered.') }}
-                                @endif
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+            @if($data->hasPages())
+                <div class="mt-6 text-sm">
+                    {!! $data->withQueryString()->links() !!}
+                </div>
+            @endif
         </div>
-
-        @if($data->hasPages())
-        <div class="mt-6 text-sm">
-            {!! $data->withQueryString()->links() !!}
-        </div>
-        @endif
     </div>
 
     <script>

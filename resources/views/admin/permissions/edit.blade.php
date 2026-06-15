@@ -12,68 +12,86 @@
     </x-slot>
 
     @php
-        $inputClass = 'admin-focus-border rounded-sm border border-transparent border-b-[#777777] bg-[#fafafa] px-2 py-1 text-lg font-bold text-[#111111] outline-none dark:bg-gray-700 dark:text-white dark:border-b-gray-500';
-        $labelClass = 'w-[96px] shrink-0 pr-3 text-right text-base leading-[28px] text-[#111111] dark:text-gray-100';
-        $rowClass = 'flex gap-1 flex-row sm:items-start';
-        $focusIn = "this.style.borderColor='#005fcc'; this.style.boxShadow='0 0 0 1px #005fcc';";
-        $focusOut = "this.style.borderColor='transparent'; this.style.borderBottomColor='#777777'; this.style.boxShadow='none';";
+        $inputClass = 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white';
+        $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
     @endphp
 
-    <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900 dark:border-gray-700">
-        <div class="min-h-[600px] bg-white px-6 py-8 sm:px-12 lg:px-16 dark:bg-gray-800 dark:border-gray-700">
-            <div class="mb-8">
-                <h1 class="text-[22px] font-bold leading-none text-[#222222] dark:text-gray-100">{{ __('Edit Permission Information') }}</h1>
+    <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900">
+        <div class="min-h-[600px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+            <div class="mx-auto max-w-4xl">
+                <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Edit Permission Information') }}</h1>
+                <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                    {{ __('권한의 이름과 설명을 수정합니다.') }}
+                </p>
             </div>
 
-            <form action="{{ route('admin.permissions.update', $permission) }}" method="POST">
+            <form id="permission-edit-form" action="{{ route('admin.permissions.update', $permission) }}" method="POST">
                 @csrf
                 @method('PUT')
 
-                <div class="mx-auto max-w-[860px] text-[#111111] dark:text-gray-100">
-                    <div class="border-t border-dashed pt-6" style="border-top-color: #aaaaaa;">
-                        <div class="space-y-3">
-                            <div class="{{ $rowClass }}">
-                                <label for="name" class="{{ $labelClass }}">{{ __('Permission Name') }} :</label>
-                                <div class="w-full sm:w-[420px]">
-                                    <input id="name" name="name" type="text" value="{{ old('name', $permission->name) }}" autocomplete="name" placeholder="{{ __('Enter permission name') }}" class="{{ $inputClass }} w-full" onfocus="{{ $focusIn }}" onblur="{{ $focusOut }}">
-                                    @if ($errors->has('name'))
-                                        <x-laravel-admin::admin.input-error-message class="mt-2 text-[13px]" :messages="['Please enter a permission name!']" />
-                                    @endif
+                <div class="mx-auto grid max-w-4xl grid-cols-1 gap-x-8 text-gray-900 md:grid-cols-12 dark:text-gray-100">
+                    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+
+                    <div class="md:col-span-4">
+                        <div class="flex flex-col">
+                            <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">{{ __('기본 정보') }}</h2>
+                            <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                                {{ __('역할에 연결할 수 있는 권한 식별자를 관리합니다.') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-8">
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+                            <div class="sm:col-span-4">
+                                <label for="name" class="{{ $labelClass }}">{{ __('Permission Name') }}</label>
+                                <div class="mt-2">
+                                    <input id="name" name="name" type="text" value="{{ old('name', $permission->name) }}" autocomplete="name" placeholder="{{ __('Enter permission name') }}" class="{{ $inputClass }}">
                                 </div>
+                                @if ($errors->has('name'))
+                                    <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="['Please enter a permission name!']" />
+                                @endif
                             </div>
 
-                            <div class="{{ $rowClass }}">
-                                <label for="description" class="{{ $labelClass }}">{{ __('Description') }} :</label>
-                                <div class="w-full sm:w-[420px]">
-                                    <input id="description" name="description" type="text" value="{{ old('description', $permission->description ?? '') }}" placeholder="{{ __('Enter permission description') }}" class="{{ $inputClass }} w-full" onfocus="{{ $focusIn }}" onblur="{{ $focusOut }}">
-                                    <x-laravel-admin::admin.input-error-message class="mt-2 text-[13px]" :messages="$errors->get('description')" />
+                            <div class="sm:col-span-5">
+                                <label for="description" class="{{ $labelClass }}">{{ __('Description') }}</label>
+                                <div class="mt-2">
+                                    <textarea id="description" name="description" rows="4" placeholder="{{ __('Enter permission description') }}" class="{{ $inputClass }}">{{ old('description', $permission->description ?? '') }}</textarea>
                                 </div>
+                                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('description')" />
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-6 border-t border-dashed pt-8" style="border-top-color: #aaaaaa;">
-                        <div class="flex justify-center gap-2">
-                            <a href="{{ route('admin.permissions.index') }}" class="inline-flex h-[30px] min-w-[104px] items-center justify-center border border-[#777777] bg-[#eeeeee] px-5 text-base font-bold text-[#111111] hover:bg-[#e3e3e3] dark:bg-gray-700 dark:text-gray-100">
-                                {{ __('목록보기') }}
-                            </a>
-                            <x-laravel-admin::admin.primary-button class="min-w-[120px] justify-center px-5">
-                                {{ __('수정하기') }}
-                            </x-laravel-admin::admin.primary-button>
-                        </div>
-                    </div>
+                    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
                 </div>
             </form>
 
-            @can('delete', $permission)
-            <form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST" class="mx-auto mt-3 flex w-full max-w-[860px] justify-start">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                    class="cursor-pointer text-[13px] font-semibold text-[#003399] hover:underline dark:text-[#e7e7d6]"
-                    onclick="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">{{ __('Delete') }}</button>
-            </form>
-            @endcan
+            <div class="mx-auto mt-6 flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex justify-start">
+                    @can('delete', $permission)
+                        <form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10"
+                                onclick="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">
+                                <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
+                                {{ __('Delete') }}
+                            </button>
+                        </form>
+                    @endcan
+                </div>
+
+                <div class="flex flex-wrap justify-end gap-3">
+                    <a href="{{ route('admin.permissions.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                        {{ __('목록보기') }}
+                    </a>
+                    <button type="submit" form="permission-edit-form" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                        {{ __('수정하기') }}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </x-laravel-admin::admin.layouts.admin>

@@ -22,6 +22,8 @@ Use it as the baseline when modernizing other admin list, form, and detail pages
 - Use a concise page title with a short helper description below it.
 - Put primary actions in the top-right on desktop and below the title on mobile.
 - Use `bg-white dark:bg-gray-900` for the main page surface.
+- Use `mx-auto w-full max-w-5xl` for resource create, edit, and show page canvases.
+- Keep the inner form/detail content aligned on `mx-auto max-w-4xl`.
 - Avoid nested decorative cards. Use cards only when they frame a concrete data object or form group.
 - Keep spacing generous but operational: `px-4 py-6 sm:px-6 lg:px-8` is the default page padding.
 
@@ -50,21 +52,25 @@ Use it as the baseline when modernizing other admin list, form, and detail pages
 ## Forms
 
 - Base forms on sectioned Tailwind form layouts.
+- Use a 12-column form canvas for admin resource forms: `mx-auto grid max-w-4xl grid-cols-1 gap-x-8 md:grid-cols-12`.
+- Separate form sections with a full-width border divider: `my-10 border-b ... md:col-span-12`.
 - Split large forms into meaningful sections with:
   - section title
   - short description
   - form controls in the right column on desktop
+- On desktop, place section copy in `md:col-span-4` and controls in `md:col-span-8`.
 - Use consistent inputs:
   - rounded `md`
   - gray border
   - white/dark background
   - indigo focus ring
 - Put related checkbox options in bordered selectable rows or grids.
-- Let large checkbox groups use the full form width. Do not keep them inside a narrow right column when labels are long.
+- Let large checkbox groups expand within the controls column and increase columns responsively. If labels are long or the group is the main task, prefer a wider controls grid over a cramped nested card.
 - For permission grids, use responsive columns such as `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`.
 - Long option labels should stay on one line with `truncate`, and the full value should be available through `title`.
 - Use `textarea` for description fields, not single-line inputs.
-- Keep submit/cancel actions right-aligned at the bottom.
+- Keep form footer actions on one shared horizontal row on desktop.
+- Put destructive actions on the left side of the shared footer row and submit/cancel actions on the right.
 - Preserve locked states with disabled controls plus muted color and helper text.
 
 ## Detail Views
@@ -75,6 +81,7 @@ Use it as the baseline when modernizing other admin list, form, and detail pages
 - Use two columns on wider screens, one column on mobile.
 - Render status values and roles as badges.
 - Put repeated page actions in a footer action area when the detail card is the main focus.
+- In detail footers, place destructive actions on the left and navigation/edit actions on the right.
 
 ## Modals
 
@@ -90,6 +97,7 @@ Use it as the baseline when modernizing other admin list, form, and detail pages
 - Primary action: indigo filled button.
 - Secondary action: white/dark bordered button.
 - Destructive action: red bordered button with a clear icon.
+- Destructive actions should be spatially separated from primary actions, but remain in the same footer row on desktop. Prefer left alignment for delete buttons and right alignment for navigation/edit/save buttons.
 - Use Font Awesome icons already available in this package for common actions.
 - Override global admin link colors with Tailwind important text classes, for example `!text-white` or `!text-gray-700`, when a link is styled as a button.
 
