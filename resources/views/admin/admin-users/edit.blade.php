@@ -12,10 +12,13 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
-    <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900 dark:border-gray-700">
-        <div class="min-h-[450px] bg-white px-6 py-8 sm:px-12 lg:px-16 dark:bg-gray-800 dark:border-gray-700">
-            <div class="mb-8">
-                <h1 class="text-[22px] font-bold leading-none text-[#222222] dark:text-gray-100">{{ __('Admin User Information') }}</h1>
+    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+        <div class="min-h-[450px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+            <div class="mx-auto max-w-4xl">
+                <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Admin User Information') }}</h1>
+                <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                    {{ __('관리자 계정의 기본 정보, 비밀번호, 권한을 수정합니다.') }}
+                </p>
             </div>
 
             @php
@@ -25,7 +28,7 @@
                     : route('admin.admin-users.update', $adminUser->getKey());
             @endphp
 
-            <form action="{{ $formRoute }}" method="POST">
+            <form action="{{ $formRoute }}" method="POST" class="mt-8">
                 @csrf
                 @method('PUT')
 
@@ -41,10 +44,11 @@
     </div>
 
     @unless ($isProfile)
-        <form action="{{ route('admin.admin-users.destroy', $adminUser->getKey()) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete this admin user?') }}');" class="mx-auto mt-3 flex w-full max-w-5xl justify-start px-2">
+        <form action="{{ route('admin.admin-users.destroy', $adminUser->getKey()) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete this admin user?') }}');" class="mx-auto mt-3 flex w-full max-w-4xl justify-end px-2">
             @csrf
             @method('DELETE')
-            <button type="submit" class="cursor-pointer text-[13px] font-semibold text-[#003399] hover:underline dark:text-[#e7e7d6]">
+            <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
+                <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
                 {{ __('삭제하기') }}
             </button>
         </form>

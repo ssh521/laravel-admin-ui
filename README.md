@@ -33,3 +33,7 @@ Host apps should keep these Vite inputs:
 ## Scope
 
 This package intentionally does not own the Livewire component classes yet. For the first extraction phase, those classes stay in `ssh521/laravel-admin` while their views live here.
+
+## Design Rules
+
+Admin UI modernization rules are documented in [docs/admin-design-rules.md](docs/admin-design-rules.md).
