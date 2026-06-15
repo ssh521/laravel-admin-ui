@@ -24,6 +24,7 @@ For rules that other packages can adopt as a cross-package contract, see [admin-
 - Put primary actions in the top-right on desktop and below the title on mobile.
 - Use `bg-white dark:bg-gray-900` for the main page surface.
 - Use `mx-auto w-full max-w-5xl` for resource create, edit, and show page canvases.
+- Use `w-full` without a max-width cap for resource list pages that contain tables or wide filter bars.
 - Keep the inner form/detail content aligned on `mx-auto max-w-4xl`.
 - Avoid nested decorative cards. Use cards only when they frame a concrete data object or form group.
 - Keep spacing generous but operational: `px-4 py-6 sm:px-6 lg:px-8` is the default page padding.
