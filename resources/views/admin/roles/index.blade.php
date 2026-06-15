@@ -14,205 +14,196 @@
 
     </x-slot>
 
-    <div class="w-full bg-white border border-[#d8d8d0] px-2 py-2 dark:bg-gray-900 dark:border-gray-700">
-        <div class="min-h-[560px] border border-[#d9d9d9] bg-white px-6 py-7 sm:px-10 sm:py-10 dark:bg-gray-800 dark:border-gray-700">
-            <div class="mb-2">
-                <h1 class="text-[26px] font-bold leading-none text-[#222222] dark:text-gray-100">{{ __('Roles') }}</h1>
-
-                <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-base font-semibold">
+    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+            <div class="sm:flex sm:items-center sm:justify-between">
+                <div class="sm:flex-auto">
+                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Roles') }}</h1>
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
+                        {{ __('역할과 연결된 권한, 메뉴 카테고리 접근 범위를 관리합니다.') }}
+                    </p>
+                    @if(request('search'))
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">"{{ request('search') }}" 검색 결과</p>
+                    @endif
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
                     @can('viewAny', \Spatie\Permission\Models\Role::class)
-                    <a href="{{ route('admin.roles.index') }}">{{ __('목록보기') }}</a>
-                    <span class="text-[#222222] dark:text-gray-400">|</span>
+                        <a href="{{ route('admin.roles.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('목록보기') }}
+                        </a>
                     @endcan
 
                     @can('create', \Spatie\Permission\Models\Role::class)
-                    <a href="{{ route('admin.roles.create') }}">{{ __('등록하기') }}</a>
-                    <span class="text-[#222222] dark:text-gray-400">|</span>
+                        <a href="{{ route('admin.roles.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                            <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('등록하기') }}
+                        </a>
                     @endcan
 
                     <button type="button"
                             id="open-menu-category-selector"
-                            class="cursor-pointer font-semibold text-[#003399] hover:underline dark:text-[#e7e7d6]">
+                            class="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
+                        <i class="fa-regular fa-folder-open mr-2 text-xs" aria-hidden="true"></i>
                         {{ __('메뉴 카테고리 관리') }}
                     </button>
                 </div>
-
-                @if(request('search'))
-                    <p class="mt-3 text-[13px] font-semibold text-[#555555] dark:text-gray-400">"{{ request('search') }}" 검색 결과</p>
-                @endif
             </div>
 
             <x-laravel-admin::admin.session-messages />
 
-            <form class="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end" action="{{ route('admin.roles.index') }}" method="GET">
-                    <label for="role-search" class="sr-only">역할 검색</label>
-                    <div class="relative w-full sm:w-[260px]">
-                        <input id="role-search" type="text" name="search" value="{{ request('search') }}"
-                            class="admin-focus-border h-[28px] w-full rounded-sm border border-[#7d7d7d] bg-white px-2 pr-8 text-base text-[#111111] outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            onfocus="this.style.borderColor='#005fcc'; this.style.boxShadow='0 0 0 1px #005fcc';"
-                            onblur="this.style.borderColor='#7d7d7d'; this.style.boxShadow='none';"
-                            placeholder="역할 이름 검색">
+            <form class="mt-6 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center dark:border-gray-700 dark:bg-gray-800/70" action="{{ route('admin.roles.index') }}" method="GET">
+                <label for="role-search" class="sr-only">역할 검색</label>
+                <div class="relative min-w-0 flex-1">
+                    <input id="role-search" type="text" name="search" value="{{ request('search') }}"
+                        class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 pr-9 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                        placeholder="역할 이름 검색">
+                    @if(request('search'))
+                        <a href="{{ route('admin.roles.index') }}"
+                           class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
+                            <i class="fa-solid fa-xmark text-sm" aria-hidden="true"></i>
+                        </a>
+                    @endif
+                </div>
+
+                <button type="submit"
+                    class="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 sm:w-auto dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
+                    <i class="fa-solid fa-magnifying-glass mr-2 text-xs" aria-hidden="true"></i>
+                    {{ __('검색') }}
+                </button>
+            </form>
+
+            <div class="mt-6">
+                @if($data->count() > 0)
+                    <ul role="list" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        @foreach ($data as $role)
+                            <li class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600 dark:hover:bg-gray-800/80">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="min-w-0">
+                                        @can('view', $role)
+                                            <button type="button"
+                                                onclick="Livewire.dispatch('admin-roles:role-detail-modal:show', { roleId: {{ Js::from($role->id) }} })"
+                                                class="cursor-pointer text-left text-base font-semibold leading-6 text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
+                                                {{ $role->name }}
+                                            </button>
+                                        @else
+                                            <h2 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">{{ $role->name }}</h2>
+                                        @endcan
+                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $role->permissions->count() }} {{ __('permissions') }}
+                                        </p>
+                                    </div>
+
+                                    @can('view', $role)
+                                        <a href="{{ route('admin.roles.show', $role) }}"
+                                            class="inline-flex h-8 shrink-0 items-center rounded-md px-2.5 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
+                                            <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
+                                            상세보기
+                                        </a>
+                                    @endcan
+                                </div>
+
+                                <div class="mt-4 border-t border-gray-100 pt-4 dark:border-gray-800">
+                                    @if($role->permissions->count() > 0)
+                                        <div class="flex max-h-28 flex-wrap gap-1.5 overflow-y-auto pr-1">
+                                            @foreach($role->permissions as $permission)
+                                                <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">{{ $permission->name }}</span>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">권한 없음</span>
+                                    @endif
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400">
                         @if(request('search'))
-                            <a href="{{ route('admin.roles.index') }}"
-                               class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </a>
+                            "{{ request('search') }}"에 대한 검색 결과가 없습니다.
+                        @else
+                            등록된 역할이 없습니다.
                         @endif
                     </div>
+                @endif
+            </div>
 
-                    <button type="submit"
-                        class="h-[28px] cursor-pointer rounded-sm border border-[#7d7d7d] bg-[#eeeeee] px-4 text-base font-semibold text-[#222222] hover:bg-[#e3e3e3] dark:bg-gray-700 dark:text-gray-100">
-                        {{ __('검색') }}
-                    </button>
-                </form>
-
-            <div
-                class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800">
-                <table class="min-w-full border-collapse text-base text-[#111111] dark:text-gray-100">
-            <thead
-                class="border-y border-[#cfcfcf] bg-[#dedede] text-[#555555] dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                <tr>
-                    <th scope="col" class="h-10 px-2 text-left font-bold whitespace-nowrap">
-                        {{ __('Role Name') }}
-                    </th>
-                    <th scope="col" class="h-10 px-2 text-left font-bold whitespace-nowrap">
-                        {{ __('Assigned Permissions') }}
-                    </th>
-                    <th scope="col" class="h-10 px-2 text-right font-bold whitespace-nowrap">
-                        <span class="sr-only">Edit</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($data as $key => $role)
-                    <tr
-                    class="border-b border-[#e6e6e6] bg-[#fbfbfb] transition-colors hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-                                    <th scope="row"
-                                        class="h-10 px-4 font-bold whitespace-nowrap">
-                                        @can('view', $role)
-                                        <button type="button"
-                                            onclick="Livewire.dispatch('admin-roles:role-detail-modal:show', { roleId: {{ Js::from($role->id) }} })"
-                                            class="cursor-pointer font-bold text-[#003399] hover:underline dark:text-[#e7e7d6] text-left">
-                                            {{ $role->name }}
-                                        </button>
-                                        @else
-                                        {{ $role->name }}
-                                        @endcan
-                                    </th>
-                                    <td class="h-10 px-4">
-                                        @if($role->permissions->count() > 0)
-                                            <div class="flex max-h-20 flex-wrap gap-x-2 gap-y-1 overflow-y-auto pr-1">
-                                                @foreach($role->permissions as $permission)
-                                                <span>{{ $permission->name }}</span>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <span class="text-gray-500 dark:text-gray-400">권한 없음</span>
-                                        @endif
-                                    </td>
-                                    <td class="h-10 px-4 text-right whitespace-nowrap">
-
-                                        @can('update', $role)
-                                        <button type="button"
-                                            onclick="Livewire.dispatch('admin-roles:role-detail-modal:show', { roleId: {{ Js::from($role->id) }} })"
-                                            class="cursor-pointer font-semibold text-[#003399] hover:underline dark:text-[#e7e7d6]">
-                                            상세보기
-                                        </button>
-                                        @endcan
-
-                                    </td>
-                                </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="h-10 px-4 text-center text-gray-500 dark:text-gray-400">
-                            @if(request('search'))
-                                "{{ request('search') }}"에 대한 검색 결과가 없습니다.
-                            @else
-                                등록된 역할이 없습니다.
-                            @endif
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <div class="mt-6 text-sm">
-        {!! $data->appends(request()->query())->links() !!}
-    </div>
+            <div class="mt-6 text-sm">
+                {!! $data->appends(request()->query())->links() !!}
+            </div>
+        </div>
     </div>
 
     {{-- 메뉴 카테고리 선택 모달 --}}
     <x-laravel-admin::admin.draggable-modal
         id="menu-category-selector-modal"
         title="메뉴 카테고리 관리"
-        width="600"
-        height="500"
+        width="720"
+        height="620"
         :close-on-backdrop-click="true"
     >
-        <div class="p-4">
-            {{-- 검색 영역 --}}
-            <div class="mb-4">
+        <div class="p-5">
+            <div>
+                <h3 class="text-lg font-semibold leading-7 text-gray-900 dark:text-white">메뉴 카테고리 관리</h3>
+                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">카테고리별 접근 역할을 확인하고 관리합니다.</p>
+            </div>
+
+            <div class="mt-5 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/70">
                 <div class="relative">
                     <input type="text"
                            id="menu-category-search"
                            placeholder="메뉴 카테고리 검색..."
-                           class="w-full px-3 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                           class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 pl-10 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
+                        <i class="fa-solid fa-magnifying-glass text-sm text-gray-400" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
 
-            {{-- 메뉴 카테고리 목록 --}}
-            <div class="max-h-80 overflow-y-auto border border-gray-200 dark:border-gray-600 rounded-md">
-                <div id="menu-category-list" class="divide-y divide-gray-200 dark:divide-gray-600">
+            <div class="mt-5 max-h-[380px] overflow-y-auto pr-1">
+                <div id="menu-category-list" class="grid grid-cols-1 gap-3">
                     @php
                         $menuCategories = \Ssh521\LaravelAdmin\Models\MenuCategory::withCount('menus')->with('roles')->ordered()->get();
                     @endphp
                     @foreach($menuCategories as $category)
-                    <div class="menu-category-item p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-150"
+                    <div class="menu-category-item rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600 dark:hover:bg-gray-800/80"
                          data-category-id="{{ $category->id }}"
                          data-category-name="{{ $category->name }}"
                          data-category-menu-count="{{ $category->menu_count ?? 0 }}">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <div class="text-sm font-medium text-gray-900 dark:text-white">
+                        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                            <div class="min-w-0 flex-1">
+                                <div class="truncate text-base font-semibold text-gray-900 dark:text-white">
                                     {{ $category->name }}
                                 </div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                                     메뉴 {{ $category->menu_count ?? 0 }}개
                                 </div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    허용된 역할:
+                                <div class="mt-3 flex flex-wrap gap-1.5">
                                     @if($category->roles->count() > 0)
                                         @foreach($category->roles as $role)
-                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 mr-1">
+                                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">
                                                 {{ $role->name }}
                                             </span>
                                         @endforeach
                                     @else
-                                        <span class="text-red-500">없음</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">허용된 역할 없음</span>
                                     @endif
                                 </div>
                             </div>
-                            <div class="flex items-center space-x-2">
+                            <div class="flex shrink-0 items-center gap-2">
                                 @if($category->is_active)
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20">
                                         활성
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                    <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/20 ring-inset dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20">
                                         비활성
                                     </span>
                                 @endif
                                 <button type="button"
-                                        class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
+                                        class="inline-flex h-8 cursor-pointer items-center rounded-md px-2.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-500/10"
                                         onclick="manageCategoryRoles({{ $category->id }}, '{{ $category->name }}')">
+                                    <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
                                     역할 관리
                                 </button>
                             </div>
@@ -221,21 +212,17 @@
                     @endforeach
                 </div>
 
-                {{-- 빈 상태 메시지 --}}
-                <div id="no-menu-categories-message" class="p-6 text-center text-gray-500 dark:text-gray-400 hidden">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
+                <div id="no-menu-categories-message" class="hidden rounded-lg border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                    <i class="fa-regular fa-folder-open text-3xl text-gray-400" aria-hidden="true"></i>
                     <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">메뉴 카테고리가 없습니다</h3>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">등록된 메뉴 카테고리가 없습니다.</p>
                 </div>
             </div>
 
-            {{-- 모달 푸터 --}}
-            <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <x-laravel-admin::admin.secondary-button type="button" id="close-menu-category-selector">
+            <div class="mt-6 flex justify-end border-t border-gray-200 pt-4 dark:border-gray-700">
+                <button type="button" id="close-menu-category-selector" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
                     닫기
-                </x-laravel-admin::admin.secondary-button>
+                </button>
             </div>
         </div>
     </x-laravel-admin::admin.draggable-modal>
@@ -244,40 +231,40 @@
     <x-laravel-admin::admin.draggable-modal
         id="role-management-modal"
         title="카테고리 역할 관리"
-        width="500"
-        height="400"
+        width="560"
+        height="520"
         :close-on-backdrop-click="true"
     >
-        <div class="p-4">
-            <div class="mb-4">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="category-name-display"></h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">이 카테고리에 접근할 수 있는 역할을 선택하세요.</p>
+        <div class="p-5">
+            <div>
+                <h3 class="text-lg font-semibold leading-7 text-gray-900 dark:text-white" id="category-name-display"></h3>
+                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">이 카테고리에 접근할 수 있는 역할을 선택하세요.</p>
             </div>
 
-            <div class="max-h-60 overflow-y-auto border border-gray-200 dark:border-gray-600 rounded-md p-3">
-                <div id="role-list" class="space-y-2">
+            <div class="mt-5 max-h-72 overflow-y-auto pr-1">
+                <div id="role-list" class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     @php
                         $allRoles = \Spatie\Permission\Models\Role::all();
                     @endphp
                     @foreach($allRoles as $role)
-                    <label class="flex items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded cursor-pointer">
+                    <label class="flex min-h-11 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800" title="{{ $role->name }}">
                         <input type="checkbox"
-                               class="role-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                               class="role-checkbox size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900"
                                value="{{ $role->id }}"
                                data-role-name="{{ $role->name }}">
-                        <span class="text-sm text-gray-900 dark:text-white">{{ $role->name }}</span>
+                        <span class="min-w-0 truncate">{{ $role->name }}</span>
                     </label>
                     @endforeach
                 </div>
             </div>
 
-            <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <x-laravel-admin::admin.secondary-button type="button" id="cancel-role-management">
+            <div class="mt-6 flex justify-end gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+                <button type="button" id="cancel-role-management" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
                     취소
-                </x-laravel-admin::admin.secondary-button>
-                <x-laravel-admin::admin.primary-button type="button" id="save-role-management">
+                </button>
+                <button type="button" id="save-role-management" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
                     저장
-                </x-laravel-admin::admin.primary-button>
+                </button>
             </div>
         </div>
     </x-laravel-admin::admin.draggable-modal>
