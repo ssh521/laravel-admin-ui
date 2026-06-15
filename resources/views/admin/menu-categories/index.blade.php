@@ -1,7 +1,5 @@
 <x-laravel-admin::admin.layouts.admin title="메뉴 카테고리 관리">
-
     <x-slot name="header">
-
         <x-laravel-admin::admin.admin-header>
             <x-slot name="navigation">
                 <a href="{{ route('home') }}">HOME</a>
@@ -11,12 +9,236 @@
                 {{ __('Menu Categories') }}
             </x-slot>
         </x-laravel-admin::admin.admin-header>
-
     </x-slot>
 
-    <!-- 드래그 앤 드롭 순서 변경을 위한 JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <style>
+        .drag-handle {
+            cursor: grab;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .sortable-ghost {
+            opacity: 0.5;
+            background-color: rgb(243 244 246) !important;
+        }
+
+        .sortable-chosen {
+            background-color: rgb(238 242 255) !important;
+        }
+
+        .sortable-drag {
+            background-color: #ffffff !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
+        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+            <div class="sm:flex sm:items-start sm:justify-between">
+                <div class="sm:flex-auto">
+                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Menu Categories List') }}</h1>
+                    <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                        @if(request('search'))
+                            "{{ request('search') }}" {{ __('검색 결과입니다.') }}
+                        @else
+                            {{ __('메뉴 카테고리의 순서, 상태, 허용 역할을 관리합니다.') }}
+                        @endif
+                    </p>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-6">
+                    @can('viewAny', Ssh521\LaravelAdmin\Models\MenuCategory::class)
+                        <a href="{{ route('admin.menu-categories.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('목록보기') }}
+                        </a>
+                    @endcan
+
+                    @can('create', Ssh521\LaravelAdmin\Models\MenuCategory::class)
+                        <a href="{{ route('admin.menu-categories.create') }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                            <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
+                            {{ __('등록하기') }}
+                        </a>
+                    @endcan
+                </div>
+            </div>
+
+            <x-laravel-admin::admin.session-messages />
+
+            <div class="mt-6 rounded-md border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/60">
+                <form class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end" action="{{ route('admin.menu-categories.index') }}" method="GET">
+                    <label for="category-search" class="sr-only">Search</label>
+                    <input
+                        id="category-search"
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:w-72 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                        placeholder="{{ __('카테고리 검색') }}"
+                    >
+
+                    <div class="flex gap-2">
+                        @if(request('search'))
+                            <a href="{{ route('admin.menu-categories.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-900 dark:!text-gray-100 dark:hover:bg-gray-800">
+                                {{ __('초기화') }}
+                            </a>
+                        @endif
+
+                        <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                            {{ __('검색') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="mt-6 flow-root">
+                <div class="-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
+                                        <span class="sr-only">순서</span>
+                                    </th>
+                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">ID</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('카테고리명') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('메뉴 개수') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">{{ __('정렬 순서') }}</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('상태') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 xl:table-cell dark:text-white">{{ __('허용 역할') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">{{ __('생성일') }}</th>
+                                    <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
+                                        <span class="sr-only">Actions</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="categories-tbody" class="divide-y divide-gray-100 dark:divide-gray-800">
+                                @forelse($categories as $category)
+                                    <tr data-category-id="{{ $category->id }}" class="hover:bg-gray-50 dark:hover:bg-gray-800/70">
+                                        <td class="whitespace-nowrap py-4 pr-3 pl-4 text-sm sm:pl-0">
+                                            <div class="drag-handle inline-flex size-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                                                <i class="fa-solid fa-grip-lines" aria-hidden="true"></i>
+                                            </div>
+                                        </td>
+                                        <td class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 sm:table-cell dark:text-gray-300">{{ $category->id }}</td>
+                                        <td class="px-3 py-4 text-sm">
+                                            @can('view', $category)
+                                                <a href="{{ route('admin.menu-categories.show', $category) }}" class="font-semibold !text-gray-900 hover:!text-indigo-600 hover:no-underline dark:!text-white dark:hover:!text-indigo-400">{{ $category->name }}</a>
+                                            @else
+                                                <span class="font-semibold text-gray-900 dark:text-white">{{ $category->name }}</span>
+                                            @endcan
+                                            <div class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-gray-500 md:hidden dark:text-gray-400">
+                                                <span>{{ $category->menus_count }} {{ __('menus') }}</span>
+                                                <span aria-hidden="true">/</span>
+                                                <span class="sort-order-cell">{{ $category->sort_order }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 md:table-cell dark:text-gray-300">{{ $category->menus_count }}</td>
+                                        <td class="sort-order-cell hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 lg:table-cell dark:text-gray-300">{{ $category->sort_order }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm">
+                                            <span class="{{ $category->is_active ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20' : 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20' }} inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset">
+                                                {{ $category->is_active ? __('활성') : __('비활성') }}
+                                            </span>
+                                        </td>
+                                        <td class="hidden px-3 py-4 text-sm xl:table-cell" data-roles-cell="{{ $category->id }}">
+                                            @if($category->roles->count() > 0)
+                                                <div class="flex flex-wrap gap-1.5">
+                                                    @foreach($category->roles as $role)
+                                                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">{{ $role->name }}</span>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <span class="text-gray-500 dark:text-gray-400">{{ __('없음') }}</span>
+                                            @endif
+                                        </td>
+                                        <td class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 lg:table-cell dark:text-gray-300">{{ $category->created_at->format('Y-m-d H:i') }}</td>
+                                        <td class="whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-0">
+                                            <div class="flex justify-end gap-3">
+                                                @can('view', $category)
+                                                    <a href="{{ route('admin.menu-categories.show', $category) }}" class="inline-flex items-center font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">
+                                                        <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        {{ __('상세보기') }}
+                                                    </a>
+                                                @endcan
+                                                @can('update', $category)
+                                                    <x-laravel-admin::admin.modal-trigger
+                                                        text="권한"
+                                                        modal-id="roles-modal"
+                                                        type="link"
+                                                        variant="primary"
+                                                        modal-type="single"
+                                                        class="cursor-pointer"
+                                                        data-category-id="{{ $category->id }}"
+                                                        data-category-name="{{ $category->name }}" />
+                                                    <a href="{{ route('admin.menu-categories.edit', $category) }}" class="inline-flex items-center font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">
+                                                        <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        {{ __('수정') }}
+                                                    </a>
+                                                @endcan
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="py-12 text-center text-sm text-gray-500 dark:text-gray-400">
+                                            @if(request('search'))
+                                                {{ __('":keyword"에 대한 검색 결과가 없습니다.', ['keyword' => request('search')]) }}
+                                            @else
+                                                {{ __('등록된 카테고리가 없습니다.') }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 text-sm">
+                {!! $categories->appends(request()->query())->links() !!}
+            </div>
+        </div>
+    </div>
+
+    <x-laravel-admin::admin.draggable-modal id="roles-modal" title="권한 관리" :width="720" :height="560">
+        <div class="p-6">
+            <div class="mb-5">
+                <h3 class="text-base font-semibold leading-7 text-gray-900 dark:text-white" id="modal-category-name">
+                    카테고리 권한 관리
+                </h3>
+                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    메뉴 카테고리에 허용할 역할을 선택합니다.
+                </p>
+            </div>
+
+            <form id="roles-form" class="space-y-5">
+                @csrf
+                <div id="roles-container" class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <!-- 역할 목록이 여기에 동적으로 로드됩니다 -->
+                </div>
+
+                <div class="flex items-center justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
+                    <button type="button"
+                        @click="$dispatch('close-modal', { modalId: 'roles-modal', action: 'close' })"
+                        class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
+                        {{ __('취소') }}
+                    </button>
+                    <button id="roles-submit-btn" type="submit"
+                        class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                        {{ __('저장') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </x-laravel-admin::admin.draggable-modal>
+
     <script>
+        let currentCategoryId = null;
+
         document.addEventListener('DOMContentLoaded', function() {
             const tbody = document.querySelector('#categories-tbody');
             if (tbody) {
@@ -26,14 +248,13 @@
                     ghostClass: 'sortable-ghost',
                     chosenClass: 'sortable-chosen',
                     dragClass: 'sortable-drag',
-                    onEnd: function(evt) {
+                    onEnd: function() {
                         const rows = Array.from(tbody.querySelectorAll('tr[data-category-id]'));
                         const newOrder = rows.map((row, index) => ({
                             id: row.dataset.categoryId,
                             sort_order: index + 1
                         }));
 
-                        // 순서 변경 API 호출
                         updateCategoryOrder(newOrder);
                     }
                 });
@@ -41,8 +262,6 @@
         });
 
         function updateCategoryOrder(newOrder) {
-            console.log('순서 변경 요청:', newOrder);
-
             fetch('{{ route("admin.menu-categories.update-order-multiple", [], false) }}', {
                 method: 'POST',
                 headers: {
@@ -53,7 +272,6 @@
                 body: JSON.stringify({ categories: newOrder })
             })
             .then(response => {
-                console.log('서버 응답 상태:', response.status);
                 if (!response.ok) {
                     return response.text().then(text => {
                         try {
@@ -61,74 +279,50 @@
                             if (data && data.message) {
                                 throw new Error(data.message);
                             }
-                        } catch (e) {
-                            // ignore JSON parse errors
-                        }
+                        } catch (e) {}
 
                         throw new Error(text || `HTTP error! status: ${response.status}`);
                     });
                 }
 
-                // Laravel이 항상 JSON을 주지 않는 경우(빈 응답/파싱 실패)에도
-                // 서버 처리는 성공(HTTP 2xx)으로 보고 후속 UI 갱신을 진행한다.
                 return response.text().then(text => {
-                    if (!text) {
-                        return { success: true };
-                    }
+                    if (!text) return { success: true };
 
                     try {
                         return JSON.parse(text);
                     } catch (e) {
-                        console.warn('응답 JSON 파싱 실패. success로 간주합니다.', text);
                         return { success: true };
                     }
                 });
             })
             .then(data => {
-                console.log('서버 응답 데이터:', data);
                 if (data.success) {
-                    // 성공 메시지 표시
                     showNotification('카테고리 순서가 성공적으로 변경되었습니다.', 'success');
-                    // 페이지 새로고침 없이 순서 번호 업데이트
                     updateSortOrderNumbers();
-
-                    // Livewire left-menu 컴포넌트 refresh
                     refreshLeftMenu();
                 } else {
-                    console.error('서버 에러:', data.message);
                     showNotification(data.message || '순서 변경 중 오류가 발생했습니다.', 'error');
                 }
             })
             .catch(error => {
-                console.error('네트워크 에러:', error);
                 showNotification(error?.message || '순서 변경 중 네트워크 오류가 발생했습니다.', 'error');
             });
         }
 
         function refreshLeftMenu() {
-            console.log('refreshLeftMenu 함수 실행됨');
-
-            // 성공 메시지를 먼저 표시
-            //showNotification('왼쪽 메뉴를 업데이트하는 중...', 'info');
-
-            // Livewire left-menu 갱신 이벤트만 dispatch (페이지 새로고침 금지)
             if (window.Livewire && typeof window.Livewire.dispatch === 'function') {
                 try {
-                    console.log('Livewire 이벤트 dispatch 시도');
                     window.Livewire.dispatch('admin-menu-categories:menu-categories:reordered');
-                } catch (error) {
-                    console.error('Livewire 이벤트 dispatch 실패:', error);
-                }
+                } catch (error) {}
             }
         }
 
         function updateSortOrderNumbers() {
             const rows = document.querySelectorAll('#categories-tbody tr[data-category-id]');
             rows.forEach((row, index) => {
-                const sortOrderCell = row.querySelector('.sort-order-cell');
-                if (sortOrderCell) {
-                    sortOrderCell.textContent = index + 1;
-                }
+                row.querySelectorAll('.sort-order-cell').forEach(cell => {
+                    cell.textContent = index + 1;
+                });
             });
         }
 
@@ -140,266 +334,16 @@
                 },
             }));
         }
-    </script>
 
-    <!-- 드래그 앤 드롭 스타일 -->
-    <style>
-        .drag-handle {
-            cursor: grab;
-            color: #6b7280;
-            transition: color 0.2s;
-        }
-
-        .drag-handle:hover {
-            color: #374151;
-        }
-
-        .drag-handle:active {
-            cursor: grabbing;
-        }
-
-        .sortable-ghost {
-            opacity: 0.5;
-            background-color: #f3f4f6 !important;
-        }
-
-        .sortable-chosen {
-            background-color: #dbeafe !important;
-        }
-
-        .sortable-drag {
-            background-color: #ffffff !important;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .drag-handle svg {
-            width: 16px;
-            height: 16px;
-        }
-    </style>
-
-    <div class="w-full bg-white border border-[#d8d8d0] px-2 py-2 dark:bg-gray-900 dark:border-gray-700">
-        <div class="min-h-[560px] border border-[#d9d9d9] bg-white px-6 py-7 sm:px-10 sm:py-10 dark:bg-gray-800 dark:border-gray-700">
-                    <div class="mb-2">
-                        <h1 class="text-[26px] font-bold leading-none text-[#222222] dark:text-gray-100">
-                            {{ __('Menu Categories List') }}
-                            @if(request('search'))
-                            <span class="text-[16px] font-normal text-gray-600 dark:text-gray-400">
-                                - "{{ request('search') }}" 검색 결과
-                            </span>
-                            @endif
-                        </h1>
-
-                        <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-base font-semibold">
-                            @can('viewAny', Ssh521\LaravelAdmin\Models\MenuCategory::class)
-                            <a href="{{ route('admin.menu-categories.index') }}">{{ __('목록보기') }}</a>
-                            <span class="text-[#222222] dark:text-gray-400">|</span>
-                            @endcan
-
-                            @can('create', Ssh521\LaravelAdmin\Models\MenuCategory::class)
-                            <a href="{{ route('admin.menu-categories.create') }}">{{ __('등록하기') }}</a>
-                            @endcan
-                        </div>
-                    </div>
-
-                    <x-laravel-admin::admin.session-messages />
-
-                    <form class="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end" action="{{ route('admin.menu-categories.index') }}" method="GET">
-                        <label for="category-search" class="sr-only">Search</label>
-
-                        <input
-                            id="category-search"
-                            type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            class="admin-focus-border h-[28px] w-full rounded-sm border border-[#7d7d7d] bg-white px-2 text-base text-[#111111] outline-none sm:w-[260px] dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            placeholder="{{ __('카테고리 검색') }}"
-                            onfocus="this.style.borderColor='#005fcc'; this.style.boxShadow='0 0 0 1px #005fcc';"
-                            onblur="this.style.borderColor='#7d7d7d'; this.style.boxShadow='none';"
-                        >
-
-                        @if(request('search'))
-                        <a href="{{ route('admin.menu-categories.index') }}" class="inline-flex h-[28px] items-center rounded-sm border border-[#7d7d7d] bg-[#eeeeee] px-3 text-base font-semibold text-[#222222] hover:bg-[#e3e3e3] dark:bg-gray-700 dark:text-gray-100">
-                            {{ __('초기화') }}
-                        </a>
-                        @endif
-
-                        <button type="submit" class="h-[28px] cursor-pointer rounded-sm border border-[#7d7d7d] bg-[#eeeeee] px-4 text-base font-semibold text-[#222222] hover:bg-[#e3e3e3] dark:bg-gray-700 dark:text-gray-100">
-                            {{ __('검색') }}
-                        </button>
-                    </form>
-
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full border-collapse text-base text-[#111111] dark:text-gray-100">
-                            <thead>
-                                <tr class="border-y border-[#cfcfcf] bg-[#dedede] text-[#555555] dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                    <th scope="col" class="h-10 w-8 px-2 text-left font-bold">
-                                        <span class="sr-only">순서</span>
-                                    </th>
-                                    <th scope="col" class="h-10 px-2 text-left font-bold">
-                                        ID
-                                    </th>
-                                    <th scope="col" class="h-10 px-2 text-left font-bold">
-                                        카테고리명
-                                    </th>
-                                    <th scope="col" class="h-10 px-2 text-left font-bold">
-                                        메뉴 개수
-                                    </th>
-                                    <th scope="col" class="h-10 px-2 text-left font-bold">
-                                        정렬 순서
-                                    </th>
-                                    <th scope="col" class="h-10 px-2 text-left font-bold">
-                                        상태
-                                    </th>
-                                    <th scope="col" class="h-10 px-2 text-left font-bold">
-                                        허용 역할
-                                    </th>
-                                    <th scope="col" class="h-10 px-2 text-left font-bold">
-                                        생성일
-                                    </th>
-                                    <th scope="col" class="h-10 px-2 text-right font-bold">
-                                        <span class="sr-only">Edit</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="categories-tbody">
-                                @forelse($categories as $category)
-                                <tr data-category-id="{{ $category->id }}"
-                                    class="border-b border-[#e6e6e6] bg-[#fbfbfb] transition-colors hover:bg-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-
-                                    <td class="h-10 px-4">
-                                        <div class="drag-handle flex items-center justify-center">
-                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M4 8h16M4 16h16"></path>
-                                            </svg>
-                                        </div>
-                                    </td>
-
-                                    <td class="h-10 whitespace-nowrap px-4">
-                                        {{ $category->id }}
-                                    </td>
-                                    <th scope="row"
-                                        class="h-10 whitespace-nowrap px-4 text-left font-bold">
-
-                                        @can('view', $category)
-                                        <a href="{{ route('admin.menu-categories.show', $category) }}">{{ $category->name
-                                            }}</a>
-                                        @else
-                                        {{ $category->name }}
-                                        @endcan
-
-                                    </th>
-                                    <td class="h-10 whitespace-nowrap px-4">
-                                        {{ $category->menus_count }}
-                                    </td>
-                                    <td class="h-10 whitespace-nowrap px-4 sort-order-cell">
-                                        {{ $category->sort_order }}
-                                    </td>
-                                    <td class="h-10 whitespace-nowrap px-4">
-                                        <span class="{{ $category->is_active ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300' }}">
-                                            {{ $category->is_active ? __('활성') : __('비활성') }}
-                                        </span>
-                                    </td>
-                                    <td class="h-10 px-4" data-roles-cell="{{ $category->id }}">
-                                        @if($category->roles->count() > 0)
-                                        <div class="flex flex-wrap gap-x-2 gap-y-1">
-                                            @foreach($category->roles as $role)
-                                            <span>{{ $role->name }}</span>
-                                            @endforeach
-                                        </div>
-                                        @else
-                                        <span class="text-gray-500 dark:text-gray-400">{{ __('없음') }}</span>
-                                        @endif
-                                    </td>
-                                    <td class="h-10 whitespace-nowrap px-4">
-                                        {{ $category->created_at->format('Y-m-d H:i') }}
-                                    </td>
-                                    <td class="h-10 whitespace-nowrap px-4 text-right">
-
-                                        @can('update', $category)
-                                        <x-laravel-admin::admin.modal-trigger
-                                            text="권한"
-                                            modal-id="roles-modal"
-                                            type="link"
-                                            variant="primary"
-                                            modal-type="single"
-                                            class="cursor-pointer"
-                                            data-category-id="{{ $category->id }}"
-                                            data-category-name="{{ $category->name }}" />
-                                        @endcan
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr class="border-b border-[#e6e6e6] bg-[#fbfbfb] dark:border-gray-700 dark:bg-gray-800">
-                                    <td colspan="9" class="h-10 px-4 text-center text-gray-500 dark:text-gray-400">
-                                        @if(request('search'))
-                                        {{ __('":keyword"에 대한 검색 결과가 없습니다.', ['keyword' => request('search')]) }}
-                                        @else
-                                        {{ __('등록된 카테고리가 없습니다.') }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-6 text-sm">
-                        {!! $categories->appends(request()->query())->links() !!}
-                    </div>
-        </div>
-    </div>
-
-    <!-- 권한 관리 모달 -->
-    <x-laravel-admin::admin.draggable-modal id="roles-modal" title="권한 관리" :width="600" :height="500">
-        <div class="p-6">
-            <div class="mb-4">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modal-category-name">
-                    카테고리 권한 관리
-                </h3>
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    메뉴 카테고리에 허용할 역할을 선택합니다.
-                </p>
-            </div>
-
-            <form id="roles-form" class="space-y-4">
-                @csrf
-                <div id="roles-container" class="space-y-3">
-                    <!-- 역할 목록이 여기에 동적으로 로드됩니다 -->
-                </div>
-
-                <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <button type="button"
-                        @click="$dispatch('close-modal', { modalId: 'roles-modal', action: 'close' })"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
-                        {{ __('취소') }}
-                    </button>
-                    <button id="roles-submit-btn" type="submit"
-                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                        {{ __('저장') }}
-                    </button>
-                </div>
-            </form>
-        </div>
-    </x-laravel-admin::admin.draggable-modal>
-
-    <script>
-        let currentCategoryId = null;
-
-        // draggable-modal 이벤트 리스너 추가
         document.addEventListener('open-modal', function(event) {
             if (event.detail.modalId === 'roles-modal') {
-                // 클릭된 요소에서 카테고리 정보 가져오기
-                const trigger = event.target.closest('[data-category-id]');
+                const trigger = event.target?.closest ? event.target.closest('[data-category-id]') : null;
                 if (trigger) {
                     const categoryId = trigger.getAttribute('data-category-id');
                     const categoryName = trigger.getAttribute('data-category-name');
 
                     currentCategoryId = categoryId;
                     document.getElementById('modal-category-name').textContent = `[${categoryName}] 권한 관리`;
-
-                    // 권한 데이터 로드
                     loadCategoryRoles(categoryId);
                 }
             }
@@ -429,7 +373,6 @@
                 }
             })
             .catch(error => {
-                console.error('Error loading roles:', error);
                 showNotification('권한 데이터를 불러오는 중 네트워크 오류가 발생했습니다.', 'error');
             });
         }
@@ -440,7 +383,7 @@
             container.innerHTML = '';
 
             if (availableRoles.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">{{ __('사용 가능한 역할이 없습니다.') }}</p>';
+                container.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">{{ __('사용 가능한 역할이 없습니다.') }}</p>';
                 submitBtn.disabled = true;
                 return;
             }
@@ -448,24 +391,22 @@
 
             availableRoles.forEach(role => {
                 const isSelected = selectedRoles.includes(role.id);
-                const roleElement = document.createElement('div');
-                roleElement.className = 'flex items-center';
+                const roleElement = document.createElement('label');
+                roleElement.className = 'flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800';
+                roleElement.setAttribute('for', `role-${role.id}`);
                 roleElement.innerHTML = `
                     <input type="checkbox"
                            id="role-${role.id}"
                            name="roles[]"
                            value="${role.id}"
                            ${isSelected ? 'checked' : ''}
-                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
-                    <label for="role-${role.id}" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                        ${role.name}
-                    </label>
+                           class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
+                    <span class="min-w-0 truncate">${role.name}</span>
                 `;
                 container.appendChild(roleElement);
             });
         }
 
-        // 폼 제출 처리
         document.getElementById('roles-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -474,13 +415,11 @@
                 return;
             }
 
-            const formData = new FormData(this);
             const selectedRoles = Array.from(this.querySelectorAll('input[name="roles[]"]:checked'))
                 .map(input => input.value);
 
-        const updateRolesUrlBase = '{{ route('admin.menu-categories.update-roles-api', ['menuCategory' => '__ID__']) }}';
+            const updateRolesUrlBase = '{{ route('admin.menu-categories.update-roles-api', ['menuCategory' => '__ID__']) }}';
 
-            // API로 권한 저장
             fetch(updateRolesUrlBase.replace('__ID__', currentCategoryId), {
                 method: 'POST',
                 headers: {
@@ -499,16 +438,14 @@
             .then(data => {
                 if (data.success) {
                     showNotification(data.message || '권한이 성공적으로 저장되었습니다.', 'success');
-                    // 테이블 역할 셀 동적 업데이트
                     const rolesCell = document.querySelector(`[data-roles-cell="${currentCategoryId}"]`);
                     if (rolesCell && data.roles !== undefined) {
                         if (data.roles.length > 0) {
-                            rolesCell.innerHTML = `<div class="flex flex-wrap gap-x-2 gap-y-1">${data.roles.map(r => `<span>${r.name}</span>`).join('')}</div>`;
+                            rolesCell.innerHTML = `<div class="flex flex-wrap gap-1.5">${data.roles.map(r => `<span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">${r.name}</span>`).join('')}</div>`;
                         } else {
                             rolesCell.innerHTML = '<span class="text-gray-500 dark:text-gray-400">없음</span>';
                         }
                     }
-                    // 모달 닫기
                     window.dispatchEvent(new CustomEvent('draggable-modal-close', {
                         detail: { modalId: 'roles-modal' }
                     }));
@@ -517,7 +454,6 @@
                 }
             })
             .catch(error => {
-                console.error('Error saving roles:', error);
                 showNotification('권한 저장 중 네트워크 오류가 발생했습니다.', 'error');
             });
         });
