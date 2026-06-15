@@ -21,7 +21,7 @@
             <form action="{{ route('admin.admin-users.store') }}" method="POST">
                 @csrf
 
-                @include('admin.admin-users.partials.form', [
+                @include('laravel-admin::admin.admin-users.partials.form', [
                     'adminUser' => null,
                     'roles' => $roles,
                     'submitLabel' => __('등록하기'),

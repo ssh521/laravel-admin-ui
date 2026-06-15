@@ -29,7 +29,7 @@
                 @csrf
                 @method('PUT')
 
-                @include('admin.admin-users.partials.form', [
+                @include('laravel-admin::admin.admin-users.partials.form', [
                     'adminUser' => $adminUser,
                     'roles' => $roles,
                     'isProfile' => $isProfile,

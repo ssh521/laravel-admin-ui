@@ -6,20 +6,10 @@ This package owns the admin UI resource layer. The core `ssh521/laravel-admin` p
 
 ## Publish Tags
 
-New UI-specific tags:
-
 ```bash
 php artisan vendor:publish --tag=laravel-admin-ui-assets
 php artisan vendor:publish --tag=laravel-admin-ui-views
 php artisan vendor:publish --tag=laravel-admin-ui-components
-```
-
-Legacy compatibility tags are also registered so existing install/update flows keep working:
-
-```bash
-php artisan vendor:publish --tag=laravel-admin-assets
-php artisan vendor:publish --tag=laravel-admin-views
-php artisan vendor:publish --tag=laravel-admin-components
 ```
 
 ## Published Paths

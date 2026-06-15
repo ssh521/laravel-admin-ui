@@ -19,8 +19,6 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
         $publishedViewsPath = resource_path('views/vendor/laravel-admin');
         $packageViewsPath = __DIR__.'/../resources/views';
 
-        View::addLocation($publishedViewsPath);
-        View::addLocation($packageViewsPath);
         View::addNamespace('laravel-admin', [$publishedViewsPath, $packageViewsPath]);
 
         Blade::anonymousComponentPath($publishedViewsPath.'/components', 'laravel-admin');
@@ -47,18 +45,5 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
             __DIR__.'/../public/images/dtree' => public_path('images/dtree'),
         ], 'laravel-admin-ui-assets');
 
-        $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/laravel-admin'),
-        ], 'laravel-admin-views');
-
-        $this->publishes([
-            __DIR__.'/../resources/views/components' => resource_path('views/vendor/laravel-admin/components'),
-        ], 'laravel-admin-components');
-
-        $this->publishes([
-            __DIR__.'/../resources/css/admin.css' => resource_path('vendor/laravel-admin/admin.css'),
-            __DIR__.'/../resources/js' => resource_path('vendor/laravel-admin'),
-            __DIR__.'/../public/images/dtree' => public_path('images/dtree'),
-        ], 'laravel-admin-assets');
     }
 }
