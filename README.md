@@ -37,3 +37,4 @@ This package intentionally does not own the Livewire component classes yet. For 
 ## Design Rules
 
 Admin UI modernization rules are documented in [docs/admin-design-rules.md](docs/admin-design-rules.md).
+Packages that need to match this UI should follow the portable design contract in [docs/admin-ui-design-contract.md](docs/admin-ui-design-contract.md).

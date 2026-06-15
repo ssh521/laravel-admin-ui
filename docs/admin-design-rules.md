@@ -2,6 +2,7 @@
 
 This document records the UI direction used for the `admin-users` and `roles` pilot screens.
 Use it as the baseline when modernizing other admin list, form, and detail pages.
+For rules that other packages can adopt as a cross-package contract, see [admin-ui-design-contract.md](admin-ui-design-contract.md).
 
 ## References
 
