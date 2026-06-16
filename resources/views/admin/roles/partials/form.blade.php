@@ -55,14 +55,50 @@
     <div class="min-w-0 md:col-span-8">
         <fieldset>
             <legend class="sr-only">{{ __('권한') }}</legend>
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach($permissions as $permission)
-                    <label for="permission_{{ $permission->id }}" title="{{ $permission->name }}" class="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800">
-                        <input id="permission_{{ $permission->id }}" name="permissions[]" type="checkbox"
-                               value="{{ $permission->id }}" @checked(in_array($permission->id, old('permissions', $role ? $rolePermissions : [])))
-                               class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
-                        <span class="min-w-0 truncate">{{ $permission->name }}</span>
-                    </label>
+            @php
+                $resolvePermissionGroup = static function (string $permissionName): string {
+                    if (str_starts_with($permissionName, 'menu-category-')) {
+                        return 'Menu Category';
+                    }
+
+                    if (str_starts_with($permissionName, 'super-admin-')) {
+                        return 'Super Admin';
+                    }
+
+                    $prefix = explode('-', $permissionName, 2)[0] ?? $permissionName;
+
+                    return [
+                        'admin' => 'Admin Dashboard',
+                        'role' => 'Role',
+                        'permission' => 'Permission',
+                        'user' => 'User',
+                        'menu' => 'Menu',
+                    ][$prefix] ?? '기타';
+                };
+
+                $permissionGroups = collect($permissions)->groupBy(fn ($permission) => $resolvePermissionGroup($permission->name));
+            @endphp
+            <div class="space-y-5">
+                @foreach($permissionGroups as $groupName => $groupPermissions)
+                    <div>
+                        <div class="mb-2 flex items-center justify-between gap-3">
+                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ $groupName }}</span>
+                            <span class="text-xs text-gray-400 dark:text-gray-500">{{ $groupPermissions->count() }}개</span>
+                        </div>
+                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            @foreach($groupPermissions as $permission)
+                                <label for="permission_{{ $permission->id }}" title="{{ $permission->name }}" class="group relative flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:z-20 hover:bg-gray-50 focus-within:z-20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800">
+                                    <input id="permission_{{ $permission->id }}" name="permissions[]" type="checkbox"
+                                           value="{{ $permission->id }}" @checked(in_array($permission->id, old('permissions', $role ? $rolePermissions : [])))
+                                           class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
+                                    <span class="min-w-0 truncate">{{ $permission->name }}</span>
+                                    <span class="pointer-events-none absolute left-10 top-full z-30 mt-1 hidden max-w-72 rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium leading-5 text-gray-900 shadow-lg group-hover:block group-focus-within:block dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
+                                        {{ $permission->name }}
+                                    </span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
                 @endforeach
             </div>
             @if ($errors->has('permissions'))
