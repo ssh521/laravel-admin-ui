@@ -35,18 +35,34 @@
                             <span class="text-xs text-gray-500 dark:text-gray-400">{{ count($permissionIds ?? []) }}개 선택</span>
                         </div>
                         <div class="mt-3 max-h-72 overflow-y-auto pr-1">
-                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                @forelse($availablePermissions as $permission)
-                                    <label for="permission-{{ $permission['id'] }}" title="{{ $permission['name'] }}" class="flex min-h-11 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800 @if($mode==='view') cursor-not-allowed opacity-70 @endif">
-                                        <input
-                                            type="checkbox"
-                                            id="permission-{{ $permission['id'] }}"
-                                            wire:model.defer="permissionIds"
-                                            value="{{ $permission['id'] }}"
-                                            @if($mode==='view') disabled @endif
-                                            class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
-                                        <span class="min-w-0 truncate">{{ $permission['name'] }}</span>
-                                    </label>
+                            @php
+                                $permissionGroups = collect($availablePermissions)->groupBy(fn ($permission) => $permission['group'] ?? '기타');
+                            @endphp
+                            <div class="space-y-5">
+                                @forelse($permissionGroups as $groupName => $groupPermissions)
+                                    <div>
+                                        <div class="mb-2 flex items-center justify-between gap-3">
+                                            <span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ $groupName }}</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500">{{ $groupPermissions->count() }}개</span>
+                                        </div>
+                                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                            @foreach($groupPermissions as $permission)
+                                                <label for="permission-{{ $permission['id'] }}" title="{{ $permission['name'] }}" class="group relative flex min-h-11 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm hover:z-20 hover:bg-gray-50 focus-within:z-20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800 @if($mode==='view') cursor-not-allowed opacity-70 @endif">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="permission-{{ $permission['id'] }}"
+                                                        wire:model.defer="permissionIds"
+                                                        value="{{ $permission['id'] }}"
+                                                        @if($mode==='view') disabled @endif
+                                                        class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
+                                                    <span class="min-w-0 truncate">{{ $permission['name'] }}</span>
+                                                    <span class="pointer-events-none absolute left-9 top-full z-30 mt-1 hidden max-w-72 rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium leading-5 text-gray-900 shadow-lg group-hover:block group-focus-within:block dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
+                                                        {{ $permission['name'] }}
+                                                    </span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 @empty
                                     <p class="text-sm text-gray-500 dark:text-gray-400">사용 가능한 권한이 없습니다.</p>
                                 @endforelse
