@@ -35,10 +35,10 @@ $centerY = $initialY ?? 'Math.floor((window.innerHeight - (' . $clampedHeightExp
     initialY: {{ $centerY }},
     resizable: {{ $showResizeHandle ? 'true' : 'false' }}
 })" x-show="isOpen" 
-@keydown.escape.window="{{ $closeOnEscape ? 'close()' : '' }}"
+@keydown.escape.window="{{ $closeOnEscape ? 'if (isTopModal()) close()' : '' }}"
 @open-modal.window="if ($event.detail.modalId === '{{ $modalId }}') openModal()"
 @close-modal.window="if ($event.detail.modalId === '{{ $modalId }}') close()"
-@click="{{ $closeOnBackdropClick ? 'close()' : '' }}"
+@click="{{ $closeOnBackdropClick ? 'if (isTopModal()) close()' : '' }}"
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70" id="{{ $modalId }}" 
     {{ $attributes->merge(['class' => '']) }}
     x-bind:style="`z-index: ${zIndex}`"

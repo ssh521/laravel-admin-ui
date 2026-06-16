@@ -171,7 +171,7 @@
                                 <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                                     메뉴 {{ $category->menu_count ?? 0 }}개
                                 </div>
-                                <div class="mt-3 flex flex-wrap gap-1.5">
+                                <div class="category-roles-list mt-3 flex flex-wrap gap-1.5">
                                     @if($category->roles->count() > 0)
                                         @foreach($category->roles as $role)
                                             <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">
@@ -361,7 +361,7 @@
             console.log('선택된 역할들:', selectedRoles);
 
             // AJAX 요청으로 역할 저장
-            fetch(`/admin/menu-categories/${currentCategoryId}/roles`, {
+            fetch(`/admin/menu-categories/${currentCategoryId}/roles/api`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -384,15 +384,12 @@
                     // 성공 메시지 표시
                     showNotification('역할이 성공적으로 저장되었습니다.', 'success');
 
-                    // 모달 닫기
+                    // 부모 모달은 유지하고 역할 관리 모달만 닫기
                     window.dispatchEvent(new CustomEvent('close-modal', {
                         detail: { modalId: 'role-management-modal' }
                     }));
 
-                    // 페이지 새로고침하여 업데이트된 정보 표시
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
+                    updateCategoryRoleBadges(currentCategoryId, data.roles || []);
                 } else {
                     showNotification(data.message || '역할 저장 중 오류가 발생했습니다.', 'error');
                 }
@@ -430,6 +427,33 @@
         }, 3000);
     }
 
+    function updateCategoryRoleBadges(categoryId, roles) {
+        const categoryItem = document.querySelector(`.menu-category-item[data-category-id="${categoryId}"]`);
+        const rolesContainer = categoryItem?.querySelector('.category-roles-list');
+
+        if (!rolesContainer) {
+            return;
+        }
+
+        rolesContainer.replaceChildren();
+
+        if (roles.length === 0) {
+            const emptyLabel = document.createElement('span');
+            emptyLabel.className = 'text-sm text-gray-500 dark:text-gray-400';
+            emptyLabel.textContent = '허용된 역할 없음';
+            rolesContainer.appendChild(emptyLabel);
+
+            return;
+        }
+
+        roles.forEach(role => {
+            const badge = document.createElement('span');
+            badge.className = 'inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700';
+            badge.textContent = role.name;
+            rolesContainer.appendChild(badge);
+        });
+    }
+
     // 전역 함수: 카테고리 역할 관리
     function manageCategoryRoles(categoryId, categoryName) {
         console.log('manageCategoryRoles 호출됨:', categoryId, categoryName);
@@ -440,7 +464,7 @@
         document.getElementById('category-name-display').textContent = categoryName;
 
         // 현재 카테고리의 역할 정보 가져오기
-        fetch(`/admin/menu-categories/${categoryId}/roles`)
+        fetch(`/admin/menu-categories/${categoryId}/roles/api`)
             .then(response => {
                 console.log('역할 정보 요청 응답:', response.status);
                 if (!response.ok) {
@@ -457,11 +481,10 @@
 
                 // 현재 카테고리에 허용된 역할 체크
                 if (data.roles) {
-                    data.roles.forEach(roleId => {
-                        const checkbox = document.querySelector(`.role-checkbox[value="${roleId}"]`);
-                        if (checkbox) {
-                            checkbox.checked = true;
-                        }
+                    const selectedRoleIds = data.roles.map(role => String(role.id ?? role));
+
+                    document.querySelectorAll('.role-checkbox').forEach(checkbox => {
+                        checkbox.checked = selectedRoleIds.includes(String(checkbox.value));
                     });
                 }
 
