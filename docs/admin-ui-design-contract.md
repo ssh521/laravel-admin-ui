@@ -54,6 +54,7 @@ List screens should:
 - Keep search and filters in a compact bordered bar above the list.
 - Keep search controls on one line on desktop and stacked on small screens.
 - Put fixed-width filter selects before the flexible search input; selects and action buttons should not stretch on desktop.
+- Do not show a self-referential list navigation button on the list page itself.
 - Put the primary identity field first.
 - Use avatars only for person/user records where recognition helps.
 - Render statuses as badges.
@@ -83,6 +84,9 @@ Footer rules:
 - Place destructive actions on the left.
 - Place cancel/list/save actions on the right.
 - Keep both groups on the same row on desktop and stacked cleanly on mobile.
+- Avoid extra top margin on footer rows immediately after section dividers.
+- Reuse a shared form partial for create/edit when fields overlap, while keeping page titles, routes, HTTP methods, and edit-only external actions in the page wrapper.
+- Form page titles should include the resource, information scope, and action, such as `회원 정보 등록` or `회원 정보 수정`.
 
 ## Detail Contract
 
@@ -94,6 +98,8 @@ Detail screens should:
 - Use one column on mobile and two columns when there is enough width.
 - Render statuses, roles, and categories as badges.
 - Put repeated actions in the card footer.
+- Show only list navigation in the top action area.
+- Show only the primary continuation action, usually edit, in the footer.
 
 ## Modal Contract
 
@@ -119,6 +125,7 @@ Use consistent action hierarchy:
 - Secondary: white/dark bordered button.
 - Destructive: red bordered button, preferably with an icon.
 - Links styled as buttons should override global admin link colors with Tailwind important text classes, such as `!text-white` or `!text-gray-700`.
+- Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
 
 ## Dark Mode Contract
 
