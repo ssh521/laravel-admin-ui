@@ -51,10 +51,13 @@ For rules that other packages can adopt as a cross-package contract, see [admin-
 - Keep search and filters in a compact bordered filter bar above the list.
 - Search controls should be one line on desktop and stack cleanly on small screens, for example `flex flex-col sm:flex-row`.
 - Place fixed-width filter selects before the search input; let only the search input expand, and keep the submit button shrink-wrapped on desktop.
+- Do not render a `목록보기` button on an index/list page that already represents that resource list. Keep only meaningful actions such as `등록하기`, search, reset, sort, or resource-specific management actions.
+- Use the term `목록` instead of `리스트` in visible Korean page titles and breadcrumbs.
 
 ## Forms
 
 - Base forms on sectioned Tailwind form layouts.
+- Use a shared `partials/form.blade.php` for create/edit resource forms when the field structure is the same. The create/edit page should own the wrapper, route, method, page title, and external edit-only actions; the partial should own the repeated form fields and optional create footer.
 - Use a 12-column form canvas for admin resource forms: `mx-auto grid max-w-4xl grid-cols-1 gap-x-8 md:grid-cols-12`.
 - Separate form sections with a full-width border divider: `my-10 border-b ... md:col-span-12`.
 - Split large forms into meaningful sections with:
@@ -74,6 +77,8 @@ For rules that other packages can adopt as a cross-package contract, see [admin-
 - Use `textarea` for description fields, not single-line inputs.
 - Keep form footer actions on one shared horizontal row on desktop.
 - Put destructive actions on the left side of the shared footer row and submit/cancel actions on the right.
+- Do not add extra top margin to form footer rows after a section divider. Use `col-span-full flex items-center justify-end gap-x-3` for create footers and `mx-auto flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between` for edit external action rows.
+- Use purpose-specific create/edit titles in the form header, such as `회원 정보 등록` and `회원 정보 수정`, instead of a generic shared title such as `회원 정보`.
 - Preserve locked states with disabled controls plus muted color and helper text.
 
 ## Detail Views
@@ -84,7 +89,8 @@ For rules that other packages can adopt as a cross-package contract, see [admin-
 - Use two columns on wider screens, one column on mobile.
 - Render status values and roles as badges.
 - Put repeated page actions in a footer action area when the detail card is the main focus.
-- In detail footers, place destructive actions on the left and navigation/edit actions on the right.
+- On detail pages, keep the top-right action area focused on `목록보기` only.
+- On detail page footers, show only the primary continuation action, usually `수정하기`, aligned to the right. Do not repeat `목록보기` in the footer and do not show destructive actions there unless a workflow explicitly requires deletion from detail.
 
 ## Modals
 
@@ -121,6 +127,7 @@ When modernizing another admin resource:
 1. Update the index page first, preserving filters, pagination, policies, and routes.
 2. Update create/edit wrappers and shared form partials together.
 3. Update show pages with a description list pattern.
-4. Run `git diff --check`.
-5. Run the available test command if dependencies are installed.
-6. Compare light and dark mode visually before shipping.
+4. Normalize visible Korean labels, page titles, and action text while preserving routes and behavior.
+5. Run `git diff --check`.
+6. Run the available test command if dependencies are installed.
+7. Compare light and dark mode visually before shipping.
