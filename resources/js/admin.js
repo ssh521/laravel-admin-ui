@@ -235,6 +235,7 @@ document.addEventListener('alpine:init', () => {
     // 토글 가능한 드롭다운 컴포넌트
     Alpine.data('dropdown', () => ({
         isOpen: false,
+        closeOnClickOutsideHandler: null,
         
         toggle() {
             this.isOpen = !this.isOpen;
@@ -245,16 +246,22 @@ document.addEventListener('alpine:init', () => {
         },
         
         init() {
+            this.closeOnClickOutsideHandler = this.closeOnClickOutside.bind(this);
+
             // 외부 클릭 시 닫기
             this.$watch('isOpen', (value) => {
                 if (value) {
                     this.$nextTick(() => {
-                        document.addEventListener('click', this.closeOnClickOutside.bind(this));
+                        document.addEventListener('click', this.closeOnClickOutsideHandler);
                     });
                 } else {
-                    document.removeEventListener('click', this.closeOnClickOutside.bind(this));
+                    document.removeEventListener('click', this.closeOnClickOutsideHandler);
                 }
             });
+        },
+
+        destroy() {
+            document.removeEventListener('click', this.closeOnClickOutsideHandler);
         },
         
         closeOnClickOutside(event) {

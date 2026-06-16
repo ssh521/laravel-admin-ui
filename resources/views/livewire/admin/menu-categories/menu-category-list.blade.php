@@ -226,7 +226,7 @@
     function updateCategoryOrder(newOrder) {
         console.log('순서 변경 요청:', newOrder);
 
-        fetch('{{ route("menu-categories.update-order-multiple") }}', {
+        fetch('{{ route("admin.menu-categories.update-order-multiple", [], false) }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -425,10 +425,13 @@
 
     function renderRoles(availableRoles, selectedRoles) {
         const container = document.getElementById('roles-container');
-        container.innerHTML = '';
+        container.replaceChildren();
 
         if (availableRoles.length === 0) {
-            container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">사용 가능한 역할이 없습니다.</p>';
+            const emptyLabel = document.createElement('p');
+            emptyLabel.className = 'text-gray-500 dark:text-gray-400';
+            emptyLabel.textContent = '사용 가능한 역할이 없습니다.';
+            container.appendChild(emptyLabel);
             return;
         }
 
@@ -436,17 +439,21 @@
             const isSelected = selectedRoles.includes(role.id);
             const roleElement = document.createElement('div');
             roleElement.className = 'flex items-center';
-            roleElement.innerHTML = `
-                <input type="checkbox"
-                       id="role-${role.id}"
-                       name="roles[]"
-                       value="${role.id}"
-                       ${isSelected ? 'checked' : ''}
-                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
-                <label for="role-${role.id}" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                    ${role.name}
-                </label>
-            `;
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `role-${role.id}`;
+            checkbox.name = 'roles[]';
+            checkbox.value = role.id;
+            checkbox.checked = isSelected;
+            checkbox.className = 'h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600';
+
+            const label = document.createElement('label');
+            label.setAttribute('for', `role-${role.id}`);
+            label.className = 'ml-2 text-sm text-gray-700 dark:text-gray-300';
+            label.textContent = role.name;
+
+            roleElement.append(checkbox, label);
             container.appendChild(roleElement);
         });
     }
@@ -496,4 +503,3 @@
         });
     });
 </script>
-
