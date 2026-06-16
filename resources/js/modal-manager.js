@@ -26,6 +26,18 @@ if (!window.modalManager) {
         getNextZIndex() {
             this.maxZIndex += 1;
             return this.maxZIndex;
+        },
+
+        isTopModal(modalId) {
+            const modal = this.modals.get(modalId);
+
+            if (!modal) {
+                return false;
+            }
+
+            const topZIndex = Math.max(...Array.from(this.modals.values()).map((item) => item.zIndex));
+
+            return modal.zIndex === topZIndex;
         }
     };
 }
@@ -124,6 +136,10 @@ export default function draggableModal(config = {}) {
 
         bringToFront() {
             this.zIndex = window.modalManager.bringToFront(this.modalId);
+        },
+
+        isTopModal() {
+            return window.modalManager.isTopModal(this.modalId);
         },
 
         centerModal() {
