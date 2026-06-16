@@ -495,6 +495,10 @@
             })
             .catch(error => {
                 console.error('역할 정보 가져오기 오류:', error);
+                document.querySelectorAll('.role-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+
                 // 오류 발생 시에도 모달은 열기
                 window.dispatchEvent(new CustomEvent('open-modal', {
                     detail: { modalId: 'role-management-modal', action: 'open' }
