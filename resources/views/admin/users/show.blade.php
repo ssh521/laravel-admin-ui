@@ -5,11 +5,11 @@
                 <a href="{{ route('home') }}">HOME</a>
                 - <a href="{{ route('admin.index') }}">관리자 홈</a>
                 @can('viewAny', Ssh521\LaravelAdmin\Models\User::class)
-                    - <a href="{{ route('admin.users.index') }}">회원 리스트</a>
+                    - <a href="{{ route('admin.users.index') }}">회원 목록</a>
                 @endcan
             </x-slot>
             <x-slot name="description">
-                {{ __('User Information') }}
+                {{ __('사용자 정보') }}
             </x-slot>
         </x-laravel-admin::admin.admin-header>
     </x-slot>
@@ -18,7 +18,7 @@
         <div class="min-h-[600px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="mx-auto max-w-4xl sm:flex sm:items-start sm:justify-between">
                 <div>
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('User Information') }}</h1>
+                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('사용자 정보') }}</h1>
                     <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
                         {{ __('사용자 계정의 기본 정보와 이메일 인증 상태를 확인합니다.') }}
                     </p>
@@ -28,11 +28,6 @@
                     <a href="{{ route('admin.users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
                         {{ __('목록보기') }}
                     </a>
-                    @can('update', $user)
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            {{ __('수정하기') }}
-                        </a>
-                    @endcan
                 </div>
             </div>
 
@@ -81,26 +76,8 @@
                     </div>
                 </dl>
 
-                <div class="flex flex-col gap-3 border-t border-gray-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 dark:border-gray-700">
-                    <div class="flex justify-start">
-                        @if($user->id != auth()->user()->id)
-                            @can('delete', $user)
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete this user?') }}');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
-                                        <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
-                                        {{ __('삭제하기') }}
-                                    </button>
-                                </form>
-                            @endcan
-                        @endif
-                    </div>
-
+                <div class="flex justify-end border-t border-gray-200 px-4 py-4 sm:px-6 dark:border-gray-700">
                     <div class="flex flex-wrap justify-end gap-3">
-                        <a href="{{ route('admin.users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            {{ __('목록보기') }}
-                        </a>
                         @can('update', $user)
                             <a href="{{ route('admin.users.edit', $user->id) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
                                 {{ __('수정하기') }}

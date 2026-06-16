@@ -7,7 +7,7 @@
                 - <a href="{{ route('admin.admin-users.index') }}">관리자 계정</a>
             </x-slot>
             <x-slot name="description">
-                {{ __('Edit Admin User') }}
+                {{ __('관리자 계정 수정') }}
             </x-slot>
         </x-laravel-admin::admin.admin-header>
     </x-slot>
@@ -15,7 +15,7 @@
     <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900">
         <div class="min-h-[450px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="mx-auto max-w-4xl">
-                <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Admin User Information') }}</h1>
+                <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('관리자 계정 정보 수정') }}</h1>
                 <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
                     {{ __('관리자 계정의 기본 정보, 비밀번호, 권한을 수정합니다.') }}
                 </p>
@@ -42,7 +42,7 @@
             </form>
 
             @unless ($isProfile)
-                <div class="mx-auto mt-6 flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
+                <div class="mx-auto flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex justify-start">
                         <form action="{{ route('admin.admin-users.destroy', $adminUser->getKey()) }}" method="POST" onsubmit="return confirm('{{ __('Are you sure you want to delete this admin user?') }}');">
                             @csrf

@@ -7,7 +7,7 @@
                 - <a href="{{ route('admin.menu-categories.index') }}">메뉴 카테고리 관리</a>
             </x-slot>
             <x-slot name="description">
-                {{ __('Menu Category Role Management') }}
+                {{ __('메뉴 카테고리 역할 관리') }}
             </x-slot>
         </x-laravel-admin::admin.admin-header>
     </x-slot>
@@ -17,14 +17,14 @@
             <div class="mx-auto max-w-4xl">
                 <div class="sm:flex sm:items-start sm:justify-between">
                     <div class="sm:flex-auto">
-                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Role Management') }} - [{{ $menuCategory->name }}]</h1>
+                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('역할 관리') }} - [{{ $menuCategory->name }}]</h1>
                         <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
                             {{ __('메뉴 카테고리에 접근을 허용할 역할을 선택합니다.') }}
                         </p>
                     </div>
                     <div class="mt-4 sm:mt-0 sm:ml-6">
                         <a href="{{ route('admin.menu-categories.show', $menuCategory) }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            {{ __('Back to Category') }}
+                            {{ __('카테고리로 돌아가기') }}
                         </a>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
 
                     <div class="min-w-0 md:col-span-8">
                         <fieldset>
-                            <legend class="sr-only">{{ __('Select Allowed Roles') }}</legend>
+                            <legend class="sr-only">{{ __('허용 역할 선택') }}</legend>
                             <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                                 @foreach($roles as $role)
                                     <label for="role_{{ $role->id }}" title="{{ $role->name }}" class="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800">
@@ -67,12 +67,12 @@
 
                     <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
 
-                    <div class="col-span-full mt-6 flex items-center justify-end gap-x-3">
+                    <div class="col-span-full flex items-center justify-end gap-x-3">
                         <a href="{{ route('admin.menu-categories.show', $menuCategory) }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
                             {{ __('취소') }}
                         </a>
                         <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            {{ __('Save Changes') }}
+                            {{ __('저장하기') }}
                         </button>
                     </div>
                 </div>

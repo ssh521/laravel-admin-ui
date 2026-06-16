@@ -8,7 +8,7 @@
                 - <a href="{{ route('admin.index') }}">{{ __('Admin Home') }}</a>
             </x-slot>
             <x-slot name="description">
-                {{ __('Permission List') }}
+                {{ __('권한 목록') }}
             </x-slot>
         </x-laravel-admin::admin.admin-header>
 
@@ -19,7 +19,7 @@
         <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <div class="sm:flex-auto">
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Permissions') }}</h1>
+                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('권한 목록') }}</h1>
                     <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
                         {{ __('관리자 권한 이름, 설명, 정렬 순서를 관리합니다.') }}
                     </p>
@@ -29,13 +29,6 @@
                 </div>
 
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
-                    @can('viewAny', Ssh521\LaravelAdmin\Models\Menu::class)
-                        <a href="{{ route('admin.permissions.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
-                            {{ __('목록보기') }}
-                        </a>
-                    @endcan
-
                     @can('create', arguments: Ssh521\LaravelAdmin\Models\Menu::class)
                         <a href="{{ route('admin.permissions.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
                             <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
@@ -152,7 +145,7 @@
                                                     <a class="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10"
                                                         href="{{ route('admin.permissions.edit', $permission) }}">
                                                         <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
-                                                        {{ __('Edit') }}
+                                                        {{ __('수정') }}
                                                     </a>
                                                 @endcan
                                             </td>
