@@ -3,6 +3,7 @@
 namespace Ssh521\LaravelAdminUi\Tests\Feature;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Ssh521\LaravelAdminUi\LaravelAdminUiServiceProvider;
@@ -17,11 +18,23 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertTrue(View::exists('laravel-admin::admin.index'));
         $this->assertTrue(View::exists('laravel-admin::livewire.admin.header-nav'));
         $this->assertTrue(View::exists('laravel-admin::partials.assets'));
+        $this->assertTrue(View::exists('laravel-admin::errors.403'));
 
         $html = Blade::render('<x-laravel-admin::admin.primary-button>Save</x-laravel-admin::admin.primary-button>');
 
         $this->assertStringContainsString('Save', $html);
         $this->assertStringContainsString('<button', $html);
+    }
+
+    public function test_it_renders_the_packaged_403_error_page(): void
+    {
+        Route::get('/forbidden', fn () => abort(403));
+
+        $this->get('/forbidden')
+            ->assertStatus(403)
+            ->assertSee('403 Forbidden')
+            ->assertSee('접근 권한이 없습니다.')
+            ->assertSee('현재 계정으로는 이 페이지에 접근할 수 없습니다.');
     }
 
     public function test_it_registers_ui_specific_publish_tags(): void

@@ -2,15 +2,19 @@
 
 namespace Ssh521\LaravelAdminUi;
 
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Throwable;
 
 class LaravelAdminUiServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
         $this->registerViewLocations();
+        $this->registerErrorRenderer();
         $this->registerPublishes();
     }
 
@@ -23,6 +27,36 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
 
         Blade::anonymousComponentPath($publishedViewsPath.'/components', 'laravel-admin');
         Blade::anonymousComponentPath($packageViewsPath.'/components', 'laravel-admin');
+    }
+
+    private function registerErrorRenderer(): void
+    {
+        $this->app->afterResolving(ExceptionHandler::class, function ($handler) {
+            if (! method_exists($handler, 'renderable')) {
+                return;
+            }
+
+            $handler->renderable(function (Throwable $e, $request) {
+                if ($request->expectsJson()) {
+                    return null;
+                }
+
+                if (! $e instanceof HttpExceptionInterface || $e->getStatusCode() !== 403) {
+                    return null;
+                }
+
+                if (file_exists(resource_path('views/errors/403.blade.php'))) {
+                    return null;
+                }
+
+                return response()->view(
+                    'laravel-admin::errors.403',
+                    [],
+                    403,
+                    $e->getHeaders()
+                );
+            });
+        });
     }
 
     private function registerPublishes(): void
