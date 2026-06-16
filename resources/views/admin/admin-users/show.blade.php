@@ -7,7 +7,7 @@
                 - <a href="{{ route('admin.admin-users.index') }}">관리자 계정</a>
             </x-slot>
             <x-slot name="description">
-                {{ __('Admin User Information') }}
+                {{ __('관리자 계정 정보') }}
             </x-slot>
         </x-laravel-admin::admin.admin-header>
     </x-slot>
@@ -17,7 +17,7 @@
             <div class="mx-auto max-w-4xl">
                 <div class="sm:flex sm:items-start sm:justify-between">
                     <div class="sm:flex-auto">
-                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Admin User Information') }}</h1>
+                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('관리자 계정 정보') }}</h1>
                         <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
                             {{ __('관리자 계정의 기본 정보, 권한, 상태 정보를 확인합니다.') }}
                         </p>
@@ -26,10 +26,6 @@
                         <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
                             <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
                             {{ __('목록보기') }}
-                        </a>
-                        <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            <i class="fa-regular fa-pen-to-square mr-2 text-xs" aria-hidden="true"></i>
-                            {{ __('수정하기') }}
                         </a>
                     </div>
                 </div>
@@ -92,9 +88,6 @@
 
                 <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 dark:border-gray-700 dark:bg-gray-800/70">
                     <div class="flex flex-wrap justify-end gap-2">
-                        <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            {{ __('목록보기') }}
-                        </a>
                         <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
                             {{ __('수정하기') }}
                         </a>

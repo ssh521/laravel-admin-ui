@@ -6,7 +6,7 @@
                 - <a href="{{ route('admin.index') }}">관리자 홈</a>
             </x-slot>
             <x-slot name="description">
-                {{ __('Menu Categories') }}
+                {{ __('메뉴 카테고리') }}
             </x-slot>
         </x-laravel-admin::admin.admin-header>
     </x-slot>
@@ -40,7 +40,7 @@
         <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="sm:flex sm:items-start sm:justify-between">
                 <div class="sm:flex-auto">
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Menu Categories List') }}</h1>
+                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('메뉴 카테고리 목록') }}</h1>
                     <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
                         @if(request('search'))
                             "{{ request('search') }}" {{ __('검색 결과입니다.') }}
@@ -50,13 +50,6 @@
                     </p>
                 </div>
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-6">
-                    @can('viewAny', Ssh521\LaravelAdmin\Models\MenuCategory::class)
-                        <a href="{{ route('admin.menu-categories.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
-                            {{ __('목록보기') }}
-                        </a>
-                    @endcan
-
                     @can('create', Ssh521\LaravelAdmin\Models\MenuCategory::class)
                         <a href="{{ route('admin.menu-categories.create') }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
                             <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>

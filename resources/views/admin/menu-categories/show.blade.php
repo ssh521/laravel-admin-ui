@@ -6,7 +6,7 @@
                 - <a href="{{ route('admin.index') }}">관리자 홈</a>
                 - <a href="{{ route('admin.menu-categories.index') }}">메뉴 카테고리 관리</a>
             </x-slot>
-            <x-slot name="description">{{ __('Menu Category Detail') }}</x-slot>
+            <x-slot name="description">{{ __('메뉴 카테고리 상세') }}</x-slot>
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
@@ -15,7 +15,7 @@
             <div class="mx-auto max-w-4xl">
                 <div class="sm:flex sm:items-start sm:justify-between">
                     <div class="sm:flex-auto">
-                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Menu Category Information') }}</h1>
+                        <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('메뉴 카테고리 정보') }}</h1>
                         <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
                             {{ __('메뉴 카테고리의 상태, 허용 역할, 연결된 메뉴를 확인합니다.') }}
                         </p>
@@ -25,12 +25,6 @@
                             <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
                             {{ __('목록보기') }}
                         </a>
-                        @can('update', $menuCategory)
-                            <a href="{{ route('admin.menu-categories.edit', $menuCategory) }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                                <i class="fa-regular fa-pen-to-square mr-2 text-xs" aria-hidden="true"></i>
-                                {{ __('수정하기') }}
-                            </a>
-                        @endcan
                     </div>
                 </div>
             </div>
@@ -131,7 +125,7 @@
                                                         </span>
                                                     </td>
                                                     <td class="whitespace-nowrap py-3 pl-3 text-right">
-                                                        <a href="{{ route('admin.menus.show', $menu) }}" class="text-sm font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">{{ __('View') }}</a>
+                                                        <a href="{{ route('admin.menus.show', $menu) }}" class="text-sm font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">{{ __('보기') }}</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -146,32 +140,13 @@
                 </div>
 
                 <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 dark:border-gray-700 dark:bg-gray-800/70">
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div class="flex justify-start">
-                            @can('delete', $menuCategory)
-                                <form action="{{ route('admin.menu-categories.destroy', $menuCategory) }}" method="POST" onsubmit="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
-                                        <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
-                                        {{ __('삭제하기') }}
-                                    </button>
-                                </form>
-                            @endcan
-                        </div>
-
+                    <div class="flex justify-end">
                         <div class="flex flex-wrap justify-end gap-2">
-                            <a href="{{ route('admin.menu-categories.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                                {{ __('목록보기') }}
-                            </a>
                             @can('update', $menuCategory)
                                 <a href="{{ route('admin.menu-categories.edit', $menuCategory) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
                                     {{ __('수정하기') }}
                                 </a>
                             @endcan
-                            <a href="{{ route('admin.menu-categories.roles', $menuCategory) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                                {{ __('권한 관리') }}
-                            </a>
                         </div>
                     </div>
                 </div>

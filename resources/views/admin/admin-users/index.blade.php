@@ -6,7 +6,7 @@
                 - <a href="{{ route('admin.index') }}">관리자 홈</a>
             </x-slot>
             <x-slot name="description">
-                {{ __('Admin User List') }}
+                {{ __('관리자 계정 목록') }}
             </x-slot>
         </x-laravel-admin::admin.admin-header>
     </x-slot>
@@ -15,16 +15,12 @@
         <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <div class="sm:flex-auto">
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('Admin Users') }}</h1>
+                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('관리자 계정 목록') }}</h1>
                     <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
                         {{ __('관리자 계정과 역할, 이메일 인증 상태를 확인합니다.') }}
                     </p>
                 </div>
                 <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                        <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
-                        {{ __('목록보기') }}
-                    </a>
                     <a href="{{ route('admin.admin-users.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">
                         <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
                         {{ __('등록하기') }}
@@ -35,9 +31,9 @@
             <x-laravel-admin::admin.session-messages />
 
             <form method="GET" action="{{ route('admin.admin-users.index') }}" class="mt-6 grid gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:grid-cols-[minmax(0,180px)_minmax(0,1fr)_auto] sm:items-center dark:border-gray-700 dark:bg-gray-800/70">
-                <label for="admin-user-role" class="sr-only">{{ __('All Roles') }}</label>
+                <label for="admin-user-role" class="sr-only">{{ __('전체 역할') }}</label>
                 <select id="admin-user-role" name="role" class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white">
-                    <option value="">{{ __('All Roles') }}</option>
+                    <option value="">{{ __('전체 역할') }}</option>
                     @foreach ($roles as $role)
                         <option value="{{ $role->name }}" @selected(request('role') === $role->name)>{{ $role->name }}</option>
                     @endforeach
@@ -64,7 +60,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">{{ __('Name') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('Roles') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('역할 목록') }}</th>
                                     <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">{{ __('Verified') }}</th>
                                     <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
                                         <span class="sr-only">{{ __('Actions') }}</span>
@@ -111,11 +107,11 @@
                                         <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                                             <a href="{{ route('admin.admin-users.show', $adminUser->getKey()) }}" class="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
                                                 <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
-                                                {{ __('View') }}
+                                                {{ __('보기') }}
                                             </a>
                                             <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="ml-1 inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
                                                 <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
-                                                {{ __('Edit') }}
+                                                {{ __('수정') }}
                                             </a>
                                         </td>
                                     </tr>

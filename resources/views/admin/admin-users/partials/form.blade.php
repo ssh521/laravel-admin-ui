@@ -119,7 +119,7 @@
     <div class="md:col-span-12 dark:border-white/10 border-b border-gray-900/10 my-10"></div>
 
     @if($showActions)
-        <div class="col-span-full mt-6 flex items-center justify-end gap-x-3">
+        <div class="col-span-full flex items-center justify-end gap-x-3">
             @unless ($isProfile)
                 <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
                     {{ __('취소') }}
