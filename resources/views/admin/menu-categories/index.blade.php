@@ -373,10 +373,13 @@
         function renderRoles(availableRoles, selectedRoles) {
             const container = document.getElementById('roles-container');
             const submitBtn = document.getElementById('roles-submit-btn');
-            container.innerHTML = '';
+            container.replaceChildren();
 
             if (availableRoles.length === 0) {
-                container.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">{{ __('사용 가능한 역할이 없습니다.') }}</p>';
+                const emptyLabel = document.createElement('p');
+                emptyLabel.className = 'text-sm text-gray-500 dark:text-gray-400';
+                emptyLabel.textContent = @json(__('사용 가능한 역할이 없습니다.'));
+                container.appendChild(emptyLabel);
                 submitBtn.disabled = true;
                 return;
             }
@@ -387,15 +390,20 @@
                 const roleElement = document.createElement('label');
                 roleElement.className = 'flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800';
                 roleElement.setAttribute('for', `role-${role.id}`);
-                roleElement.innerHTML = `
-                    <input type="checkbox"
-                           id="role-${role.id}"
-                           name="roles[]"
-                           value="${role.id}"
-                           ${isSelected ? 'checked' : ''}
-                           class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
-                    <span class="min-w-0 truncate">${role.name}</span>
-                `;
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `role-${role.id}`;
+                checkbox.name = 'roles[]';
+                checkbox.value = role.id;
+                checkbox.checked = isSelected;
+                checkbox.className = 'size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900';
+
+                const roleName = document.createElement('span');
+                roleName.className = 'min-w-0 truncate';
+                roleName.textContent = role.name;
+
+                roleElement.append(checkbox, roleName);
                 container.appendChild(roleElement);
             });
         }
@@ -433,10 +441,25 @@
                     showNotification(data.message || '권한이 성공적으로 저장되었습니다.', 'success');
                     const rolesCell = document.querySelector(`[data-roles-cell="${currentCategoryId}"]`);
                     if (rolesCell && data.roles !== undefined) {
+                        rolesCell.replaceChildren();
+
                         if (data.roles.length > 0) {
-                            rolesCell.innerHTML = `<div class="flex flex-wrap gap-1.5">${data.roles.map(r => `<span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">${r.name}</span>`).join('')}</div>`;
+                            const rolesWrapper = document.createElement('div');
+                            rolesWrapper.className = 'flex flex-wrap gap-1.5';
+
+                            data.roles.forEach(role => {
+                                const badge = document.createElement('span');
+                                badge.className = 'inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700';
+                                badge.textContent = role.name;
+                                rolesWrapper.appendChild(badge);
+                            });
+
+                            rolesCell.appendChild(rolesWrapper);
                         } else {
-                            rolesCell.innerHTML = '<span class="text-gray-500 dark:text-gray-400">없음</span>';
+                            const emptyLabel = document.createElement('span');
+                            emptyLabel.className = 'text-gray-500 dark:text-gray-400';
+                            emptyLabel.textContent = '없음';
+                            rolesCell.appendChild(emptyLabel);
                         }
                     }
                     window.dispatchEvent(new CustomEvent('draggable-modal-close', {
