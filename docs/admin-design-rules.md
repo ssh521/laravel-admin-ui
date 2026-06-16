@@ -50,6 +50,7 @@ For rules that other packages can adopt as a cross-package contract, see [admin-
 - If a name opens a quick modal, keep that behavior on the name and make the explicit `상세보기` action navigate to the show page.
 - Keep search and filters in a compact bordered filter bar above the list.
 - Search controls should be one line on desktop and stack cleanly on small screens, for example `flex flex-col sm:flex-row`.
+- Place fixed-width filter selects before the search input; let only the search input expand, and keep the submit button shrink-wrapped on desktop.
 
 ## Forms
 

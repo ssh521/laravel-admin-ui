@@ -53,6 +53,7 @@ List screens should:
 
 - Keep search and filters in a compact bordered bar above the list.
 - Keep search controls on one line on desktop and stacked on small screens.
+- Put fixed-width filter selects before the flexible search input; selects and action buttons should not stretch on desktop.
 - Put the primary identity field first.
 - Use avatars only for person/user records where recognition helps.
 - Render statuses as badges.
