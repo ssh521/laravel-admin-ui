@@ -46,7 +46,7 @@ $centerY = $initialY ?? 'Math.floor((window.innerHeight - (' . $clampedHeightExp
     >
 
     <!-- 모달 박스 -->
-    <div x-ref="modal" x-show="isOpen" @click.stop @keydown.escape.window="close" @mousedown.stop="bringToFront" @touchstart.stop="bringToFront" :style="style"
+    <div x-ref="modal" x-show="isOpen" @click.stop @keydown.escape.window="if (isTopModal()) close()" @mousedown.stop="bringToFront" @touchstart.stop="bringToFront" :style="style"
         class="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 absolute p-0 min-w-[300px] border border-gray-200 dark:border-gray-700">
 
         <!-- 헤더 -->
