@@ -59,13 +59,15 @@
                         </a>
                     </div>
 
-                    <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                        <h3 class="text-lg font-semibold mb-4">사용자 관리</h3>
-                        <p class="text-gray-600 mb-4">시스템 사용자들을 관리합니다.</p>
-                        <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                            관리하기
-                        </a>
-                    </div>
+                    @if (Route::has('admin.users.index'))
+                        <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                            <h3 class="text-lg font-semibold mb-4">사용자 관리</h3>
+                            <p class="text-gray-600 mb-4">시스템 사용자들을 관리합니다.</p>
+                            <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                관리하기
+                            </a>
+                        </div>
+                    @endif
                     @endcan
 
                     @can('manageRoles', 'admin')
