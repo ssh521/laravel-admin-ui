@@ -361,9 +361,16 @@
 
     <!-- 우측: 드롭다운 메뉴 -->
     <div class="flex items-center gap-4">
+        @php
+            $hasJetstream = class_exists(\Laravel\Jetstream\Jetstream::class);
+            $hasTeamFeatures = $hasJetstream && \Laravel\Jetstream\Jetstream::hasTeamFeatures();
+            $newTeamModel = $hasTeamFeatures ? \Laravel\Jetstream\Jetstream::newTeamModel() : null;
+            $managesProfilePhotos = $hasJetstream && \Laravel\Jetstream\Jetstream::managesProfilePhotos();
+            $hasApiFeatures = $hasJetstream && \Laravel\Jetstream\Jetstream::hasApiFeatures() && Route::has('api-tokens.index');
+        @endphp
 
         <!-- Teams Dropdown -->
-        @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
+        @if ($hasTeamFeatures)
         <div class="ms-3 relative">
             <x-laravel-admin::admin.dropdown align="right" width="60">
                 <x-slot name="trigger">
@@ -389,7 +396,7 @@
                         <x-laravel-admin::admin.dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}">
                             {{ __('Team Settings') }}
                         </x-laravel-admin::admin.dropdown-link>
-                        @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
+                        @can('create', $newTeamModel)
                         <x-laravel-admin::admin.dropdown-link href="{{ route('teams.create') }}">
                             {{ __('Create New Team') }}
                         </x-laravel-admin::admin.dropdown-link>
@@ -414,7 +421,7 @@
         <div class="ms-3 relative">
             <x-laravel-admin::admin.dropdown align="right" width="48">
                 <x-slot name="trigger">
-                    @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                    @if ($managesProfilePhotos)
                     <button
                         class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-purple-300 transition">
                         <img class="size-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}"
@@ -475,7 +482,7 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>{{ __('Profile') }}
                     </x-laravel-admin::admin.dropdown-link>
-                    @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                    @if ($hasApiFeatures)
                     <x-laravel-admin::admin.dropdown-link href="{{ route('api-tokens.index') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
