@@ -10,7 +10,6 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <style>
         .drag-handle {
             cursor: grab;
@@ -232,26 +231,72 @@
         let currentCategoryId = null;
 
         document.addEventListener('DOMContentLoaded', function() {
-            const tbody = document.querySelector('#categories-tbody');
-            if (tbody) {
-                new Sortable(tbody, {
-                    animation: 150,
-                    handle: '.drag-handle',
-                    ghostClass: 'sortable-ghost',
-                    chosenClass: 'sortable-chosen',
-                    dragClass: 'sortable-drag',
-                    onEnd: function() {
-                        const rows = Array.from(tbody.querySelectorAll('tr[data-category-id]'));
-                        const newOrder = rows.map((row, index) => ({
-                            id: row.dataset.categoryId,
-                            sort_order: index + 1
-                        }));
-
-                        updateCategoryOrder(newOrder);
-                    }
-                });
-            }
+            initCategoryDragSort();
         });
+
+        function initCategoryDragSort() {
+            const tbody = document.querySelector('#categories-tbody');
+            if (!tbody || tbody.dataset.nativeSortInitialized === 'true') {
+                return;
+            }
+
+            tbody.dataset.nativeSortInitialized = 'true';
+            let draggedRow = null;
+
+            tbody.querySelectorAll('tr[data-category-id]').forEach(row => {
+                row.draggable = true;
+
+                row.addEventListener('dragstart', event => {
+                    if (!event.target.closest('.drag-handle')) {
+                        event.preventDefault();
+                        return;
+                    }
+
+                    draggedRow = row;
+                    row.classList.add('sortable-ghost');
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.dataTransfer.setData('text/plain', row.dataset.categoryId);
+                });
+
+                row.addEventListener('dragover', event => {
+                    if (!draggedRow || draggedRow === row) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    const rect = row.getBoundingClientRect();
+                    const shouldInsertAfter = event.clientY > rect.top + rect.height / 2;
+                    tbody.insertBefore(draggedRow, shouldInsertAfter ? row.nextSibling : row);
+                });
+
+                row.addEventListener('drop', event => {
+                    event.preventDefault();
+
+                    if (!draggedRow) {
+                        return;
+                    }
+
+                    draggedRow.classList.remove('sortable-ghost');
+                    draggedRow = null;
+                    updateCategoryOrder(buildCategoryOrder(tbody));
+                });
+
+                row.addEventListener('dragend', () => {
+                    if (draggedRow) {
+                        draggedRow.classList.remove('sortable-ghost');
+                    }
+
+                    draggedRow = null;
+                });
+            });
+        }
+
+        function buildCategoryOrder(tbody) {
+            return Array.from(tbody.querySelectorAll('tr[data-category-id]')).map((row, index) => ({
+                id: row.dataset.categoryId,
+                sort_order: index + 1
+            }));
+        }
 
         function updateCategoryOrder(newOrder) {
             fetch('{{ route("admin.menu-categories.update-order-multiple", [], false) }}', {

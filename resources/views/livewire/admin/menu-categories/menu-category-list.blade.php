@@ -188,39 +188,88 @@
 <!-- 드래그 앤 드롭 순서 변경을 위한 JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        initSortable();
+        initNativeDrag();
     });
 
     // Livewire 컴포넌트가 업데이트된 후 다시 초기화
     document.addEventListener('livewire:init', function() {
         Livewire.hook('morph.updated', ({ el, component }) => {
             if (el.querySelector('#categories-tbody')) {
-                initSortable();
+                initNativeDrag();
             }
         });
     });
 
-    function initSortable() {
+    function initNativeDrag() {
         const tbody = document.querySelector('#categories-tbody');
-        if (tbody && !tbody.sortableInstance) {
-            tbody.sortableInstance = new Sortable(tbody, {
-                animation: 150,
-                handle: '.drag-handle',
-                ghostClass: 'sortable-ghost',
-                chosenClass: 'sortable-chosen',
-                dragClass: 'sortable-drag',
-                onEnd: function(evt) {
-                    const rows = Array.from(tbody.querySelectorAll('tr[data-category-id]'));
-                    const newOrder = rows.map((row, index) => ({
-                        id: row.dataset.categoryId,
-                        sort_order: index + 1
-                    }));
-
-                    // 순서 변경 API 호출
-                    updateCategoryOrder(newOrder);
-                }
-            });
+        if (!tbody || tbody.dataset.nativeSortInitialized === 'true') {
+            return;
         }
+
+        tbody.dataset.nativeSortInitialized = 'true';
+        let draggedRow = null;
+
+        const refreshDraggableRows = () => {
+            tbody.querySelectorAll('tr[data-category-id]').forEach(row => {
+                row.draggable = true;
+            });
+        };
+
+        refreshDraggableRows();
+
+        tbody.addEventListener('dragstart', event => {
+            const row = event.target.closest('tr[data-category-id]');
+
+            if (!row || !event.target.closest('.drag-handle')) {
+                event.preventDefault();
+                return;
+            }
+
+            draggedRow = row;
+            row.classList.add('sortable-ghost');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', row.dataset.categoryId);
+        });
+
+        tbody.addEventListener('dragover', event => {
+            const row = event.target.closest('tr[data-category-id]');
+
+            if (!draggedRow || !row || draggedRow === row) {
+                return;
+            }
+
+            event.preventDefault();
+            const rect = row.getBoundingClientRect();
+            const shouldInsertAfter = event.clientY > rect.top + rect.height / 2;
+            tbody.insertBefore(draggedRow, shouldInsertAfter ? row.nextSibling : row);
+        });
+
+        tbody.addEventListener('drop', event => {
+            event.preventDefault();
+
+            if (!draggedRow) {
+                return;
+            }
+
+            draggedRow.classList.remove('sortable-ghost');
+            draggedRow = null;
+
+            const newOrder = Array.from(tbody.querySelectorAll('tr[data-category-id]')).map((row, index) => ({
+                id: row.dataset.categoryId,
+                sort_order: index + 1
+            }));
+
+            updateCategoryOrder(newOrder);
+        });
+
+        tbody.addEventListener('dragend', () => {
+            if (draggedRow) {
+                draggedRow.classList.remove('sortable-ghost');
+            }
+
+            draggedRow = null;
+            refreshDraggableRows();
+        });
     }
 
     function updateCategoryOrder(newOrder) {
