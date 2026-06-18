@@ -216,7 +216,12 @@
 
         const refreshDraggableRows = () => {
             tbody.querySelectorAll('tr[data-category-id]').forEach(row => {
-                row.draggable = true;
+                const handle = row.querySelector('.drag-handle');
+                row.draggable = false;
+
+                if (handle) {
+                    handle.draggable = true;
+                }
             });
         };
 
