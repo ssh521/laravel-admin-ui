@@ -1,4 +1,3 @@
-import './bootstrap';
 import draggableModal, { draggableModalAlert } from './modal-manager';
 import './sidebarBackground';
 import './dtree';
