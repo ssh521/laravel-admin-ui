@@ -208,6 +208,11 @@
 
         tbody.dataset.nativeSortInitialized = 'true';
         let draggedRow = null;
+        let originalOrder = [];
+        let dropHandled = false;
+
+        const captureCategoryOrder = () => Array.from(tbody.querySelectorAll('tr[data-category-id]'))
+            .map(row => row.dataset.categoryId);
 
         const refreshDraggableRows = () => {
             tbody.querySelectorAll('tr[data-category-id]').forEach(row => {
@@ -226,6 +231,8 @@
             }
 
             draggedRow = row;
+            originalOrder = captureCategoryOrder();
+            dropHandled = false;
             row.classList.add('sortable-ghost');
             event.dataTransfer.effectAllowed = 'move';
             event.dataTransfer.setData('text/plain', row.dataset.categoryId);
@@ -252,6 +259,7 @@
             }
 
             draggedRow.classList.remove('sortable-ghost');
+            dropHandled = true;
             draggedRow = null;
 
             const newOrder = Array.from(tbody.querySelectorAll('tr[data-category-id]')).map((row, index) => ({
@@ -259,7 +267,7 @@
                 sort_order: index + 1
             }));
 
-            updateCategoryOrder(newOrder);
+            updateCategoryOrder(newOrder, originalOrder);
         });
 
         tbody.addEventListener('dragend', () => {
@@ -268,11 +276,36 @@
             }
 
             draggedRow = null;
+
+            if (!dropHandled && originalOrder.length > 0) {
+                restoreCategoryOrder(originalOrder);
+            }
+
+            originalOrder = [];
+            dropHandled = false;
             refreshDraggableRows();
         });
     }
 
-    function updateCategoryOrder(newOrder) {
+    function restoreCategoryOrder(order) {
+        const tbody = document.querySelector('#categories-tbody');
+
+        if (!tbody || order.length === 0) {
+            return;
+        }
+
+        order.forEach(categoryId => {
+            const row = tbody.querySelector(`tr[data-category-id="${categoryId}"]`);
+
+            if (row) {
+                tbody.appendChild(row);
+            }
+        });
+
+        updateSortOrderNumbers();
+    }
+
+    function updateCategoryOrder(newOrder, previousOrder = []) {
         console.log('순서 변경 요청:', newOrder);
 
         fetch('{{ route("admin.menu-categories.update-order-multiple", [], false) }}', {
@@ -307,11 +340,13 @@
                 }
             } else {
                 console.error('서버 에러:', data.message);
+                restoreCategoryOrder(previousOrder);
                 showNotification(data.message || '순서 변경 중 오류가 발생했습니다.', 'error');
             }
         })
         .catch(error => {
             console.error('네트워크 에러:', error);
+            restoreCategoryOrder(previousOrder);
             showNotification('순서 변경 중 네트워크 오류가 발생했습니다.', 'error');
         });
     }

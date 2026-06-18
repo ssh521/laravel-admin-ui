@@ -242,6 +242,11 @@
 
             tbody.dataset.nativeSortInitialized = 'true';
             let draggedRow = null;
+            let originalOrder = [];
+            let dropHandled = false;
+
+            const captureCategoryOrder = () => Array.from(tbody.querySelectorAll('tr[data-category-id]'))
+                .map(row => row.dataset.categoryId);
 
             tbody.querySelectorAll('tr[data-category-id]').forEach(row => {
                 row.draggable = true;
@@ -253,6 +258,8 @@
                     }
 
                     draggedRow = row;
+                    originalOrder = captureCategoryOrder();
+                    dropHandled = false;
                     row.classList.add('sortable-ghost');
                     event.dataTransfer.effectAllowed = 'move';
                     event.dataTransfer.setData('text/plain', row.dataset.categoryId);
@@ -277,8 +284,9 @@
                     }
 
                     draggedRow.classList.remove('sortable-ghost');
+                    dropHandled = true;
                     draggedRow = null;
-                    updateCategoryOrder(buildCategoryOrder(tbody));
+                    updateCategoryOrder(buildCategoryOrder(tbody), originalOrder);
                 });
 
                 row.addEventListener('dragend', () => {
@@ -287,6 +295,13 @@
                     }
 
                     draggedRow = null;
+
+                    if (!dropHandled && originalOrder.length > 0) {
+                        restoreCategoryOrder(originalOrder);
+                    }
+
+                    originalOrder = [];
+                    dropHandled = false;
                 });
             });
         }
@@ -298,7 +313,25 @@
             }));
         }
 
-        function updateCategoryOrder(newOrder) {
+        function restoreCategoryOrder(order) {
+            const tbody = document.querySelector('#categories-tbody');
+
+            if (!tbody || order.length === 0) {
+                return;
+            }
+
+            order.forEach(categoryId => {
+                const row = tbody.querySelector(`tr[data-category-id="${categoryId}"]`);
+
+                if (row) {
+                    tbody.appendChild(row);
+                }
+            });
+
+            updateSortOrderNumbers();
+        }
+
+        function updateCategoryOrder(newOrder, previousOrder = []) {
             fetch('{{ route("admin.menu-categories.update-order-multiple", [], false) }}', {
                 method: 'POST',
                 headers: {
@@ -338,10 +371,12 @@
                     updateSortOrderNumbers();
                     refreshLeftMenu();
                 } else {
+                    restoreCategoryOrder(previousOrder);
                     showNotification(data.message || '순서 변경 중 오류가 발생했습니다.', 'error');
                 }
             })
             .catch(error => {
+                restoreCategoryOrder(previousOrder);
                 showNotification(error?.message || '순서 변경 중 네트워크 오류가 발생했습니다.', 'error');
             });
         }

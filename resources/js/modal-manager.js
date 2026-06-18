@@ -9,8 +9,20 @@ if (!window.modalManager) {
         register(modalId, component) {
             this.modals.set(modalId, component);
         },
+
+        resetModalElement(modalId) {
+            const modalElement = document.getElementById(modalId);
+
+            if (!modalElement) {
+                return;
+            }
+
+            modalElement.style.pointerEvents = '';
+            modalElement.style.zIndex = '';
+        },
         
         unregister(modalId) {
+            this.resetModalElement(modalId);
             this.modals.delete(modalId);
         },
         
@@ -92,6 +104,8 @@ export default function draggableModal(config = {}) {
         },
 
         openModal() {
+            window.modalManager.resetModalElement(this.modalId);
+
             // 모달이 등록되어 있지 않으면 다시 등록
             if (!window.modalManager.modals.has(this.modalId)) {
                 window.modalManager.register(this.modalId, this);

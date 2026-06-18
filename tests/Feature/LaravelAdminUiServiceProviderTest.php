@@ -3,6 +3,7 @@
 namespace Ssh521\LaravelAdminUi\Tests\Feature;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -46,11 +47,55 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertPublishesTo('laravel-admin-ui-assets', public_path('images/dtree'));
     }
 
-    public function test_it_does_not_register_legacy_publish_tags(): void
+    public function test_it_registers_legacy_publish_tag_aliases(): void
     {
-        $this->assertSame([], ServiceProvider::pathsToPublish(LaravelAdminUiServiceProvider::class, 'laravel-admin-views'));
-        $this->assertSame([], ServiceProvider::pathsToPublish(LaravelAdminUiServiceProvider::class, 'laravel-admin-components'));
-        $this->assertSame([], ServiceProvider::pathsToPublish(LaravelAdminUiServiceProvider::class, 'laravel-admin-assets'));
+        $this->assertPublishesTo('laravel-admin-views', resource_path('views/vendor/laravel-admin'));
+        $this->assertPublishesTo('laravel-admin-components', resource_path('views/vendor/laravel-admin/components'));
+        $this->assertPublishesTo('laravel-admin-assets', resource_path('vendor/laravel-admin/admin.css'));
+        $this->assertPublishesTo('laravel-admin-assets', resource_path('vendor/laravel-admin'));
+        $this->assertPublishesTo('laravel-admin-assets', public_path('images/dtree'));
+    }
+
+    public function test_icon_component_logs_unknown_icon_names_and_renders_warning_icon(): void
+    {
+        Log::shouldReceive('warning')
+            ->once()
+            ->with('Unknown laravel-admin icon name.', ['name' => 'legacy-icon']);
+
+        $html = Blade::render('<x-laravel-admin::admin.icon name="legacy-icon" />');
+
+        $this->assertStringContainsString('M12 9v4m0 4h.01', $html);
+    }
+
+    public function test_menu_search_uses_full_icon_map_and_disposable_listeners(): void
+    {
+        $source = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/partials/header-menu-search.blade.php');
+
+        $this->assertStringContainsString('AbortController', $source);
+        $this->assertStringContainsString('disposeMenuSearches', $source);
+        $this->assertStringContainsString('tags:', $source);
+        $this->assertStringContainsString('lock:', $source);
+        $this->assertStringContainsString('magnifying-glass', $source);
+    }
+
+    public function test_modal_manager_clears_stale_pointer_event_styles(): void
+    {
+        $source = file_get_contents(__DIR__.'/../../resources/js/modal-manager.js');
+
+        $this->assertStringContainsString('resetModalElement', $source);
+        $this->assertStringContainsString("modalElement.style.pointerEvents = ''", $source);
+    }
+
+    public function test_menu_category_drag_sort_restores_cancelled_or_failed_reorders(): void
+    {
+        $index = file_get_contents(__DIR__.'/../../resources/views/admin/menu-categories/index.blade.php');
+        $livewire = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/menu-categories/menu-category-list.blade.php');
+
+        foreach ([$index, $livewire] as $source) {
+            $this->assertStringContainsString('originalOrder', $source);
+            $this->assertStringContainsString('dropHandled', $source);
+            $this->assertStringContainsString('restoreCategoryOrder', $source);
+        }
     }
 
     public function test_admin_shell_guards_optional_navigation_features(): void
