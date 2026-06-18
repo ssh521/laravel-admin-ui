@@ -64,12 +64,12 @@ export default function draggableModal(config = {}) {
         zIndex: 1000,
         pos: { x: 100, y: 100 },
         size: { w: 800, h: 600 },
+        minWidth: 300,
+        minHeight: 200,
         alwaysCenter: config.alwaysCenter || false,
         resizable: config.resizable || false,
 
         init() {
-            //console.log('draggableModal 초기화:', this.modalId, config);
-            
             // 설정 병합 및 타입 변환
             const finalConfig = { ...this.defaultConfig, ...config };
             
@@ -79,14 +79,9 @@ export default function draggableModal(config = {}) {
             this.pos.y = parseInt(finalConfig.initialY) || 100;
             this.size.w = parseInt(finalConfig.initialWidth) || 800;
             this.size.h = parseInt(finalConfig.initialHeight) || 600;
-            
-            //console.log('최종 설정:', {
-            //    modalId: this.modalId,
-            //    pos: this.pos,
-            //    size: this.size,
-            //    zIndex: this.zIndex
-            //});
-            
+            this.minWidth = parseInt(finalConfig.minWidth) || 300;
+            this.minHeight = parseInt(finalConfig.minHeight) || 200;
+
             // 모달 매니저에 등록
             window.modalManager.register(this.modalId, this);
             
@@ -97,8 +92,6 @@ export default function draggableModal(config = {}) {
         },
 
         openModal() {
-            //console.log('모달 열기:', this.modalId);
-            
             // 모달이 등록되어 있지 않으면 다시 등록
             if (!window.modalManager.modals.has(this.modalId)) {
                 window.modalManager.register(this.modalId, this);
@@ -199,8 +192,8 @@ export default function draggableModal(config = {}) {
                     this.size.w = w;
                     this.size.h = h;
                 },
-                minWidth: this.defaultConfig.minWidth,
-                minHeight: this.defaultConfig.minHeight,
+                minWidth: this.minWidth,
+                minHeight: this.minHeight,
                 maxWidth: maxWidth,
                 maxHeight: maxHeight,
                 direction: direction,
@@ -231,8 +224,6 @@ export default function draggableModal(config = {}) {
                             height: this.size.h
                         }
                     }));
-                    
-                    console.log('모달 리사이즈 완료:', this.modalId, 'Size:', this.size.w + 'x' + this.size.h, 'Direction:', direction);
                 }
             });
             
@@ -252,35 +243,40 @@ export function draggableModalAlert(config = {}) {
         type: config.type || 'info',
         isOpen: false,
 
-        init() {
-            console.log('Draggable Alert 모달 초기화:', this.modalId);
-        },
+        init() {},
 
         openModal() {
-            console.log('Draggable Alert 모달 열기:', this.modalId);
             this.isOpen = true;
             document.body.style.overflow = 'hidden';
             this.disableOtherModals();
         },
 
         close() {
-            console.log('Draggable Alert 모달 닫기:', this.modalId);
             this.isOpen = false;
             document.body.style.overflow = '';
             this.enableOtherModals();
         },
 
+        otherModalElements() {
+            if (!window.modalManager) {
+                return [];
+            }
+
+            return Array.from(window.modalManager.modals.keys())
+                .filter((modalId) => modalId !== this.modalId)
+                .map((modalId) => document.getElementById(modalId))
+                .filter(Boolean);
+        },
+
         disableOtherModals() {
-            const otherModals = document.querySelectorAll('[id^="draggable-modal"]:not([id*="alert"])');
-            otherModals.forEach(modal => {
+            this.otherModalElements().forEach(modal => {
                 modal.style.zIndex = '1000';
                 modal.style.pointerEvents = 'none';
             });
         },
 
         enableOtherModals() {
-            const otherModals = document.querySelectorAll('[id^="draggable-modal"]:not([id*="alert"])');
-            otherModals.forEach(modal => {
+            this.otherModalElements().forEach(modal => {
                 modal.style.zIndex = '';
                 modal.style.pointerEvents = '';
             });

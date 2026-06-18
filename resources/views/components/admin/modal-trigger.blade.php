@@ -58,7 +58,7 @@
 @if($type === 'link')
     {{-- 링크 형태로 렌더링 --}}
     <a 
-        @click.prevent="$dispatch('{{ $eventName }}', { modalId: '{{ $finalModalId }}' })"
+        @click.prevent="$dispatch('{{ $eventName }}', @js($eventData))"
         class="{{ $commonClasses }} {{ $linkClasses }}"
         {{ $attributes->merge(['class' => '']) }}>
         {{ $text }}
@@ -66,9 +66,9 @@
 @else
     {{-- 버튼 형태로 렌더링 (기본값) --}}
     <button 
-        @click="$dispatch('{{ $eventName }}', { modalId: '{{ $finalModalId }}' })"
+        @click="$dispatch('{{ $eventName }}', @js($eventData))"
         class="px-4 py-2 rounded-md {{ $commonClasses }} {{ $buttonClasses }}"
         {{ $attributes->merge(['class' => '']) }}>
         {{ $text }}
     </button>
-@endif 
+@endif
