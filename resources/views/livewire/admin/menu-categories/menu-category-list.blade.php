@@ -348,7 +348,7 @@
 </style>
 
 <!-- 권한 관리 모달 -->
-<x-laravel-admin::admin.draggable-modal id="roles-modal" title="권한 관리" :width="600" :height="500">
+<x-laravel-admin::admin.draggable-modal id="roles-modal" title="권한 관리" :width="720" :height="560">
     <div class="p-6">
         <div class="mb-4">
             <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modal-category-name">
@@ -361,13 +361,13 @@
 
         <form id="roles-form" class="space-y-4">
             @csrf
-            <div id="roles-container" class="space-y-3">
+            <div id="roles-container" class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <!-- 역할 목록이 여기에 동적으로 로드됩니다 -->
             </div>
 
             <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button type="button"
-                    @click="$dispatch('draggable-modal-close', { modalId: 'roles-modal', action: 'close' })"
+                    @click="$dispatch('close-modal', { modalId: 'roles-modal', action: 'close' })"
                     class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
                     취소
                 </button>
@@ -383,8 +383,8 @@
 <script>
     let currentCategoryId = null;
 
-    // draggable-modal 이벤트 리스너 추가
-    document.addEventListener('draggable-modal', function(event) {
+    // 현재 draggable-modal 컴포넌트의 표준 open-modal 이벤트 사용
+    document.addEventListener('open-modal', function(event) {
         if (event.detail.modalId === 'roles-modal') {
             // 클릭된 요소에서 카테고리 정보 가져오기
             const trigger = event.target.closest('[data-category-id]');
@@ -435,10 +435,13 @@
             return;
         }
 
+        const selectedRoleIds = selectedRoles.map(selectedRole => String(selectedRole.id ?? selectedRole));
+
         availableRoles.forEach(role => {
-            const isSelected = selectedRoles.includes(role.id);
-            const roleElement = document.createElement('div');
-            roleElement.className = 'flex items-center';
+            const isSelected = selectedRoleIds.includes(String(role.id));
+            const roleElement = document.createElement('label');
+            roleElement.className = 'flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800';
+            roleElement.setAttribute('for', `role-${role.id}`);
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -446,14 +449,13 @@
             checkbox.name = 'roles[]';
             checkbox.value = role.id;
             checkbox.checked = isSelected;
-            checkbox.className = 'h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600';
+            checkbox.className = 'size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900';
 
-            const label = document.createElement('label');
-            label.setAttribute('for', `role-${role.id}`);
-            label.className = 'ml-2 text-sm text-gray-700 dark:text-gray-300';
-            label.textContent = role.name;
+            const roleName = document.createElement('span');
+            roleName.className = 'min-w-0 truncate';
+            roleName.textContent = role.name;
 
-            roleElement.append(checkbox, label);
+            roleElement.append(checkbox, roleName);
             container.appendChild(roleElement);
         });
     }
@@ -486,7 +488,7 @@
             if (data.success) {
                 showNotification(data.message || '권한이 성공적으로 저장되었습니다.', 'success');
                 // 모달 닫기
-                window.dispatchEvent(new CustomEvent('draggable-modal-close', {
+                window.dispatchEvent(new CustomEvent('close-modal', {
                     detail: { modalId: 'roles-modal' }
                 }));
                 // Livewire 컴포넌트 새로고침
