@@ -82,10 +82,5 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
         $this->publishes($views, 'laravel-admin-ui-views');
         $this->publishes($components, 'laravel-admin-ui-components');
         $this->publishes($assets, 'laravel-admin-ui-assets');
-
-        $this->publishes($views, 'laravel-admin-views');
-        $this->publishes($components, 'laravel-admin-components');
-        $this->publishes($assets, 'laravel-admin-assets');
-
     }
 }
