@@ -53,6 +53,44 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertSame([], ServiceProvider::pathsToPublish(LaravelAdminUiServiceProvider::class, 'laravel-admin-assets'));
     }
 
+    public function test_admin_shell_guards_optional_navigation_features(): void
+    {
+        $layout = file_get_contents(__DIR__.'/../../resources/views/components/admin/layouts/admin.blade.php');
+        $header = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/header-nav.blade.php');
+        $legacyHeader = file_get_contents(__DIR__.'/../../resources/views/components/admin/admin-header.blade.php');
+        $login = file_get_contents(__DIR__.'/../../resources/views/admin/auth/login.blade.php');
+
+        $this->assertStringContainsString('this.isMobileMenuOpen = false', $layout);
+        $this->assertStringNotContainsString("e.key === 'Escape' && open", $layout);
+        $this->assertStringNotContainsString("route('home')", $legacyHeader);
+        $this->assertStringNotContainsString('favicon.ico', $layout);
+        $this->assertStringNotContainsString('favicon.ico', $login);
+
+        $this->assertStringContainsString("Route::has('profile.show')", $header);
+        $this->assertStringContainsString("Route::has('logout')", $header);
+        $this->assertStringContainsString("Route::has('teams.show')", $header);
+        $this->assertStringNotContainsString("route('profile.show')", $header);
+    }
+
+    public function test_packaged_views_do_not_assume_host_home_route_or_favicons(): void
+    {
+        $viewFiles = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(__DIR__.'/../../resources/views')
+        );
+
+        foreach ($viewFiles as $viewFile) {
+            if (! $viewFile->isFile() || $viewFile->getExtension() !== 'php') {
+                continue;
+            }
+
+            $source = file_get_contents($viewFile->getPathname());
+
+            $this->assertStringNotContainsString("route('home')", $source, $viewFile->getPathname());
+            $this->assertStringNotContainsString('favicon.ico', $source, $viewFile->getPathname());
+            $this->assertStringNotContainsString('/site.webmanifest', $source, $viewFile->getPathname());
+        }
+    }
+
     private function assertPublishesTo(string $tag, string $targetPath): void
     {
         $targets = array_values(ServiceProvider::pathsToPublish(LaravelAdminUiServiceProvider::class, $tag));

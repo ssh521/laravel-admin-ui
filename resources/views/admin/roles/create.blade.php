@@ -2,8 +2,7 @@
     <x-slot name="header">
         <x-laravel-admin::admin.admin-header>
             <x-slot name="navigation">
-                <a href="{{ route('home') }}">HOME</a>
-                - <a href="{{ route('admin.index') }}">Admin Home</a>
+                <a href="{{ route('admin.index') }}">Admin Home</a>
             </x-slot>
             <x-slot name="description">
                 {{ __('역할 등록') }}

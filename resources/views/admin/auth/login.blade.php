@@ -7,8 +7,6 @@
 
     <title>{{ __('Admin Login') }} - {{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-
     <script>
         (function() {
             const theme = window.localStorage?.getItem('theme') || null;
