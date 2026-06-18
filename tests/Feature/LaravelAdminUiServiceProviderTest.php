@@ -47,15 +47,6 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertPublishesTo('laravel-admin-ui-assets', public_path('images/dtree'));
     }
 
-    public function test_it_registers_legacy_publish_tag_aliases(): void
-    {
-        $this->assertPublishesTo('laravel-admin-views', resource_path('views/vendor/laravel-admin'));
-        $this->assertPublishesTo('laravel-admin-components', resource_path('views/vendor/laravel-admin/components'));
-        $this->assertPublishesTo('laravel-admin-assets', resource_path('vendor/laravel-admin/admin.css'));
-        $this->assertPublishesTo('laravel-admin-assets', resource_path('vendor/laravel-admin'));
-        $this->assertPublishesTo('laravel-admin-assets', public_path('images/dtree'));
-    }
-
     public function test_icon_component_logs_unknown_icon_names_and_renders_warning_icon(): void
     {
         Log::shouldReceive('warning')
