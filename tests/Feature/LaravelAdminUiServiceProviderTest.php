@@ -82,6 +82,12 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $index = file_get_contents(__DIR__.'/../../resources/views/admin/menu-categories/index.blade.php');
         $livewire = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/menu-categories/menu-category-list.blade.php');
 
+        $this->assertStringContainsString('x-data="menuCategoryDragSort()"', $index);
+        $this->assertStringContainsString(':draggable="sortMode === \'drag\'"', $index);
+        $this->assertStringContainsString('this.draggedRow = event.currentTarget', $index);
+        $this->assertStringNotContainsString('new Sortable', $index);
+        $this->assertStringNotContainsString('Sortable.create', $index);
+
         foreach ([$index, $livewire] as $source) {
             $this->assertStringContainsString('originalOrder', $source);
             $this->assertStringContainsString('dropHandled', $source);

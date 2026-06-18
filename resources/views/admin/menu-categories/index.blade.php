@@ -85,7 +85,7 @@
                 </form>
             </div>
 
-            <div class="mt-6 flow-root">
+            <div class="mt-6 flow-root" x-data="menuCategoryDragSort()" x-init="initNativeDrag()">
                 <div class="-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -108,7 +108,14 @@
                             </thead>
                             <tbody id="categories-tbody" class="divide-y divide-gray-100 dark:divide-gray-800">
                                 @forelse($categories as $category)
-                                    <tr data-category-id="{{ $category->id }}" class="hover:bg-gray-50 dark:hover:bg-gray-800/70">
+                                    <tr data-category-id="{{ $category->id }}"
+                                        class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70"
+                                        :class="sortMode === 'drag' ? 'cursor-move' : 'cursor-default'"
+                                        :draggable="sortMode === 'drag'"
+                                        @dragstart="startDrag($event)"
+                                        @dragover.prevent="dragOver($event)"
+                                        @drop.prevent="dropRow()"
+                                        @dragend="endDrag()">
                                         <td class="whitespace-nowrap py-4 pr-3 pl-4 text-sm sm:pl-0">
                                             <div class="drag-handle inline-flex size-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
                                                 <x-laravel-admin::admin.icon name="grip-lines" />
@@ -230,155 +237,157 @@
     <script>
         let currentCategoryId = null;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            initCategoryDragSort();
-        });
+        function menuCategoryDragSort() {
+            return {
+                sortMode: 'drag',
+                draggedRow: null,
+                originalOrder: [],
+                dropHandled: false,
 
-        function initCategoryDragSort() {
-            const tbody = document.querySelector('#categories-tbody');
-            if (!tbody || tbody.dataset.nativeSortInitialized === 'true') {
-                return;
-            }
+                initNativeDrag() {},
 
-            tbody.dataset.nativeSortInitialized = 'true';
-            let draggedRow = null;
-            let originalOrder = [];
-            let dropHandled = false;
+                captureCategoryOrder() {
+                    const tbody = document.getElementById('categories-tbody');
 
-            const captureCategoryOrder = () => Array.from(tbody.querySelectorAll('tr[data-category-id]'))
-                .map(row => row.dataset.categoryId);
+                    return Array.from(tbody.querySelectorAll('tr[data-category-id]'))
+                        .map(row => row.dataset.categoryId);
+                },
 
-            tbody.querySelectorAll('tr[data-category-id]').forEach(row => {
-                row.draggable = true;
-
-                row.addEventListener('dragstart', event => {
-                    if (!event.target.closest('.drag-handle')) {
+                startDrag(event) {
+                    if (this.sortMode !== 'drag') {
                         event.preventDefault();
                         return;
                     }
 
-                    draggedRow = row;
-                    originalOrder = captureCategoryOrder();
-                    dropHandled = false;
-                    row.classList.add('sortable-ghost');
+                    this.draggedRow = event.currentTarget;
+                    this.originalOrder = this.captureCategoryOrder();
+                    this.dropHandled = false;
+                    this.draggedRow.classList.add('sortable-ghost');
                     event.dataTransfer.effectAllowed = 'move';
-                    event.dataTransfer.setData('text/plain', row.dataset.categoryId);
-                });
-
-                row.addEventListener('dragover', event => {
-                    if (!draggedRow || draggedRow === row) {
-                        return;
-                    }
-
-                    event.preventDefault();
-                    const rect = row.getBoundingClientRect();
-                    const shouldInsertAfter = event.clientY > rect.top + rect.height / 2;
-                    tbody.insertBefore(draggedRow, shouldInsertAfter ? row.nextSibling : row);
-                });
-
-                row.addEventListener('drop', event => {
-                    event.preventDefault();
-
-                    if (!draggedRow) {
-                        return;
-                    }
-
-                    draggedRow.classList.remove('sortable-ghost');
-                    dropHandled = true;
-                    draggedRow = null;
-                    updateCategoryOrder(buildCategoryOrder(tbody), originalOrder);
-                });
-
-                row.addEventListener('dragend', () => {
-                    if (draggedRow) {
-                        draggedRow.classList.remove('sortable-ghost');
-                    }
-
-                    draggedRow = null;
-
-                    if (!dropHandled && originalOrder.length > 0) {
-                        restoreCategoryOrder(originalOrder);
-                    }
-
-                    originalOrder = [];
-                    dropHandled = false;
-                });
-            });
-        }
-
-        function buildCategoryOrder(tbody) {
-            return Array.from(tbody.querySelectorAll('tr[data-category-id]')).map((row, index) => ({
-                id: row.dataset.categoryId,
-                sort_order: index + 1
-            }));
-        }
-
-        function restoreCategoryOrder(order) {
-            const tbody = document.querySelector('#categories-tbody');
-
-            if (!tbody || order.length === 0) {
-                return;
-            }
-
-            order.forEach(categoryId => {
-                const row = tbody.querySelector(`tr[data-category-id="${categoryId}"]`);
-
-                if (row) {
-                    tbody.appendChild(row);
-                }
-            });
-
-            updateSortOrderNumbers();
-        }
-
-        function updateCategoryOrder(newOrder, previousOrder = []) {
-            fetch('{{ route("admin.menu-categories.update-order-multiple", [], false) }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    event.dataTransfer.setData('text/plain', this.draggedRow.dataset.categoryId);
                 },
-                body: JSON.stringify({ categories: newOrder })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        try {
-                            const data = JSON.parse(text);
-                            if (data && data.message) {
-                                throw new Error(data.message);
-                            }
-                        } catch (e) {}
 
-                        throw new Error(text || `HTTP error! status: ${response.status}`);
+                dragOver(event) {
+                    if (!this.draggedRow || this.sortMode !== 'drag') {
+                        return;
+                    }
+
+                    const targetRow = event.currentTarget;
+
+                    if (targetRow === this.draggedRow) {
+                        return;
+                    }
+
+                    const rect = targetRow.getBoundingClientRect();
+                    const shouldInsertAfter = event.clientY > rect.top + rect.height / 2;
+                    const tbody = targetRow.parentNode;
+
+                    tbody.insertBefore(this.draggedRow, shouldInsertAfter ? targetRow.nextSibling : targetRow);
+                },
+
+                dropRow() {
+                    if (!this.draggedRow || this.sortMode !== 'drag') {
+                        return;
+                    }
+
+                    this.dropHandled = true;
+                    this.updateCategoryOrder(this.buildCategoryOrder(), this.originalOrder);
+                    this.endDrag();
+                },
+
+                endDrag() {
+                    if (this.draggedRow) {
+                        this.draggedRow.classList.remove('sortable-ghost');
+                    }
+
+                    this.draggedRow = null;
+
+                    if (!this.dropHandled && this.originalOrder.length > 0) {
+                        this.restoreCategoryOrder(this.originalOrder);
+                    }
+
+                    this.originalOrder = [];
+                    this.dropHandled = false;
+                },
+
+                buildCategoryOrder() {
+                    const pageOffset = ({{ $categories->currentPage() }} - 1) * {{ $categories->perPage() }};
+                    const tbody = document.getElementById('categories-tbody');
+
+                    return Array.from(tbody.querySelectorAll('tr[data-category-id]')).map((row, index) => ({
+                        id: row.dataset.categoryId,
+                        sort_order: pageOffset + index + 1
+                    }));
+                },
+
+                restoreCategoryOrder(order) {
+                    const tbody = document.getElementById('categories-tbody');
+
+                    if (!tbody || order.length === 0) {
+                        return;
+                    }
+
+                    order.forEach(categoryId => {
+                        const row = tbody.querySelector(`tr[data-category-id="${categoryId}"]`);
+
+                        if (row) {
+                            tbody.appendChild(row);
+                        }
+                    });
+
+                    updateSortOrderNumbers();
+                },
+
+                updateCategoryOrder(newOrder, previousOrder = []) {
+                    fetch('{{ route("admin.menu-categories.update-order-multiple", [], false) }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ categories: newOrder })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.text().then(text => {
+                                try {
+                                    const data = JSON.parse(text);
+                                    if (data && data.message) {
+                                        throw new Error(data.message);
+                                    }
+                                } catch (e) {}
+
+                                throw new Error(text || `HTTP error! status: ${response.status}`);
+                            });
+                        }
+
+                        return response.text().then(text => {
+                            if (!text) return { success: true };
+
+                            try {
+                                return JSON.parse(text);
+                            } catch (e) {
+                                return { success: true };
+                            }
+                        });
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            showNotification('카테고리 순서가 성공적으로 변경되었습니다.', 'success');
+                            updateSortOrderNumbers();
+                            refreshLeftMenu();
+                        } else {
+                            this.restoreCategoryOrder(previousOrder);
+                            showNotification(data.message || '순서 변경 중 오류가 발생했습니다.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        this.restoreCategoryOrder(previousOrder);
+                        showNotification(error?.message || '순서 변경 중 네트워크 오류가 발생했습니다.', 'error');
                     });
                 }
-
-                return response.text().then(text => {
-                    if (!text) return { success: true };
-
-                    try {
-                        return JSON.parse(text);
-                    } catch (e) {
-                        return { success: true };
-                    }
-                });
-            })
-            .then(data => {
-                if (data.success) {
-                    showNotification('카테고리 순서가 성공적으로 변경되었습니다.', 'success');
-                    updateSortOrderNumbers();
-                    refreshLeftMenu();
-                } else {
-                    restoreCategoryOrder(previousOrder);
-                    showNotification(data.message || '순서 변경 중 오류가 발생했습니다.', 'error');
-                }
-            })
-            .catch(error => {
-                restoreCategoryOrder(previousOrder);
-                showNotification(error?.message || '순서 변경 중 네트워크 오류가 발생했습니다.', 'error');
-            });
+            }
         }
 
         function refreshLeftMenu() {
