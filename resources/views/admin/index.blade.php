@@ -19,15 +19,10 @@
 
                 <!-- 통계 카드들 -->
                 @can('viewStatistics', 'admin')
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="bg-indigo-100 p-6 rounded-lg">
                         <h3 class="text-lg font-semibold text-indigo-800">총 관리자</h3>
                         <p class="text-3xl font-bold text-indigo-600">{{ $stats['total_admin_users'] ?? 0 }}</p>
-                    </div>
-
-                    <div class="bg-blue-100 p-6 rounded-lg">
-                        <h3 class="text-lg font-semibold text-blue-800">총 사용자</h3>
-                        <p class="text-3xl font-bold text-blue-600">{{ $stats['total_users'] ?? 0 }}</p>
                     </div>
 
                     <div class="bg-green-100 p-6 rounded-lg">
