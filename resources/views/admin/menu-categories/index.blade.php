@@ -384,8 +384,10 @@
             }
             submitBtn.disabled = false;
 
+            const selectedRoleIds = selectedRoles.map(selectedRole => String(selectedRole.id ?? selectedRole));
+
             availableRoles.forEach(role => {
-                const isSelected = selectedRoles.includes(role.id);
+                const isSelected = selectedRoleIds.includes(String(role.id));
                 const roleElement = document.createElement('label');
                 roleElement.className = 'flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800';
                 roleElement.setAttribute('for', `role-${role.id}`);
@@ -461,7 +463,7 @@
                             rolesCell.appendChild(emptyLabel);
                         }
                     }
-                    window.dispatchEvent(new CustomEvent('draggable-modal-close', {
+                    window.dispatchEvent(new CustomEvent('close-modal', {
                         detail: { modalId: 'roles-modal' }
                     }));
                 } else {
