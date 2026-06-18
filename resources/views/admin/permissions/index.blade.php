@@ -66,7 +66,7 @@
                 </button>
             </form>
 
-            <div class="mt-6" x-data="permissionSortable()" x-init="initSortable()">
+            <div class="mt-6" x-data="permissionDragSort()" x-init="initNativeDrag()">
                 <div class="mb-4 flex flex-col gap-3 rounded-lg border border-gray-200 bg-white p-3 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-900">
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('정렬 방식') }}</span>
@@ -128,7 +128,12 @@
                                     @forelse ($data as $permission)
                                         <tr data-id="{{ $permission->id }}"
                                             class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/80"
-                                            :class="sortMode === 'drag' ? 'cursor-move' : 'cursor-default'">
+                                            :class="sortMode === 'drag' ? 'cursor-move' : 'cursor-default'"
+                                            :draggable="sortMode === 'drag'"
+                                            @dragstart="startDrag($event)"
+                                            @dragover.prevent="dragOver($event)"
+                                            @drop.prevent="dropRow($event)"
+                                            @dragend="endDrag()">
                                             <td class="py-4 pr-3 pl-4 text-sm sm:pl-0">
                                                 <span x-show="sortMode === 'drag'" class="cursor-move text-gray-400">⋮⋮</span>
                                             </td>
@@ -183,46 +188,18 @@
     </div>
 
     <script>
-        function permissionSortable() {
+        function permissionDragSort() {
             return {
                 sortMode: 'click', // 'click' or 'drag'
                 sortField: '{{ request('sort', 'name') }}',
                 sortDirection: '{{ request('direction', 'asc') }}',
-                sortableInstance: null,
+                draggedRow: null,
                 permissions: @json($data->items()),
 
-                initSortable() {
-                    this.$nextTick(() => {
-                        this.initSortableInstance();
-                    });
-                },
-
-                initSortableInstance() {
-                    if (this.sortMode === 'drag') {
-                        const tbody = document.getElementById('sortable-permissions');
-                        if (tbody && !this.sortableInstance) {
-                            this.sortableInstance = new Sortable(tbody, {
-                                animation: 150,
-                                ghostClass: 'opacity-40',
-                                chosenClass: 'bg-gray-100',
-                                dragClass: 'bg-gray-200',
-                                handle: '.cursor-move',
-                                onEnd: (evt) => {
-                                    this.updateOrder(evt);
-                                }
-                            });
-                        }
-                    } else {
-                        if (this.sortableInstance) {
-                            this.sortableInstance.destroy();
-                            this.sortableInstance = null;
-                        }
-                    }
-                },
+                initNativeDrag() {},
 
                 setSortMode(mode) {
                     this.sortMode = mode;
-                    this.initSortableInstance();
                 },
 
                 sortBy(field) {
@@ -242,9 +219,57 @@
                     window.location.href = url.toString();
                 },
 
-                updateOrder(evt) {
+                startDrag(event) {
+                    if (this.sortMode !== 'drag') {
+                        event.preventDefault();
+                        return;
+                    }
+
+                    this.draggedRow = event.currentTarget;
+                    this.draggedRow.classList.add('opacity-40');
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.dataTransfer.setData('text/plain', this.draggedRow.dataset.id);
+                },
+
+                dragOver(event) {
+                    if (!this.draggedRow || this.sortMode !== 'drag') {
+                        return;
+                    }
+
+                    const targetRow = event.currentTarget;
+
+                    if (targetRow === this.draggedRow) {
+                        return;
+                    }
+
+                    const rect = targetRow.getBoundingClientRect();
+                    const shouldInsertAfter = event.clientY > rect.top + rect.height / 2;
+                    const tbody = targetRow.parentNode;
+
+                    tbody.insertBefore(this.draggedRow, shouldInsertAfter ? targetRow.nextSibling : targetRow);
+                },
+
+                dropRow() {
+                    if (!this.draggedRow || this.sortMode !== 'drag') {
+                        return;
+                    }
+
+                    this.updateOrder();
+                    this.endDrag();
+                },
+
+                endDrag() {
+                    if (this.draggedRow) {
+                        this.draggedRow.classList.remove('opacity-40');
+                    }
+
+                    this.draggedRow = null;
+                },
+
+                updateOrder() {
                     const pageOffset = ({{ $data->currentPage() }} - 1) * {{ $data->perPage() }};
-                    const newOrder = Array.from(evt.to.children).map((row, index) => ({
+                    const tbody = document.getElementById('sortable-permissions');
+                    const newOrder = Array.from(tbody.querySelectorAll('tr[data-id]')).map((row, index) => ({
                         id: row.dataset.id,
                         order: pageOffset + index + 1
                     }));

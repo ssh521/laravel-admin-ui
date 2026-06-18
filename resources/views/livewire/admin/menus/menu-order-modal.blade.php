@@ -82,7 +82,7 @@
     </div>
 
     <script>
-        function updateMenuOrderFromSortable(newOrder, livewireId) {
+        function updateMenuOrderFromNativeDrag(newOrder, livewireId) {
             // Livewire 3 방식으로 호출
             if (window.Livewire && livewireId) {
                 const component = window.Livewire.find(livewireId);
@@ -96,47 +96,88 @@
             }
         }
 
-        function initMenuSortable() {
+        function initMenuNativeDrag() {
             const menuContainer = document.getElementById('menu-list-sortable');
-            if (!menuContainer) return;
-
-            // 기존 Sortable 인스턴스가 있으면 제거
-            if (window.menuListSortable) {
-                try {
-                    window.menuListSortable.destroy();
-                } catch(e) {
-                    // 무시
-                }
-                window.menuListSortable = null;
+            if (!menuContainer || menuContainer.dataset.nativeSortInitialized === 'true') {
+                return;
             }
 
             const livewireId = menuContainer.dataset.livewireId;
             if (!livewireId) return;
 
-            window.menuListSortable = new Sortable(menuContainer, {
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-                chosenClass: 'sortable-chosen',
-                dragClass: 'sortable-drag',
-                filter: 'button', // 버튼 클릭 시 드래그 방지
-                preventOnFilter: false,
-                onEnd: function(evt) {
-                    const items = Array.from(menuContainer.querySelectorAll('[data-menu-id]'));
-                    const newOrder = items.map((item, index) => ({
-                        id: parseInt(item.dataset.menuId),
-                        sort_order: index
-                    }));
-                    updateMenuOrderFromSortable(newOrder, livewireId);
+            menuContainer.dataset.nativeSortInitialized = 'true';
+            let draggedItem = null;
+
+            const refreshDraggableItems = () => {
+                menuContainer.querySelectorAll('[data-menu-id]').forEach(item => {
+                    item.draggable = true;
+                });
+            };
+
+            refreshDraggableItems();
+
+            menuContainer.addEventListener('dragstart', event => {
+                const item = event.target.closest('[data-menu-id]');
+
+                if (!item || event.target.closest('button')) {
+                    event.preventDefault();
+                    return;
                 }
+
+                draggedItem = item;
+                item.classList.add('sortable-ghost');
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', item.dataset.menuId);
+            });
+
+            menuContainer.addEventListener('dragover', event => {
+                const item = event.target.closest('[data-menu-id]');
+
+                if (!draggedItem || !item || draggedItem === item) {
+                    return;
+                }
+
+                event.preventDefault();
+                const rect = item.getBoundingClientRect();
+                const shouldInsertAfter = event.clientY > rect.top + rect.height / 2;
+                menuContainer.insertBefore(draggedItem, shouldInsertAfter ? item.nextSibling : item);
+            });
+
+            menuContainer.addEventListener('drop', event => {
+                event.preventDefault();
+
+                if (!draggedItem) {
+                    return;
+                }
+
+                draggedItem.classList.remove('sortable-ghost');
+                draggedItem = null;
+
+                const items = Array.from(menuContainer.querySelectorAll('[data-menu-id]'));
+                const newOrder = items.map((item, index) => ({
+                    id: parseInt(item.dataset.menuId),
+                    sort_order: index
+                }));
+
+                updateMenuOrderFromNativeDrag(newOrder, livewireId);
+            });
+
+            menuContainer.addEventListener('dragend', () => {
+                if (draggedItem) {
+                    draggedItem.classList.remove('sortable-ghost');
+                }
+
+                draggedItem = null;
+                refreshDraggableItems();
             });
         }
 
-        // Livewire 컴포넌트가 업데이트될 때마다 Sortable 재초기화
+        // Livewire 컴포넌트가 업데이트될 때마다 native drag 초기화
         document.addEventListener('livewire:init', () => {
             Livewire.hook('morph.updated', ({ el, component }) => {
                 if (el.querySelector('#menu-list-sortable')) {
                     setTimeout(() => {
-                        initMenuSortable();
+                        initMenuNativeDrag();
                     }, 100);
                 }
             });
@@ -146,22 +187,8 @@
         window.addEventListener('opened-modal', function(event) {
             if (event.detail.modalId === 'menu-order-modal') {
                 setTimeout(() => {
-                    initMenuSortable();
+                    initMenuNativeDrag();
                 }, 200);
-            }
-        });
-
-        // 모달이 닫힐 때 정리
-        window.addEventListener('closed-modal', function(event) {
-            if (event.detail.modalId === 'menu-order-modal') {
-                if (window.menuListSortable) {
-                    try {
-                        window.menuListSortable.destroy();
-                    } catch(e) {
-                        // 무시
-                    }
-                    window.menuListSortable = null;
-                }
             }
         });
 
@@ -169,17 +196,17 @@
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
-                    initMenuSortable();
+                    initMenuNativeDrag();
                 }, 300);
             });
         } else {
             setTimeout(() => {
-                initMenuSortable();
+                initMenuNativeDrag();
             }, 300);
         }
     </script>
 
-    <!-- SortableJS 스타일 -->
+    <!-- Native drag and drop style -->
     <style>
         .sortable-ghost {
             opacity: 0.5;
