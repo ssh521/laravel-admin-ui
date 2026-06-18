@@ -346,8 +346,6 @@
 
         // 역할 관리 저장
         saveRoleManagement.addEventListener('click', function() {
-            console.log('저장 버튼 클릭됨, currentCategoryId:', currentCategoryId);
-
             if (!currentCategoryId) {
                 console.error('currentCategoryId가 설정되지 않음');
                 showNotification('카테고리 ID가 설정되지 않았습니다.', 'error');
@@ -356,8 +354,6 @@
 
             const selectedRoles = Array.from(document.querySelectorAll('.role-checkbox:checked'))
                 .map(checkbox => checkbox.value);
-
-            console.log('선택된 역할들:', selectedRoles);
 
             // AJAX 요청으로 역할 저장
             fetch(`/admin/menu-categories/${currentCategoryId}/roles/api`, {
@@ -371,14 +367,12 @@
                 })
             })
             .then(response => {
-                console.log('응답 상태:', response.status);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('응답 데이터:', data);
                 if (data.success) {
                     // 성공 메시지 표시
                     showNotification('역할이 성공적으로 저장되었습니다.', 'success');
@@ -455,9 +449,7 @@
 
     // 전역 함수: 카테고리 역할 관리
     function manageCategoryRoles(categoryId, categoryName) {
-        console.log('manageCategoryRoles 호출됨:', categoryId, categoryName);
         currentCategoryId = categoryId;
-        console.log('currentCategoryId 설정됨:', currentCategoryId);
 
         // 카테고리 이름 표시
         document.getElementById('category-name-display').textContent = categoryName;
@@ -465,14 +457,12 @@
         // 현재 카테고리의 역할 정보 가져오기
         fetch(`/admin/menu-categories/${categoryId}/roles/api`)
             .then(response => {
-                console.log('역할 정보 요청 응답:', response.status);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('역할 정보 데이터:', data);
                 // 모든 체크박스 해제
                 document.querySelectorAll('.role-checkbox').forEach(checkbox => {
                     checkbox.checked = false;
