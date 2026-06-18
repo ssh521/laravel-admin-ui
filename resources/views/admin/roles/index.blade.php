@@ -28,7 +28,7 @@
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
                     @can('create', \Spatie\Permission\Models\Role::class)
                         <a href="{{ route('admin.roles.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
                             {{ __('등록하기') }}
                         </a>
                     @endcan
@@ -36,7 +36,7 @@
                     <button type="button"
                             id="open-menu-category-selector"
                             class="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
-                        <i class="fa-regular fa-folder-open mr-2 text-xs" aria-hidden="true"></i>
+                        <x-laravel-admin::admin.icon name="folder-open" class="mr-2 text-xs" />
                         {{ __('메뉴 카테고리 관리') }}
                     </button>
                 </div>
@@ -53,14 +53,14 @@
                     @if(request('search'))
                         <a href="{{ route('admin.roles.index') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
-                            <i class="fa-solid fa-xmark text-sm" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
                         </a>
                     @endif
                 </div>
 
                 <button type="submit"
                     class="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 sm:w-auto dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                    <i class="fa-solid fa-magnifying-glass mr-2 text-xs" aria-hidden="true"></i>
+                    <x-laravel-admin::admin.icon name="magnifying-glass" class="mr-2 text-xs" />
                     {{ __('검색') }}
                 </button>
             </form>
@@ -89,7 +89,7 @@
                                     @can('view', $role)
                                         <a href="{{ route('admin.roles.show', $role) }}"
                                             class="inline-flex h-8 shrink-0 items-center rounded-md px-2.5 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
-                                            <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
+                                            <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
                                             상세보기
                                         </a>
                                     @endcan
@@ -147,7 +147,7 @@
                            placeholder="메뉴 카테고리 검색..."
                            class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 pl-10 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fa-solid fa-magnifying-glass text-sm text-gray-400" aria-hidden="true"></i>
+                        <x-laravel-admin::admin.icon name="magnifying-glass" class="text-sm text-gray-400" />
                     </div>
                 </div>
             </div>
@@ -195,7 +195,7 @@
                                 <button type="button"
                                         class="inline-flex h-8 cursor-pointer items-center rounded-md px-2.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-500/10"
                                         onclick="manageCategoryRoles({{ $category->id }}, '{{ $category->name }}')">
-                                    <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
+                                    <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
                                     역할 관리
                                 </button>
                             </div>
@@ -205,7 +205,7 @@
                 </div>
 
                 <div id="no-menu-categories-message" class="hidden rounded-lg border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                    <i class="fa-regular fa-folder-open text-3xl text-gray-400" aria-hidden="true"></i>
+                    <x-laravel-admin::admin.icon name="folder-open" class="text-3xl text-gray-400" />
                     <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">메뉴 카테고리가 없습니다</h3>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">등록된 메뉴 카테고리가 없습니다.</p>
                 </div>

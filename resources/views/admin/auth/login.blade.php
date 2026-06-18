@@ -44,7 +44,7 @@
                         <ul class="space-y-1">
                             @foreach ($errors->all() as $error)
                                 <li class="flex gap-2">
-                                    <i class="fa-solid fa-circle-exclamation mt-0.5 text-xs" aria-hidden="true"></i>
+                                    <x-laravel-admin::admin.icon name="circle-exclamation" class="mt-0.5 text-xs" />
                                     <span>{{ $error }}</span>
                                 </li>
                             @endforeach
@@ -102,7 +102,7 @@
                     </label>
 
                     <button type="submit" class="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                        <i class="fa-solid fa-right-to-bracket mr-2 text-xs" aria-hidden="true"></i>
+                        <x-laravel-admin::admin.icon name="right-to-bracket" class="mr-2 text-xs" />
                         {{ __('Log in') }}
                     </button>
                 </form>

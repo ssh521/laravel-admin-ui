@@ -133,7 +133,7 @@
             <div class="sm:col-span-3">
                 <label for="icon" class="{{ $labelClass }}">{{ __('Icon') }}</label>
                 <div class="mt-2">
-                    <input id="icon" name="icon" type="text" value="{{ old('icon', $menu?->icon) }}" placeholder="fas fa-home" class="{{ $inputClass }}">
+                    <input id="icon" name="icon" type="text" value="{{ old('icon', $menu?->icon) }}" placeholder="house" class="{{ $inputClass }}">
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('icon')" />
             </div>

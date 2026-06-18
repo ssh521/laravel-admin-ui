@@ -44,7 +44,7 @@
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-6">
                     @can('create', Ssh521\LaravelAdmin\Models\Menu::class)
                         <a href="{{ route('admin.menus.create') }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
                             {{ __('등록하기') }}
                         </a>
                     @endcan
@@ -58,7 +58,7 @@
                     <div class="flex flex-wrap items-center gap-2 text-sm">
                         <x-laravel-admin::admin.checkbox-controls />
                         <button type="button" onclick="openCategorySelectionModal()" class="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800">
-                            <i class="fa-solid fa-tags mr-2 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="tags" class="mr-2 text-xs" />
                             {{ __('분류선택') }}
                         </button>
                     </div>
@@ -130,11 +130,7 @@
                                         <td class="py-4 pr-3 pl-3 text-sm">
                                             <div class="flex items-center gap-3">
                                                 <div class="flex size-9 shrink-0 items-center justify-center rounded-md bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20">
-                                                    @if($menu->icon)
-                                                        <i class="{{ $menu->icon }} text-xs" aria-hidden="true"></i>
-                                                    @else
-                                                        <i class="fa-solid fa-bars text-xs" aria-hidden="true"></i>
-                                                    @endif
+                                                    <x-laravel-admin::admin.icon :name="$menu->icon ?: 'bars'" class="text-xs" />
                                                 </div>
                                                 <div class="min-w-0">
                                                     @can('view', $menu)
@@ -196,13 +192,13 @@
                                             <div class="flex justify-end gap-3">
                                                 @can('view', $menu)
                                                     <a href="{{ route('admin.menus.show', $menu) }}" class="inline-flex items-center font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">
-                                                        <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
                                                         {{ __('상세보기') }}
                                                     </a>
                                                 @endcan
                                                 @can('update', $menu)
                                                     <a href="{{ route('admin.menus.edit', $menu) }}" class="inline-flex items-center font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">
-                                                        <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
                                                         {{ __('수정') }}
                                                     </a>
                                                 @endcan

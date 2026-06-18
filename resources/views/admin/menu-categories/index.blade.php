@@ -51,7 +51,7 @@
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-6">
                     @can('create', Ssh521\LaravelAdmin\Models\MenuCategory::class)
                         <a href="{{ route('admin.menu-categories.create') }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
                             {{ __('등록하기') }}
                         </a>
                     @endcan
@@ -112,7 +112,7 @@
                                     <tr data-category-id="{{ $category->id }}" class="hover:bg-gray-50 dark:hover:bg-gray-800/70">
                                         <td class="whitespace-nowrap py-4 pr-3 pl-4 text-sm sm:pl-0">
                                             <div class="drag-handle inline-flex size-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
-                                                <i class="fa-solid fa-grip-lines" aria-hidden="true"></i>
+                                                <x-laravel-admin::admin.icon name="grip-lines" />
                                             </div>
                                         </td>
                                         <td class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 sm:table-cell dark:text-gray-300">{{ $category->id }}</td>
@@ -151,7 +151,7 @@
                                             <div class="flex justify-end gap-3">
                                                 @can('view', $category)
                                                     <a href="{{ route('admin.menu-categories.show', $category) }}" class="inline-flex items-center font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">
-                                                        <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
                                                         {{ __('상세보기') }}
                                                     </a>
                                                 @endcan
@@ -166,7 +166,7 @@
                                                         data-category-id="{{ $category->id }}"
                                                         data-category-name="{{ $category->name }}" />
                                                     <a href="{{ route('admin.menu-categories.edit', $category) }}" class="inline-flex items-center font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">
-                                                        <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
                                                         {{ __('수정') }}
                                                     </a>
                                                 @endcan

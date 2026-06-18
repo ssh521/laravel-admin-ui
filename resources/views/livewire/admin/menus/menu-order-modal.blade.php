@@ -34,7 +34,7 @@
                 <div class="flex-1">
                     <div class="flex items-center">
                         @if($menu['icon'])
-                        <i class="{{ $menu['icon'] }} mr-2 text-blue-500"></i>
+                        <x-laravel-admin::admin.icon :name="$menu['icon']" class="mr-2 text-blue-500" />
                         @endif
                         <span class="font-medium text-gray-900 dark:text-white">{{ $menu['name'] }}</span>
                         @if(!$menu['is_active'])

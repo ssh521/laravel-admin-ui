@@ -21,7 +21,7 @@
                     </div>
                     <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-6">
                         <a href="{{ route('admin.menus.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="list" class="mr-2 text-xs" />
                             {{ __('목록보기') }}
                         </a>
                     </div>
@@ -34,11 +34,7 @@
                 <div class="border-b border-gray-200 px-4 py-5 sm:px-6 dark:border-gray-700">
                     <div class="flex items-center gap-4">
                         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20">
-                            @if($menu->icon)
-                                <i class="{{ $menu->icon }}" aria-hidden="true"></i>
-                            @else
-                                <i class="fa-solid fa-bars" aria-hidden="true"></i>
-                            @endif
+                            <x-laravel-admin::admin.icon :name="$menu->icon ?: 'bars'" />
                         </div>
                         <div class="min-w-0">
                             <h2 class="truncate text-base font-semibold leading-7 text-gray-900 dark:text-white">{{ $menu->name }}</h2>

@@ -23,7 +23,7 @@
                     </div>
                     <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-6">
                         <a href="{{ route('admin.permissions.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            <i class="fa-solid fa-list mr-2 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="list" class="mr-2 text-xs" />
                             {{ __('목록보기') }}
                         </a>
                     </div>
