@@ -31,7 +31,16 @@
         'xmark' => 'M6 18 18 6M6 6l12 12',
     ];
 
-    $path = $icons[$name] ?? $icons['circle-exclamation'];
+    $iconName = (string) $name;
+    $path = $icons[$iconName] ?? null;
+
+    if ($path === null) {
+        \Illuminate\Support\Facades\Log::warning('Unknown laravel-admin icon name.', [
+            'name' => $iconName,
+        ]);
+
+        $path = $icons['circle-exclamation'];
+    }
 @endphp
 
 <svg {{ $attributes->merge(['class' => 'inline-block size-4 shrink-0']) }} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

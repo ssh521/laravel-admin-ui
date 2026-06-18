@@ -65,19 +65,27 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->publishes([
+        $views = [
             __DIR__.'/../resources/views' => resource_path('views/vendor/laravel-admin'),
-        ], 'laravel-admin-ui-views');
+        ];
 
-        $this->publishes([
+        $components = [
             __DIR__.'/../resources/views/components' => resource_path('views/vendor/laravel-admin/components'),
-        ], 'laravel-admin-ui-components');
+        ];
 
-        $this->publishes([
+        $assets = [
             __DIR__.'/../resources/css/admin.css' => resource_path('vendor/laravel-admin/admin.css'),
             __DIR__.'/../resources/js' => resource_path('vendor/laravel-admin'),
             __DIR__.'/../public/images/dtree' => public_path('images/dtree'),
-        ], 'laravel-admin-ui-assets');
+        ];
+
+        $this->publishes($views, 'laravel-admin-ui-views');
+        $this->publishes($components, 'laravel-admin-ui-components');
+        $this->publishes($assets, 'laravel-admin-ui-assets');
+
+        $this->publishes($views, 'laravel-admin-views');
+        $this->publishes($components, 'laravel-admin-components');
+        $this->publishes($assets, 'laravel-admin-assets');
 
     }
 }
