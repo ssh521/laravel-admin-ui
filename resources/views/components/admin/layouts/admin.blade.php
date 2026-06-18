@@ -9,12 +9,6 @@
 
     <title>{{ $title ? $title . ' - ' : '' }}{{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-
     <!-- Dark mode FOUC prevention -->
     <script>
         (function() {
@@ -53,23 +47,41 @@
 
     <div x-data="{
             isMobileMenuOpen: false,
-            isDesktop: localStorage.getItem('adminSidebarOpen') === 'true' || false
-        }" x-init="
-            $watch('isDesktop', value => localStorage.setItem('adminSidebarOpen', value));
+            isDesktop: false,
+            keydownHandler: null,
+            init() {
+                try {
+                    this.isDesktop = window.localStorage?.getItem('adminSidebarOpen') === 'true';
+                } catch (error) {
+                    this.isDesktop = false;
+                }
 
-            // 단축키 이벤트 리스너 추가
-            document.addEventListener('keydown', function(e) {
-                // Ctrl/Cmd + B: 사이드바 토글
-                if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-                    e.preventDefault();
-                    isDesktop = !isDesktop;
+                this.$watch('isDesktop', value => {
+                    try {
+                        window.localStorage?.setItem('adminSidebarOpen', value);
+                    } catch (error) {
+                    }
+                });
+
+                this.keydownHandler = event => {
+                    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'b') {
+                        event.preventDefault();
+                        this.isDesktop = !this.isDesktop;
+                    }
+
+                    if (event.key === 'Escape' && this.isMobileMenuOpen) {
+                        this.isMobileMenuOpen = false;
+                    }
+                };
+
+                document.addEventListener('keydown', this.keydownHandler);
+            },
+            destroy() {
+                if (this.keydownHandler) {
+                    document.removeEventListener('keydown', this.keydownHandler);
                 }
-                // ESC: 모바일 메뉴 닫기
-                if (e.key === 'Escape' && open) {
-                    open = false;
-                }
-            });
-        ">
+            }
+        }">
 
         <livewire:admin.left-menu-mobile />
         <livewire:admin.header-nav />

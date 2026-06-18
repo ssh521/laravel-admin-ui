@@ -47,7 +47,7 @@
     <!-- 햄버거 버튼 -->
     <button
         class="hidden lg:block mr-2 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-purple-800 transition relative group"
-        @click="isDesktop = !isDesktop; localStorage.setItem('adminSidebarOpen', isDesktop)" title="사이드바 토글 (Ctrl+B)">
+        @click="isDesktop = !isDesktop" title="사이드바 토글 (Ctrl+B)">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-700 dark:text-purple-300" fill="none"
             viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -78,11 +78,22 @@
     <!-- 우측: 드롭다운 메뉴 -->
     <div class="flex items-center gap-4">
         @php
+            $user = Auth::user();
             $hasJetstream = class_exists(\Laravel\Jetstream\Jetstream::class);
-            $hasTeamFeatures = $hasJetstream && \Laravel\Jetstream\Jetstream::hasTeamFeatures();
+            $hasTeamRoutes = Route::has('teams.show');
+            $canCreateTeamsRoute = Route::has('teams.create');
+            $hasTeamFeatures = $user && $hasJetstream && $hasTeamRoutes && \Laravel\Jetstream\Jetstream::hasTeamFeatures() && $user->currentTeam;
             $newTeamModel = $hasTeamFeatures ? \Laravel\Jetstream\Jetstream::newTeamModel() : null;
-            $managesProfilePhotos = $hasJetstream && \Laravel\Jetstream\Jetstream::managesProfilePhotos();
+            $managesProfilePhotos = $user && $hasJetstream && \Laravel\Jetstream\Jetstream::managesProfilePhotos();
             $hasApiFeatures = $hasJetstream && \Laravel\Jetstream\Jetstream::hasApiFeatures() && Route::has('api-tokens.index');
+            $adminProfileRoute = config('laravel-admin.route_name_prefix', 'admin.').'profile.show';
+            $profileRoute = Route::has($adminProfileRoute)
+                ? $adminProfileRoute
+                : (Route::has('profile.show') ? 'profile.show' : null);
+            $adminLogoutRoute = config('laravel-admin.route_name_prefix', 'admin.').'logout';
+            $logoutRoute = Route::has($adminLogoutRoute)
+                ? $adminLogoutRoute
+                : (Route::has('logout') ? 'logout' : null);
         @endphp
 
         <!-- Teams Dropdown -->
@@ -93,7 +104,7 @@
                     <span class="inline-flex rounded-md">
                         <button type="button"
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-purple-700 dark:text-purple-300 bg-white dark:bg-gray-900 hover:text-purple-900 dark:hover:text-purple-200 focus:outline-none focus:bg-purple-50 dark:focus:bg-purple-900 active:bg-purple-100 dark:active:bg-purple-800 transition">
-                            {{ Auth::user()->currentTeam->name }}
+                            {{ $user->currentTeam->name }}
                             <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -109,21 +120,23 @@
                             {{ __('Manage Team') }}
                         </div>
                         <!-- Team Settings -->
-                        <x-laravel-admin::admin.dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}">
+                        <x-laravel-admin::admin.dropdown-link href="{{ route('teams.show', $user->currentTeam->id) }}">
                             {{ __('Team Settings') }}
                         </x-laravel-admin::admin.dropdown-link>
+                        @if ($canCreateTeamsRoute)
                         @can('create', $newTeamModel)
                         <x-laravel-admin::admin.dropdown-link href="{{ route('teams.create') }}">
                             {{ __('Create New Team') }}
                         </x-laravel-admin::admin.dropdown-link>
                         @endcan
+                        @endif
                         <!-- Team Switcher -->
-                        @if (Auth::user()->allTeams()->count() > 1)
+                        @if ($user->allTeams()->count() > 1)
                         <div class="border-t border-gray-200 dark:border-gray-600"></div>
                         <div class="block px-4 py-2 text-xs text-gray-400">
                             {{ __('Switch Teams') }}
                         </div>
-                        @foreach (Auth::user()->allTeams() as $team)
+                        @foreach ($user->allTeams() as $team)
                         <x-laravel-admin::admin.switchable-team :team="$team" />
                         @endforeach
                         @endif
@@ -140,14 +153,14 @@
                     @if ($managesProfilePhotos)
                     <button
                         class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-purple-300 transition">
-                        <img class="size-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}"
-                            alt="{{ Auth::user()->name }}" />
+                        <img class="size-8 rounded-full object-cover" src="{{ $user->profile_photo_url }}"
+                            alt="{{ $user->name }}" />
                     </button>
                     @else
                     <span class="inline-flex rounded-md">
                         <button type="button"
                             class="inline-flex items-center px-1 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-purple-700 dark:text-purple-300 bg-white dark:bg-gray-900 hover:text-purple-900 dark:hover:text-purple-200 focus:outline-none focus:bg-purple-50 dark:focus:bg-purple-900 active:bg-purple-100 dark:active:bg-purple-800 transition">
-                            {{ Auth::user()->name }}
+                            {{ $user?->name ?? __('Admin') }}
                             <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -185,11 +198,7 @@
                         {{ __('Manage Account') }}
                     </div>
 
-                    @php
-                        $adminProfileRoute = config('laravel-admin.route_name_prefix', 'admin.').'profile.show';
-                        $profileRoute = Route::has($adminProfileRoute) ? $adminProfileRoute : 'profile.show';
-                    @endphp
-
+                    @if ($profileRoute)
                     <x-laravel-admin::admin.dropdown-link href="{{ route($profileRoute) }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -198,6 +207,7 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>{{ __('Profile') }}
                     </x-laravel-admin::admin.dropdown-link>
+                    @endif
                     @if ($hasApiFeatures)
                     <x-laravel-admin::admin.dropdown-link href="{{ route('api-tokens.index') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -211,11 +221,7 @@
                     <div class="border-t border-gray-200 dark:border-gray-600"></div>
 
                     <!-- Authentication -->
-                    @php
-                        $adminLogoutRoute = config('laravel-admin.route_name_prefix', 'admin.').'logout';
-                        $logoutRoute = Route::has($adminLogoutRoute) ? $adminLogoutRoute : 'logout';
-                    @endphp
-
+                    @if ($logoutRoute)
                     <form method="POST" action="{{ route($logoutRoute) }}" x-data>
                         @csrf
                         <x-laravel-admin::admin.dropdown-link href="{{ route($logoutRoute) }}" @click.prevent="$root.submit();">
@@ -229,6 +235,7 @@
                             {{ __('Log Out') }}
                         </x-laravel-admin::admin.dropdown-link>
                     </form>
+                    @endif
 
 
                 </x-slot>
