@@ -99,11 +99,14 @@
         <!-- Teams Dropdown -->
         @if ($hasTeamFeatures)
         <div class="ms-3 relative">
-            <x-laravel-admin::admin.dropdown align="right" width="60">
+            <x-laravel-admin::admin.dropdown
+                align="right"
+                width="60"
+                contentClasses="overflow-hidden rounded-lg border border-gray-200 bg-white py-1 shadow-xl dark:border-gray-700 dark:bg-gray-900">
                 <x-slot name="trigger">
                     <span class="inline-flex rounded-md">
                         <button type="button"
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-purple-700 dark:text-purple-300 bg-white dark:bg-gray-900 hover:text-purple-900 dark:hover:text-purple-200 focus:outline-none focus:bg-purple-50 dark:focus:bg-purple-900 active:bg-purple-100 dark:active:bg-purple-800 transition">
+                            class="inline-flex items-center rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm transition hover:border-indigo-300 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-indigo-500 dark:hover:text-indigo-300 dark:focus:ring-offset-gray-900">
                             {{ $user->currentTeam->name }}
                             <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -116,7 +119,7 @@
                 <x-slot name="content">
                     <div class="w-60">
                         <!-- Team Management -->
-                        <div class="block px-4 py-2 text-xs text-gray-400">
+                        <div class="block px-4 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                             {{ __('Manage Team') }}
                         </div>
                         <!-- Team Settings -->
@@ -132,8 +135,8 @@
                         @endif
                         <!-- Team Switcher -->
                         @if ($user->allTeams()->count() > 1)
-                        <div class="border-t border-gray-200 dark:border-gray-600"></div>
-                        <div class="block px-4 py-2 text-xs text-gray-400">
+                        <div class="border-t border-gray-200 dark:border-gray-700"></div>
+                        <div class="block px-4 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                             {{ __('Switch Teams') }}
                         </div>
                         @foreach ($user->allTeams() as $team)
@@ -148,19 +151,27 @@
 
         <!-- Settings Dropdown -->
         <div class="ms-3 relative">
-            <x-laravel-admin::admin.dropdown align="right" width="48">
+            <x-laravel-admin::admin.dropdown
+                align="right"
+                width="48"
+                contentClasses="overflow-hidden rounded-lg border border-gray-200 bg-white py-1 shadow-xl dark:border-gray-700 dark:bg-gray-900">
                 <x-slot name="trigger">
                     @if ($managesProfilePhotos)
                     <button
-                        class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-purple-300 transition">
+                        class="flex rounded-full border border-gray-200 bg-white p-0.5 text-sm shadow-sm transition hover:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-indigo-500 dark:focus:ring-offset-gray-900">
                         <img class="size-8 rounded-full object-cover" src="{{ $user->profile_photo_url }}"
                             alt="{{ $user->name }}" />
                     </button>
                     @else
                     <span class="inline-flex rounded-md">
                         <button type="button"
-                            class="inline-flex items-center px-1 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-purple-700 dark:text-purple-300 bg-white dark:bg-gray-900 hover:text-purple-900 dark:hover:text-purple-200 focus:outline-none focus:bg-purple-50 dark:focus:bg-purple-900 active:bg-purple-100 dark:active:bg-purple-800 transition">
+                            class="inline-flex max-w-44 items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm transition hover:border-indigo-300 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-indigo-500 dark:hover:text-indigo-300 dark:focus:ring-offset-gray-900">
+                            <span class="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                                {{ mb_substr($user?->name ?? __('Admin'), 0, 1) }}
+                            </span>
+                            <span class="truncate">
                             {{ $user?->name ?? __('Admin') }}
+                            </span>
                             <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -173,13 +184,13 @@
                 <x-slot name="content">
 
                     <!-- Admin Management -->
-                    <div class="block px-4 py-2 text-xs text-gray-400">
+                    <div class="block px-4 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                         {{ __('Admin Management') }}
                     </div>
 
 
                     @if(auth()->user())
-                    <x-laravel-admin::admin.dropdown-link href="{{ route('admin.index') }}" :active="request()->routeIs('admin.index')">
+                    <x-laravel-admin::admin.dropdown-link href="{{ route('admin.index') }}" :active="request()->routeIs('admin.index')" class="!text-gray-700 hover:!bg-gray-50 hover:!text-indigo-700 dark:!text-gray-300 dark:hover:!bg-gray-800 dark:hover:!text-indigo-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="w-4 h-4 mr-2 inline -mt-1">
@@ -191,15 +202,15 @@
                     </x-laravel-admin::admin.dropdown-link>
                     @endif
 
-                    <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                    <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
                     <!-- Account Management -->
-                    <div class="block px-4 py-2 text-xs text-gray-400">
+                    <div class="block px-4 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                         {{ __('Manage Account') }}
                     </div>
 
                     @if ($profileRoute)
-                    <x-laravel-admin::admin.dropdown-link href="{{ route($profileRoute) }}">
+                    <x-laravel-admin::admin.dropdown-link href="{{ route($profileRoute) }}" class="!text-gray-700 hover:!bg-gray-50 hover:!text-indigo-700 dark:!text-gray-300 dark:hover:!bg-gray-800 dark:hover:!text-indigo-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="w-4 h-4 mr-2 inline -mt-1">
@@ -209,7 +220,7 @@
                     </x-laravel-admin::admin.dropdown-link>
                     @endif
                     @if ($hasApiFeatures)
-                    <x-laravel-admin::admin.dropdown-link href="{{ route('api-tokens.index') }}">
+                    <x-laravel-admin::admin.dropdown-link href="{{ route('api-tokens.index') }}" class="!text-gray-700 hover:!bg-gray-50 hover:!text-indigo-700 dark:!text-gray-300 dark:hover:!bg-gray-800 dark:hover:!text-indigo-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="w-4 h-4 mr-2  inline -mt-1">
@@ -218,13 +229,13 @@
                     </x-laravel-admin::admin.dropdown-link>
                     @endif
 
-                    <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                    <div class="border-t border-gray-200 dark:border-gray-700"></div>
 
                     <!-- Authentication -->
                     @if ($logoutRoute)
                     <form method="POST" action="{{ route($logoutRoute) }}" x-data>
                         @csrf
-                        <x-laravel-admin::admin.dropdown-link href="{{ route($logoutRoute) }}" @click.prevent="$root.submit();">
+                        <x-laravel-admin::admin.dropdown-link href="{{ route($logoutRoute) }}" class="!text-red-600 hover:!bg-red-50 hover:!text-red-700 dark:!text-red-400 dark:hover:!bg-red-950/40 dark:hover:!text-red-300" @click.prevent="$root.submit();">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="w-4 h-4 mr-2 inline -mt-1">
