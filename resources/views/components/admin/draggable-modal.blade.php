@@ -34,12 +34,12 @@ $centerY = $initialY ?? 'Math.floor((window.innerHeight - (' . $clampedHeightExp
     initialX: {{ $centerX }},
     initialY: {{ $centerY }},
     resizable: {{ $showResizeHandle ? 'true' : 'false' }}
-})" x-show="isOpen" 
+})" x-show="isOpen"
 @keydown.escape.window="{{ $closeOnEscape ? 'if (isTopModal()) close()' : '' }}"
 @open-modal.window="if ($event.detail.modalId === '{{ $modalId }}') openModal()"
 @close-modal.window="if ($event.detail.modalId === '{{ $modalId }}') close()"
 @click="{{ $closeOnBackdropClick ? 'if (isTopModal()) close()' : '' }}"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70" id="{{ $modalId }}" 
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70" id="{{ $modalId }}"
     {{ $attributes->merge(['class' => '']) }}
     x-bind:style="`z-index: ${zIndex}`"
     draggable="false"
@@ -47,20 +47,20 @@ $centerY = $initialY ?? 'Math.floor((window.innerHeight - (' . $clampedHeightExp
 
     <!-- 모달 박스 -->
     <div x-ref="modal" x-show="isOpen" @click.stop @keydown.escape.window="if (isTopModal()) close()" @mousedown.stop="bringToFront" @touchstart.stop="bringToFront" :style="style"
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 absolute p-0 min-w-[300px] border border-gray-200 dark:border-gray-700">
+        class="absolute flex min-w-[300px] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white p-0 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/50">
 
         <!-- 헤더 -->
-        <div class="cursor-move flex justify-between items-center bg-gradient-to-r from-indigo-300 to-indigo-400 dark:from-indigo-600 dark:to-indigo-700 px-3 py-1.5 rounded-t-lg border-indigo-500 dark:border-indigo-600 transform hover:scale-[1] transition-transform duration-200"
+        <div class="flex shrink-0 cursor-move select-none items-center justify-between border-b border-gray-200 bg-gray-50 px-3 py-2 dark:border-gray-700 dark:bg-gray-900"
             @mousedown.stop="dragStart"
             @touchstart.stop="dragStart">
 
-            <span class="text-sm font-semibold text-white drop-shadow-sm">
+            <span class="min-w-0 truncate text-sm font-semibold text-gray-900 dark:text-white">
                 {{ $title }}
             </span>
 
             @if($showCloseButton)
-            <button @click.stop="close" @touchstart.stop="close" class="cursor-pointer hover:bg-indigo-500 dark:hover:bg-indigo-600 rounded-full p-1 transition-colors duration-200">
-                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <button type="button" aria-label="닫기" @click.stop="close" @touchstart.stop="close" class="cursor-pointer rounded-md p-1 text-gray-500 transition-colors duration-150 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                     <path
                         d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
                 </svg>
@@ -69,27 +69,27 @@ $centerY = $initialY ?? 'Math.floor((window.innerHeight - (' . $clampedHeightExp
         </div>
 
         <!-- 모달 콘텐츠 -->
-        <div class="text-sm overflow-y-auto text-gray-900 dark:text-gray-100" style="max-height: calc(100% - 60px);">
+        <div class="min-h-0 flex-1 overflow-y-auto text-sm text-gray-900 dark:text-gray-100">
             {{ $slot }}
         </div>
 
         <!-- 리사이즈 핸들 -->
         @if($showResizeHandle)
-        <div class="absolute bottom-0 left-0 w-6 h-6 cursor-sw-resize flex items-center justify-center touch-none z-10"
+        <div class="absolute bottom-0 left-0 z-10 hidden h-6 w-6 cursor-sw-resize touch-none items-center justify-center text-gray-400 hover:text-gray-700 sm:flex dark:text-gray-500 dark:hover:text-gray-200"
             @mousedown.stop.prevent="resizeStart($event, 'sw')"
             @touchstart.stop.prevent="resizeStart($event, 'sw')"
             style="pointer-events: auto;">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 <path
                     d="M2 22H4V20H2V22ZM2 18H4V16H2V18ZM6 22H8V20H6V22ZM6 18H8V16H6V18ZM10 22H12V20H10V22ZM2 14H4V12H2V14Z" />
             </svg>
         </div>
 
-        <div class="absolute bottom-0 right-0 w-6 h-6 cursor-se-resize flex items-center justify-center touch-none z-10"
+        <div class="absolute bottom-0 right-0 z-10 hidden h-6 w-6 cursor-se-resize touch-none items-center justify-center text-gray-400 hover:text-gray-700 sm:flex dark:text-gray-500 dark:hover:text-gray-200"
             @mousedown.stop.prevent="resizeStart($event, 'se')"
             @touchstart.stop.prevent="resizeStart($event, 'se')"
             style="pointer-events: auto;">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 <path
                     d="M22 22H20V20H22V22ZM22 18H20V16H22V18ZM18 22H16V20H18V22ZM18 18H16V16H18V18ZM14 22H12V20H14V22ZM22 14H20V12H22V14Z" />
             </svg>
