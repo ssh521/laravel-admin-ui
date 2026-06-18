@@ -1,0 +1,439 @@
+<div class="w-full flex" data-admin-menu-search data-search-url="{{ route(config('laravel-admin.route_name_prefix', 'admin.').'menus.search', [], false) }}">
+    <div class="flex w-full justify-center relative">
+        <div class="hidden w-full max-w-sm sm:block lg:max-w-md relative">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex w-9 items-center justify-center text-gray-400 dark:text-gray-500">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-4-4m0 0A7 7 0 104 4a7 7 0 0013 13z" />
+                </svg>
+            </div>
+            <input
+                type="search"
+                autocomplete="off"
+                data-search-input
+                class="h-9 w-full rounded-md border border-gray-300 bg-white pl-10 pr-16 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                placeholder="메뉴 검색"
+            >
+            <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                <kbd class="rounded border border-gray-200 bg-gray-50 px-1 py-0.5 text-[10px] font-medium text-gray-500 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">⌘K</kbd>
+            </div>
+            <div data-search-panel class="hidden absolute top-full left-0 right-0 z-50 mt-2 max-h-96 overflow-y-auto rounded-md border border-gray-200 bg-white shadow-xl ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-900"></div>
+        </div>
+    </div>
+
+    <div class="w-full sm:hidden flex justify-end">
+        <button type="button" data-mobile-search-open class="rounded-md p-2 text-gray-700 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white">
+            <span class="sr-only">메뉴 검색 열기</span>
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-4-4m0 0A7 7 0 104 4a7 7 0 0013 13z" />
+            </svg>
+        </button>
+    </div>
+
+    <div data-mobile-search-overlay class="hidden fixed inset-0 z-50 flex items-start justify-center bg-gray-900/40 px-4 sm:hidden">
+        <div class="mt-20 w-full max-w-md rounded-lg border border-gray-200 bg-white p-4 shadow-xl dark:border-gray-700 dark:bg-gray-900">
+            <div class="mb-3 flex items-center justify-between">
+                <h2 class="text-sm font-semibold text-gray-900 dark:text-white">메뉴 검색</h2>
+                <button type="button" data-mobile-search-close class="rounded-md p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200">
+                    <span class="sr-only">메뉴 검색 닫기</span>
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="relative">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex w-9 items-center justify-center text-gray-400 dark:text-gray-500">
+                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-4-4m0 0A7 7 0 104 4a7 7 0 0013 13z" />
+                    </svg>
+                </div>
+                <input
+                    type="search"
+                    autocomplete="off"
+                    data-search-input
+                    data-mobile-search-input
+                    class="h-10 w-full rounded-md border border-gray-300 bg-white pl-10 pr-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                    placeholder="메뉴 검색"
+                >
+            </div>
+            <div data-search-panel class="hidden mt-3 max-h-96 overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"></div>
+        </div>
+    </div>
+</div>
+
+@once
+    <script>
+        (() => {
+            const loadingMarkup = `
+                <div class="flex items-center justify-center gap-2 px-4 py-5 text-sm text-gray-500 dark:text-gray-400">
+                    <svg class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>검색 중...</span>
+                </div>
+            `;
+
+            const emptyMarkup = `
+                <div class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                    <div class="mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-gray-50 text-gray-400 ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4-4m0 0A7 7 0 104 4a7 7 0 0013 13z" />
+                        </svg>
+                    </div>
+                    <span>검색 결과가 없습니다.</span>
+                </div>
+            `;
+
+            const arrowMarkup = `
+                <svg class="h-4 w-4 flex-none text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            `;
+
+            function initMenuSearch(root) {
+                if (root.dataset.initialized === 'true') {
+                    return;
+                }
+
+                root.dataset.initialized = 'true';
+
+                const searchUrl = root.dataset.searchUrl;
+                const inputs = Array.from(root.querySelectorAll('[data-search-input]'));
+                const panels = Array.from(root.querySelectorAll('[data-search-panel]'));
+                const mobileOverlay = root.querySelector('[data-mobile-search-overlay]');
+                const mobileInput = root.querySelector('[data-mobile-search-input]');
+                const mobileOpenButton = root.querySelector('[data-mobile-search-open]');
+                const mobileCloseButton = root.querySelector('[data-mobile-search-close]');
+
+                const state = {
+                    query: '',
+                    results: [],
+                    selectedIndex: -1,
+                    isLoading: false,
+                    hasSearched: false,
+                    isVisible: false,
+                    token: 0,
+                    timer: null,
+                };
+
+                const setPanelVisibility = () => {
+                    const shouldShow = state.isVisible && (
+                        state.isLoading ||
+                        state.results.length > 0 ||
+                        (state.hasSearched && state.query.trim().length >= 2)
+                    );
+
+                    panels.forEach((panel) => panel.classList.toggle('hidden', !shouldShow));
+                };
+
+                const setInputValues = () => {
+                    inputs.forEach((input) => {
+                        if (input.value !== state.query) {
+                            input.value = state.query;
+                        }
+                    });
+                };
+
+                const clearResults = () => {
+                    state.results = [];
+                    state.selectedIndex = -1;
+                    state.isLoading = false;
+                    state.hasSearched = false;
+                    render();
+                };
+
+                const hideResults = () => {
+                    state.isVisible = false;
+                    setPanelVisibility();
+                };
+
+                const resetSearch = () => {
+                    state.query = '';
+                    state.isVisible = false;
+                    setInputValues();
+                    clearResults();
+                };
+
+                const visitResult = (result) => {
+                    mobileOverlay?.classList.add('hidden');
+                    resetSearch();
+
+                    if (result.target === '_blank') {
+                        window.open(result.url, '_blank');
+                    } else {
+                        window.location.href = result.url;
+                    }
+                };
+
+                const makeText = (tagName, className, text) => {
+                    const element = document.createElement(tagName);
+                    element.className = className;
+                    element.textContent = text || '';
+                    return element;
+                };
+
+                const makeResultItem = (result, index) => {
+                    const item = document.createElement('a');
+                    item.href = result.url || '#';
+                    item.target = result.target || '_self';
+                    item.dataset.searchResult = 'true';
+
+                    if (index === state.selectedIndex) {
+                        item.dataset.selected = 'true';
+                    }
+
+                    item.className = [
+                        'block border-b border-gray-100 px-3 py-3 transition-colors last:border-b-0 dark:border-gray-800',
+                        index === state.selectedIndex
+                            ? 'bg-indigo-50 dark:bg-indigo-500/10'
+                            : 'hover:bg-gray-50 dark:hover:bg-gray-800/80',
+                    ].join(' ');
+
+                    item.addEventListener('mousedown', (event) => event.preventDefault());
+                    item.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        visitResult(result);
+                    });
+
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center gap-3';
+
+                    const iconWrap = document.createElement('div');
+                    iconWrap.className = 'flex-shrink-0';
+
+                    const iconBox = document.createElement('div');
+                    iconBox.className = 'flex h-9 w-9 items-center justify-center rounded-md bg-indigo-50 text-indigo-600 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20';
+
+                    if (result.icon) {
+                        const icon = document.createElement('i');
+                        icon.className = `${result.icon} text-sm`;
+                        iconBox.appendChild(icon);
+                    } else {
+                        iconBox.innerHTML = arrowMarkup;
+                    }
+
+                    iconWrap.appendChild(iconBox);
+
+                    const content = document.createElement('div');
+                    content.className = 'min-w-0 flex-1';
+                    content.appendChild(makeText('div', 'truncate text-sm font-medium text-gray-900 dark:text-white', result.name));
+
+                    if (result.category) {
+                        const badge = document.createElement('div');
+                        badge.className = 'mt-1 inline-flex max-w-full items-center rounded-md bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700';
+                        badge.appendChild(makeText('span', 'truncate', result.category));
+                        content.appendChild(badge);
+                    }
+
+                    row.append(iconWrap, content);
+                    const arrow = document.createElement('div');
+                    arrow.innerHTML = arrowMarkup;
+                    row.appendChild(arrow.firstElementChild);
+                    item.appendChild(row);
+
+                    return item;
+                };
+
+                const scrollSelectedItemIntoView = () => {
+                    panels.forEach((panel) => {
+                        if (panel.classList.contains('hidden')) {
+                            return;
+                        }
+
+                        panel.querySelector('[data-selected="true"]')?.scrollIntoView({
+                            block: 'nearest',
+                            inline: 'nearest',
+                        });
+                    });
+                };
+
+                function render() {
+                    setInputValues();
+
+                    panels.forEach((panel) => {
+                        panel.replaceChildren();
+
+                        if (state.isLoading) {
+                            panel.innerHTML = loadingMarkup;
+                            return;
+                        }
+
+                        if (state.results.length > 0) {
+                            state.results.forEach((result, index) => {
+                                panel.appendChild(makeResultItem(result, index));
+                            });
+                            return;
+                        }
+
+                        if (state.hasSearched && state.query.trim().length >= 2) {
+                            panel.innerHTML = emptyMarkup;
+                        }
+                    });
+
+                    setPanelVisibility();
+                    scrollSelectedItemIntoView();
+                }
+
+                const performSearch = async () => {
+                    const query = state.query.trim();
+
+                    if (query.length < 2) {
+                        clearResults();
+                        return;
+                    }
+
+                    const token = ++state.token;
+                    state.isLoading = true;
+                    state.hasSearched = false;
+                    state.selectedIndex = -1;
+                    state.isVisible = true;
+                    render();
+
+                    try {
+                        const response = await fetch(`${searchUrl}?q=${encodeURIComponent(query)}`, {
+                            headers: {'Accept': 'application/json'},
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Search failed: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+
+                        if (token !== state.token || query !== state.query.trim()) {
+                            return;
+                        }
+
+                        state.results = Array.isArray(data) ? data : [];
+                        state.selectedIndex = state.results.length > 0 ? 0 : -1;
+                        state.hasSearched = true;
+                    } catch (error) {
+                        console.error('메뉴 검색 오류:', error);
+                        state.results = [];
+                        state.selectedIndex = -1;
+                        state.hasSearched = true;
+                    } finally {
+                        if (token === state.token) {
+                            state.isLoading = false;
+                            render();
+                        }
+                    }
+                };
+
+                const queueSearch = (value) => {
+                    state.query = value;
+                    state.isVisible = true;
+                    clearTimeout(state.timer);
+
+                    if (state.query.trim().length < 2) {
+                        clearResults();
+                        return;
+                    }
+
+                    state.timer = setTimeout(performSearch, 250);
+                };
+
+                const moveSelection = (direction) => {
+                    if (state.results.length === 0) {
+                        return;
+                    }
+
+                    state.selectedIndex = Math.max(
+                        0,
+                        Math.min(state.selectedIndex + direction, state.results.length - 1)
+                    );
+                    render();
+                };
+
+                const chooseSelected = () => {
+                    if (state.selectedIndex < 0 || !state.results[state.selectedIndex]) {
+                        return;
+                    }
+
+                    visitResult(state.results[state.selectedIndex]);
+                };
+
+                inputs.forEach((input) => {
+                    input.addEventListener('input', () => queueSearch(input.value));
+                    input.addEventListener('focus', () => {
+                        state.isVisible = true;
+
+                        if (state.query.trim().length >= 2 && state.results.length === 0) {
+                            performSearch();
+                        } else {
+                            render();
+                        }
+                    });
+                    input.addEventListener('keydown', (event) => {
+                        if (event.key === 'ArrowDown') {
+                            event.preventDefault();
+                            moveSelection(1);
+                        } else if (event.key === 'ArrowUp') {
+                            event.preventDefault();
+                            moveSelection(-1);
+                        } else if (event.key === 'Enter') {
+                            event.preventDefault();
+                            chooseSelected();
+                        } else if (event.key === 'Escape') {
+                            event.preventDefault();
+                            resetSearch();
+                        }
+                    });
+                });
+
+                mobileOpenButton?.addEventListener('click', () => {
+                    mobileOverlay?.classList.remove('hidden');
+                    state.isVisible = true;
+                    render();
+                    window.requestAnimationFrame(() => mobileInput?.focus());
+                });
+
+                mobileCloseButton?.addEventListener('click', () => {
+                    mobileOverlay?.classList.add('hidden');
+                    hideResults();
+                });
+
+                mobileOverlay?.addEventListener('click', (event) => {
+                    if (event.target === mobileOverlay) {
+                        mobileOverlay.classList.add('hidden');
+                        hideResults();
+                    }
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!root.contains(event.target)) {
+                        hideResults();
+                    }
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+                        event.preventDefault();
+
+                        if (window.innerWidth < 640) {
+                            mobileOpenButton?.click();
+                        } else {
+                            inputs[0]?.focus();
+                        }
+                    }
+                });
+            }
+
+            function initAllMenuSearches() {
+                document.querySelectorAll('[data-admin-menu-search]').forEach(initMenuSearch);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAllMenuSearches);
+            } else {
+                initAllMenuSearches();
+            }
+
+            document.addEventListener('livewire:navigated', initAllMenuSearches);
+        })();
+    </script>
+@endonce
