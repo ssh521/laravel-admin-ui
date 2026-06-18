@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
-                    @can('create', arguments: Ssh521\LaravelAdmin\Models\Menu::class)
+                    @can('create', arguments: Ssh521\LaravelAdmin\Models\Permission::class)
                         <a href="{{ route('admin.permissions.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
                             <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
                             {{ __('등록하기') }}
@@ -141,8 +141,15 @@
                                                 {{ $permission->description ?: '설명 없음' }}
                                             </td>
                                             <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                                @can('update', $permission)
+                                                @can('view', $permission)
                                                     <a class="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10"
+                                                        href="{{ route('admin.permissions.show', $permission) }}">
+                                                        <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        {{ __('보기') }}
+                                                    </a>
+                                                @endcan
+                                                @can('update', $permission)
+                                                    <a class="ml-1 inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10"
                                                         href="{{ route('admin.permissions.edit', $permission) }}">
                                                         <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
                                                         {{ __('수정') }}
@@ -197,9 +204,9 @@
                         if (tbody && !this.sortableInstance) {
                             this.sortableInstance = new Sortable(tbody, {
                                 animation: 150,
-                                ghostClass: 'sortable-ghost',
-                                chosenClass: 'sortable-chosen',
-                                dragClass: 'sortable-drag',
+                                ghostClass: 'opacity-40',
+                                chosenClass: 'bg-gray-100',
+                                dragClass: 'bg-gray-200',
                                 handle: '.cursor-move',
                                 onEnd: (evt) => {
                                     this.updateOrder(evt);
@@ -284,18 +291,5 @@
             }
         }
     </script>
-
-    <style>
-        .sortable-ghost {
-            opacity: 0.4;
-            background: #f3f4f6;
-        }
-        .sortable-chosen {
-            background: #e5e7eb;
-        }
-        .sortable-drag {
-            background: #d1d5db;
-        }
-    </style>
 
 </x-laravel-admin::admin.layouts.admin>
