@@ -290,15 +290,15 @@ span.cursor-pointer:hover {
 
   /* 모달 오버레이 */
   .overlay {
-    @apply fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4;
+    @apply fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 dark:bg-black/70;
   }
 
   /* 모달 창 */
   .modal-content {
-    @apply bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all;
+    @apply w-full max-w-lg overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg transition-all dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/50;
     /* 모바일에서는 아래에서 위로 슬라이드, PC는 중앙 정렬 */
     animation: admin-slide-in-from-bottom 300ms ease-out;
-  }  
+  }
 
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider;
