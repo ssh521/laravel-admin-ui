@@ -21,7 +21,7 @@
                 </div>
                 <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
                     <a href="{{ route('admin.admin-users.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                        <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
+                        <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
                         {{ __('등록하기') }}
                     </a>
                 </div>
@@ -47,7 +47,7 @@
                     class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
                 >
                 <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                    <i class="fa-solid fa-magnifying-glass mr-2 text-xs" aria-hidden="true"></i>
+                    <x-laravel-admin::admin.icon name="magnifying-glass" class="mr-2 text-xs" />
                     {{ __('검색') }}
                 </button>
             </form>
@@ -105,11 +105,11 @@
                                         </td>
                                         <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                                             <a href="{{ route('admin.admin-users.show', $adminUser->getKey()) }}" class="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
-                                                <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
+                                                <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
                                                 {{ __('보기') }}
                                             </a>
                                             <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="ml-1 inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
-                                                <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
+                                                <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
                                                 {{ __('수정') }}
                                             </a>
                                         </td>

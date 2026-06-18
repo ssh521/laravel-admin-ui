@@ -126,6 +126,7 @@ Use consistent action hierarchy:
 - Destructive: red bordered button, preferably with an icon.
 - Links styled as buttons should override global admin link colors with Tailwind important text classes, such as `!text-white` or `!text-gray-700`.
 - Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
+- Icons should use the shared `x-laravel-admin::admin.icon` Blade component instead of external icon font packages.
 
 ## Dark Mode Contract
 

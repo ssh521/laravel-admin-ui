@@ -30,7 +30,7 @@
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
                     @can('create', arguments: Ssh521\LaravelAdmin\Models\Permission::class)
                         <a href="{{ route('admin.permissions.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            <i class="fa-solid fa-plus mr-2 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
                             {{ __('등록하기') }}
                         </a>
                     @endcan
@@ -54,14 +54,14 @@
                     @if(request('search'))
                         <a href="{{ route('admin.permissions.index') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
-                            <i class="fa-solid fa-xmark text-sm" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
                         </a>
                     @endif
                 </div>
 
                 <button type="submit"
                     class="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 sm:w-auto dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                    <i class="fa-solid fa-magnifying-glass mr-2 text-xs" aria-hidden="true"></i>
+                    <x-laravel-admin::admin.icon name="magnifying-glass" class="mr-2 text-xs" />
                     {{ __('검색') }}
                 </button>
             </form>
@@ -73,13 +73,13 @@
                         <button type="button" @click="setSortMode('drag')"
                                 :class="sortMode === 'drag' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-600 dark:hover:bg-gray-700'"
                                 class="inline-flex h-8 cursor-pointer items-center rounded-md px-3 text-sm font-semibold shadow-sm">
-                            <i class="fa-solid fa-grip-vertical mr-1.5 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="grip-vertical" class="mr-1.5 text-xs" />
                             {{ __('Drag Sort') }}
                         </button>
                         <button type="button" @click="setSortMode('click')"
                                 :class="sortMode === 'click' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-600 dark:hover:bg-gray-700'"
                                 class="inline-flex h-8 cursor-pointer items-center rounded-md px-3 text-sm font-semibold shadow-sm">
-                            <i class="fa-solid fa-arrow-up-wide-short mr-1.5 text-xs" aria-hidden="true"></i>
+                            <x-laravel-admin::admin.icon name="arrow-up-wide-short" class="mr-1.5 text-xs" />
                             {{ __('Click Sort') }}
                         </button>
                     </div>
@@ -102,9 +102,9 @@
                                                     @click="sortBy('name')"
                                                     class="inline-flex cursor-pointer items-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
                                                 <span>{{ __('Permission Name') }}</span>
-                                                <i x-show="sortField === 'name' && sortDirection === 'asc'" class="fa-solid fa-arrow-up text-xs" aria-hidden="true"></i>
-                                                <i x-show="sortField === 'name' && sortDirection === 'desc'" class="fa-solid fa-arrow-down text-xs" aria-hidden="true"></i>
-                                                <i x-show="sortField !== 'name'" class="fa-solid fa-sort text-xs text-gray-400" aria-hidden="true"></i>
+                                                <x-laravel-admin::admin.icon name="arrow-up" x-show="sortField === 'name' && sortDirection === 'asc'" class="text-xs" />
+                                                <x-laravel-admin::admin.icon name="arrow-down" x-show="sortField === 'name' && sortDirection === 'desc'" class="text-xs" />
+                                                <x-laravel-admin::admin.icon name="sort" x-show="sortField !== 'name'" class="text-xs text-gray-400" />
                                             </button>
                                             <span x-show="sortMode === 'drag'">{{ __('Permission Name') }}</span>
                                         </th>
@@ -113,9 +113,9 @@
                                                     @click="sortBy('description')"
                                                     class="inline-flex cursor-pointer items-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
                                                 <span>{{ __('Permission Description') }}</span>
-                                                <i x-show="sortField === 'description' && sortDirection === 'asc'" class="fa-solid fa-arrow-up text-xs" aria-hidden="true"></i>
-                                                <i x-show="sortField === 'description' && sortDirection === 'desc'" class="fa-solid fa-arrow-down text-xs" aria-hidden="true"></i>
-                                                <i x-show="sortField !== 'description'" class="fa-solid fa-sort text-xs text-gray-400" aria-hidden="true"></i>
+                                                <x-laravel-admin::admin.icon name="arrow-up" x-show="sortField === 'description' && sortDirection === 'asc'" class="text-xs" />
+                                                <x-laravel-admin::admin.icon name="arrow-down" x-show="sortField === 'description' && sortDirection === 'desc'" class="text-xs" />
+                                                <x-laravel-admin::admin.icon name="sort" x-show="sortField !== 'description'" class="text-xs text-gray-400" />
                                             </button>
                                             <span x-show="sortMode === 'drag'">{{ __('Permission Description') }}</span>
                                         </th>
@@ -143,14 +143,14 @@
                                                 @can('view', $permission)
                                                     <a class="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10"
                                                         href="{{ route('admin.permissions.show', $permission) }}">
-                                                        <i class="fa-regular fa-eye mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
                                                         {{ __('보기') }}
                                                     </a>
                                                 @endcan
                                                 @can('update', $permission)
                                                     <a class="ml-1 inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10"
                                                         href="{{ route('admin.permissions.edit', $permission) }}">
-                                                        <i class="fa-regular fa-pen-to-square mr-1.5 text-xs" aria-hidden="true"></i>
+                                                        <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
                                                         {{ __('수정') }}
                                                     </a>
                                                 @endcan

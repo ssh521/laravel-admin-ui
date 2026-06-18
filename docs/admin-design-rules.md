@@ -107,7 +107,7 @@ For rules that other packages can adopt as a cross-package contract, see [admin-
 - Secondary action: white/dark bordered button.
 - Destructive action: red bordered button with a clear icon.
 - Destructive actions should be spatially separated from primary actions, but remain in the same footer row on desktop. Prefer left alignment for delete buttons and right alignment for navigation/edit/save buttons.
-- Use Font Awesome icons already available in this package for common actions.
+- Use the package Blade icon component for common actions.
 - Override global admin link colors with Tailwind important text classes, for example `!text-white` or `!text-gray-700`, when a link is styled as a button.
 
 ## Dark Mode

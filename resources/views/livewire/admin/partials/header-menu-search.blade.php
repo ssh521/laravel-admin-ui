@@ -94,6 +94,16 @@
                 </svg>
             `;
 
+            const iconPaths = {
+                bars: 'M3 6h18M3 12h18M3 18h18',
+                folder: 'M3 7.5A1.5 1.5 0 0 1 4.5 6h5.25l2.25 2.25h7.5A1.5 1.5 0 0 1 21 9.75V18a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18V7.5Z',
+                gauge: 'M3.75 13.5a8.25 8.25 0 1 1 16.5 0M12 13.5l3.75-3.75M6.75 13.5h.01M17.25 13.5h.01M8.25 8.25h.01M15.75 8.25h.01M12 6.75h.01',
+                house: 'm3 10.5 9-7.5 9 7.5M5.25 9.75V21h13.5V9.75M9.75 21v-6h4.5v6',
+                key: 'M15.75 7.5a5.25 5.25 0 1 1-1.463 3.645L6 19.432V21H3v-3h3v-3h3v-1.568l2.355-2.355A5.229 5.229 0 0 1 15.75 7.5ZM17.25 6.75h.008v.008h-.008V6.75Z',
+                'user-shield': 'M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 10.5-6.87M18 13.5l3 1.125v2.25a5.25 5.25 0 0 1-3 4.75 5.25 5.25 0 0 1-3-4.75v-2.25L18 13.5Z',
+                'user-tag': 'M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.25a7.5 7.5 0 0 1 10.5-6.87M16.5 15h3.568c.398 0 .779.158 1.06.44l1.432 1.432a1.5 1.5 0 0 1 0 2.121l-2.067 2.067a1.5 1.5 0 0 1-2.121 0l-1.432-1.432a1.5 1.5 0 0 1-.44-1.06V15Zm2.25 2.25h.01',
+            };
+
             function initMenuSearch(root) {
                 if (root.dataset.initialized === 'true') {
                     return;
@@ -176,6 +186,30 @@
                     return element;
                 };
 
+                const makeIcon = (name) => {
+                    const path = iconPaths[name];
+
+                    if (! path) {
+                        return null;
+                    }
+
+                    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    svg.setAttribute('class', 'size-4 text-sm');
+                    svg.setAttribute('viewBox', '0 0 24 24');
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', 'currentColor');
+                    svg.setAttribute('stroke-width', '1.8');
+                    svg.setAttribute('stroke-linecap', 'round');
+                    svg.setAttribute('stroke-linejoin', 'round');
+                    svg.setAttribute('aria-hidden', 'true');
+
+                    const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    pathElement.setAttribute('d', path);
+                    svg.appendChild(pathElement);
+
+                    return svg;
+                };
+
                 const makeResultItem = (result, index) => {
                     const item = document.createElement('a');
                     item.href = result.url || '#';
@@ -209,9 +243,13 @@
                     iconBox.className = 'flex h-9 w-9 items-center justify-center rounded-md bg-indigo-50 text-indigo-600 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20';
 
                     if (result.icon) {
-                        const icon = document.createElement('i');
-                        icon.className = `${result.icon} text-sm`;
-                        iconBox.appendChild(icon);
+                        const icon = makeIcon(result.icon);
+
+                        if (icon) {
+                            iconBox.appendChild(icon);
+                        } else {
+                            iconBox.innerHTML = arrowMarkup;
+                        }
                     } else {
                         iconBox.innerHTML = arrowMarkup;
                     }

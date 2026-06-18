@@ -41,7 +41,7 @@
                             <button type="submit"
                                     onclick="return confirm('{{ __('정말 삭제하시겠습니까?') }}')"
                                     class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
-                                <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
+                                <x-laravel-admin::admin.icon name="trash-can" class="mr-2 text-xs" />
                                 {{ __('삭제하기') }}
                             </button>
                         </form>

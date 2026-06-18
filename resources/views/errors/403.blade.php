@@ -35,7 +35,7 @@
             <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800 sm:px-8">
                 <div class="flex items-center gap-4">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-amber-50 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/25">
-                        <i class="fa-solid fa-lock text-lg" aria-hidden="true"></i>
+                        <x-laravel-admin::admin.icon name="lock" class="text-lg" />
                     </div>
                     <div class="min-w-0">
                         <p class="text-sm font-semibold text-amber-700 dark:text-amber-300">403 Forbidden</p>
@@ -64,11 +64,11 @@
 
                 <div class="mt-8 flex flex-col gap-3 border-t border-gray-200 pt-6 dark:border-gray-800 sm:flex-row sm:justify-end">
                     <a href="{{ url()->previous() }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                        <i class="fa-solid fa-arrow-left mr-2 text-xs" aria-hidden="true"></i>
+                        <x-laravel-admin::admin.icon name="arrow-left" class="mr-2 text-xs" />
                         {{ __('이전 페이지') }}
                     </a>
                     <a href="{{ url('/') }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                        <i class="fa-solid fa-house mr-2 text-xs" aria-hidden="true"></i>
+                        <x-laravel-admin::admin.icon name="house" class="mr-2 text-xs" />
                         {{ __('홈으로 이동') }}
                     </a>
                 </div>
