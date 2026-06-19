@@ -14,12 +14,7 @@
         x-transition:leave="transition-transform duration-300"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="-translate-x-64"
-        @transitionend="
-            // 트랜지션이 완료되고 메뉴가 열려있을 때 폴더 상태 복원
-            if (isMobileMenuOpen && typeof window.restoreAllDtreeNodes === 'function') {
-                window.restoreAllDtreeNodes();
-            }
-        "
+        @transitionend="isMobileMenuOpen && typeof window.restoreAllDtreeNodes === 'function' && window.restoreAllDtreeNodes()"
         class="fixed top-0 left-0 h-screen w-64
             shadow-lg border-r border-gray-200 dark:border-gray-700
            z-50 bg-gray-50 dark:bg-gray-900 transform" style="display: none;">
@@ -44,7 +39,7 @@
         <!-- 메뉴 본문: 아이콘+텍스트, 섹션 구분, 스크롤 -->
         <nav x-data="sidebarBackground" :style="backgroundStyle" class="overflow-y-auto h-[calc(100vh-64px)] py-0 px-0"
              @click.self="isMobileMenuOpen = false">
-            <div @click="if ($event.target.closest('a')) { isMobileMenuOpen = false; }">
+            <div @click="$event.target.closest('a') && (isMobileMenuOpen = false)">
                 @livewire('admin.left-menu')
             </div>
         </nav>
