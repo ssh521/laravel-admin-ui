@@ -37,7 +37,7 @@
         </div>
 
         <!-- 메뉴 본문: 아이콘+텍스트, 섹션 구분, 스크롤 -->
-        <nav x-data="sidebarBackground" :style="backgroundStyle" class="overflow-y-auto h-[calc(100vh-64px)] py-0 px-0"
+        <nav class="admin-sidebar-surface overflow-y-auto h-[calc(100vh-64px)] py-0 px-0"
              @click.self="isMobileMenuOpen = false">
             <div @click="$event.target.closest('a') && (isMobileMenuOpen = false)">
                 @livewire('admin.left-menu')

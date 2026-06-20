@@ -1,5 +1,4 @@
 import draggableModal, { draggableModalAlert } from './modal-manager';
-import './sidebarBackground';
 import './dtree';
 
 // Alpine.js 컴포넌트들

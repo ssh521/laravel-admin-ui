@@ -106,6 +106,8 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('adminSidebarWidth', $layout);
         $this->assertStringContainsString('startSidebarResize', $layout);
         $this->assertStringContainsString('role="separator"', $layout);
+        $this->assertStringContainsString('admin-sidebar-surface', $layout);
+        $this->assertStringNotContainsString('sidebarBackground', $layout);
         $this->assertStringNotContainsString("e.key === 'Escape' && open", $layout);
         $this->assertStringNotContainsString("route('home')", $legacyHeader);
         $this->assertStringNotContainsString('favicon.ico', $layout);
@@ -115,6 +117,38 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString("Route::has('logout')", $header);
         $this->assertStringContainsString("Route::has('teams.show')", $header);
         $this->assertStringNotContainsString("route('profile.show')", $header);
+    }
+
+    public function test_sidebar_surface_uses_css_backgrounds_instead_of_background_image_js(): void
+    {
+        $css = file_get_contents(__DIR__.'/../../resources/css/admin.css');
+        $adminJs = file_get_contents(__DIR__.'/../../resources/js/admin.js');
+        $mobileMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu-mobile.blade.php');
+
+        $this->assertStringContainsString('.admin-sidebar-surface', $css);
+        $this->assertStringContainsString('.dark .admin-sidebar-surface', $css);
+        $this->assertStringContainsString('admin-sidebar-surface', $mobileMenu);
+        $this->assertStringNotContainsString('menu_bg.gif', $css);
+        $this->assertStringNotContainsString('sidebarBackground', $adminJs);
+        $this->assertFileDoesNotExist(__DIR__.'/../../resources/js/sidebarBackground.js');
+    }
+
+    public function test_left_menu_uses_themeable_svg_icons_for_primary_tree_controls(): void
+    {
+        $leftMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu.blade.php');
+        $css = file_get_contents(__DIR__.'/../../resources/css/admin.css');
+
+        $this->assertStringContainsString('name="plus"', $leftMenu);
+        $this->assertStringContainsString('name="minus"', $leftMenu);
+        $this->assertStringContainsString('name="folder"', $leftMenu);
+        $this->assertStringContainsString('name="folder-open"', $leftMenu);
+        $this->assertStringContainsString('name="file-lines"', $leftMenu);
+        $this->assertStringContainsString('.dtree-menu-icon-folder', $css);
+        $this->assertStringContainsString('.dark .dtree .dtree-menu-icon-folder', $css);
+
+        foreach (['plus.gif', 'minus.gif', 'plusbottom.gif', 'minusbottom.gif', 'folder.gif', 'folderopen.gif', 'page.gif'] as $legacyIcon) {
+            $this->assertStringNotContainsString($legacyIcon, $leftMenu);
+        }
     }
 
     public function test_packaged_views_do_not_assume_host_home_route_or_favicons(): void

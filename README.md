@@ -91,7 +91,6 @@ resources/vendor/laravel-admin/admin.js
 resources/vendor/laravel-admin/dtree.js
 resources/vendor/laravel-admin/modal-manager.js
 resources/vendor/laravel-admin/modal-utils.js
-resources/vendor/laravel-admin/sidebarBackground.js
 resources/views/vendor/laravel-admin
 public/images/dtree
 ```
