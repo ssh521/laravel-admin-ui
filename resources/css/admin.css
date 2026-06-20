@@ -313,14 +313,14 @@ span.cursor-pointer:hover {
   .admin-sidebar-surface {
     background-color: #d9f5ad;
     background-image:
-      linear-gradient(90deg, rgb(134 205 160 / 0.38) 0, rgb(134 205 160 / 0.38) 45px, transparent 45px),
-      linear-gradient(180deg, #e9ffc8 0%, #d9f5ad 42%, #d2f0a3 100%);
+      linear-gradient(90deg, rgb(119 195 144 / 0.46) 0, rgb(119 195 144 / 0.46) 45px, rgb(229 255 197 / 0.86) 45px, rgb(213 244 165 / 0.92) 100%),
+      linear-gradient(180deg, #f1ffd2 0%, #def8b5 34%, #d2f0a3 72%, #c8e895 100%);
   }
   .dark .admin-sidebar-surface {
     background-color: #17251e;
     background-image:
-      linear-gradient(90deg, rgb(48 83 66 / 0.55) 0, rgb(48 83 66 / 0.55) 45px, transparent 45px),
-      linear-gradient(180deg, #223127 0%, #17251e 48%, #132019 100%);
+      linear-gradient(90deg, rgb(20 43 32 / 0.94) 0, rgb(20 43 32 / 0.94) 45px, rgb(28 48 36 / 0.95) 45px, rgb(17 32 25 / 0.98) 100%),
+      linear-gradient(180deg, #263b2d 0%, #1b2d22 38%, #17251e 78%, #111d16 100%);
   }
   .dtree {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -369,19 +369,20 @@ span.cursor-pointer:hover {
   .dtree .dtree-toggle {
     width: 18px;
     height: 20px;
-    color: #4f6f5a;
+    color: #52655b;
     vertical-align: middle;
   }
   .dtree .dtree-toggle-control {
     display: inline-flex;
-    width: 13px;
-    height: 13px;
+    width: 16px;
+    height: 18px;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgb(79 111 90 / 0.58);
-    border-radius: 3px;
-    background-color: rgb(255 255 255 / 0.72);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6);
+    transition: color 120ms ease, transform 120ms ease;
+  }
+  .dtree .dtree-toggle:hover .dtree-toggle-control {
+    color: #24352b;
+    transform: translateX(1px);
   }
   .dtree .dtree-menu-icon {
     width: 18px;
@@ -397,6 +398,42 @@ span.cursor-pointer:hover {
   .dtree .dtree-menu-icon-page {
     color: #687386;
   }
+  .dtree .dtree-folder-icon {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 20px;
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+  .dtree .dtree-folder-icon::before,
+  .dtree .dtree-folder-icon::after {
+    position: absolute;
+    content: "";
+    display: block;
+    background: #d6a047;
+    border: 1px solid rgb(103 77 29 / 0.34);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.32);
+  }
+  .dtree .dtree-folder-icon::before {
+    top: 5px;
+    left: 3px;
+    width: 8px;
+    height: 4px;
+    border-bottom: 0;
+    border-radius: 2px 2px 0 0;
+  }
+  .dtree .dtree-folder-icon::after {
+    top: 8px;
+    left: 2px;
+    width: 15px;
+    height: 10px;
+    border-radius: 1px;
+  }
+  .dtree .dtree-folder-icon-open::after {
+    transform: skewX(-10deg);
+    transform-origin: left bottom;
+  }
   .dark .dtree a {
     color: #e8f5df;
   }
@@ -409,12 +446,13 @@ span.cursor-pointer:hover {
     color: #ffffff;
   }
   .dark .dtree .dtree-toggle {
-    color: #dcebd4;
+    color: #9aa49d;
   }
   .dark .dtree .dtree-toggle-control {
-    border-color: rgb(196 217 187 / 0.42);
-    background-color: rgb(9 18 14 / 0.65);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12);
+    color: #9aa49d;
+  }
+  .dark .dtree .dtree-toggle:hover .dtree-toggle-control {
+    color: #e8f5df;
   }
   .dark .dtree .dtree-menu-icon-folder {
     color: #f4bf45;
@@ -422,6 +460,12 @@ span.cursor-pointer:hover {
   }
   .dark .dtree .dtree-menu-icon-page {
     color: #c8d2c2;
+  }
+  .dark .dtree .dtree-folder-icon::before,
+  .dark .dtree .dtree-folder-icon::after {
+    background: #c7964b;
+    border-color: rgb(246 205 124 / 0.28);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16);
   }
 }
 

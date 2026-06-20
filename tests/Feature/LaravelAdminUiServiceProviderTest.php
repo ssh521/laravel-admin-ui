@@ -133,18 +133,18 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertFileDoesNotExist(__DIR__.'/../../resources/js/sidebarBackground.js');
     }
 
-    public function test_left_menu_uses_themeable_svg_icons_for_primary_tree_controls(): void
+    public function test_left_menu_uses_themeable_controls_for_primary_tree_icons(): void
     {
         $leftMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu.blade.php');
         $css = file_get_contents(__DIR__.'/../../resources/css/admin.css');
 
-        $this->assertStringContainsString('name="plus"', $leftMenu);
-        $this->assertStringContainsString('name="minus"', $leftMenu);
-        $this->assertStringContainsString('name="folder"', $leftMenu);
-        $this->assertStringContainsString('name="folder-open"', $leftMenu);
+        $this->assertStringContainsString('name="chevron-right"', $leftMenu);
+        $this->assertStringContainsString('name="chevron-down"', $leftMenu);
+        $this->assertStringContainsString('dtree-folder-icon', $leftMenu);
+        $this->assertStringContainsString('dtree-folder-icon-open', $leftMenu);
         $this->assertStringContainsString('name="file-lines"', $leftMenu);
-        $this->assertStringContainsString('.dtree-menu-icon-folder', $css);
-        $this->assertStringContainsString('.dark .dtree .dtree-menu-icon-folder', $css);
+        $this->assertStringContainsString('.dtree-folder-icon::after', $css);
+        $this->assertStringContainsString('.dark .dtree .dtree-folder-icon::after', $css);
 
         foreach (['plus.gif', 'minus.gif', 'plusbottom.gif', 'minusbottom.gif', 'folder.gif', 'folderopen.gif', 'page.gif'] as $legacyIcon) {
             $this->assertStringNotContainsString($legacyIcon, $leftMenu);

@@ -28,11 +28,11 @@
                         <span class="dtree-indent flex items-center">
                             @if($hasChildren)
                                 <a href="javascript:void(0)" class="dtree-toggle inline-flex items-center justify-center">
-                                    <span x-show="!isOpen" class="dtree-toggle-control">
-                                        <x-laravel-admin::admin.icon name="plus" class="size-3" />
+                                    <span x-show="!isOpen" class="dtree-toggle-control" aria-hidden="true">
+                                        <x-laravel-admin::admin.icon name="chevron-right" class="size-3.5" />
                                     </span>
-                                    <span x-show="isOpen" x-cloak class="dtree-toggle-control">
-                                        <x-laravel-admin::admin.icon name="minus" class="size-3" />
+                                    <span x-show="isOpen" x-cloak class="dtree-toggle-control" aria-hidden="true">
+                                        <x-laravel-admin::admin.icon name="chevron-down" class="size-3.5" />
                                     </span>
                                 </a>
                             @else
@@ -40,10 +40,10 @@
                             @endif
                         </span>
                         @if($hasChildren)
-                            <x-laravel-admin::admin.icon x-show="!isOpen" name="folder" class="dtree-menu-icon dtree-menu-icon-folder" />
-                            <x-laravel-admin::admin.icon x-show="isOpen" x-cloak name="folder-open" class="dtree-menu-icon dtree-menu-icon-folder" />
+                            <span x-show="!isOpen" class="dtree-folder-icon" aria-hidden="true"></span>
+                            <span x-show="isOpen" x-cloak class="dtree-folder-icon dtree-folder-icon-open" aria-hidden="true"></span>
                         @else
-                            <x-laravel-admin::admin.icon name="folder" class="dtree-menu-icon dtree-menu-icon-folder" />
+                            <span class="dtree-folder-icon" aria-hidden="true"></span>
                         @endif
                         <span class="dtree-text ml-0.5">{{ $category->name }}</span>
                     </div>
