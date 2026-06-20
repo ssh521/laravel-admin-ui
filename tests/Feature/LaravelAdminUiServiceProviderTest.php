@@ -103,6 +103,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $login = file_get_contents(__DIR__.'/../../resources/views/admin/auth/login.blade.php');
 
         $this->assertStringContainsString('this.isMobileMenuOpen = false', $layout);
+        $this->assertStringContainsString('adminSidebarWidth', $layout);
+        $this->assertStringContainsString('startSidebarResize', $layout);
+        $this->assertStringContainsString('role="separator"', $layout);
         $this->assertStringNotContainsString("e.key === 'Escape' && open", $layout);
         $this->assertStringNotContainsString("route('home')", $legacyHeader);
         $this->assertStringNotContainsString('favicon.ico', $layout);
