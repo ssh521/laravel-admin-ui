@@ -1,0 +1,21 @@
+@props([
+    'variant' => 'neutral',
+])
+
+@php
+    $base = 'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium';
+
+    $variants = [
+        'neutral' => 'bg-neutral-100 text-neutral-700',
+        'brand' => 'bg-brand-100 text-brand-700',
+        'success' => 'bg-success-100 text-success-700',
+        'warning' => 'bg-warning-100 text-warning-700',
+        'danger' => 'bg-danger-100 text-danger-700',
+    ];
+
+    $classes = trim($base.' '.($variants[$variant] ?? $variants['neutral']));
+@endphp
+
+<span {{ $attributes->merge(['class' => $classes]) }}>
+    {{ $slot }}
+</span>
