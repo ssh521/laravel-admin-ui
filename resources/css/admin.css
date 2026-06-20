@@ -311,7 +311,7 @@ span.cursor-pointer:hover {
 
   /* dTree 스타일 (Classic ASP 메뉴 형식) */
   .admin-sidebar-surface {
-    --admin-sidebar-rail-width: 24px;
+    --admin-sidebar-rail-width: 25px;
     background-color: #d9f5ad;
     background-image:
       linear-gradient(90deg, rgb(119 195 144 / 0.46) 0, rgb(119 195 144 / 0.46) var(--admin-sidebar-rail-width), rgb(229 255 197 / 0.86) var(--admin-sidebar-rail-width), rgb(213 244 165 / 0.92) 100%),
@@ -348,7 +348,8 @@ span.cursor-pointer:hover {
     text-decoration: underline;
   }
   .dtree a.nodeSel {
-    background-color: #c0d2ec;
+    background-color: rgb(134 166 104 / 0.3);
+    border-radius: 4px;
   }
   .dtree .clip {
     overflow: hidden;
@@ -356,7 +357,15 @@ span.cursor-pointer:hover {
   .dtree .dTreeNode {
     display: flex;
     align-items: center;
+    min-height: 22px;
+    padding-right: 6px;
+    border-radius: 8px;
     white-space: nowrap;
+    transition: background-color 120ms ease, color 120ms ease;
+  }
+  .dtree .dTreeNode:hover,
+  .dtree .dTreeNode:focus-within {
+    background-color: rgb(134 166 104 / 0.24);
   }
   .dtree .dTreeNode a {
     padding: 0px 1px;
@@ -445,6 +454,10 @@ span.cursor-pointer:hover {
   .dark .dtree a.nodeSel {
     background-color: rgb(77 111 90 / 0.82);
     color: #ffffff;
+  }
+  .dark .dtree .dTreeNode:hover,
+  .dark .dtree .dTreeNode:focus-within {
+    background-color: rgb(96 129 104 / 0.3);
   }
   .dark .dtree .dtree-toggle {
     color: #9aa49d;

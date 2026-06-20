@@ -45,7 +45,7 @@
                         @else
                             <span class="dtree-folder-icon" aria-hidden="true"></span>
                         @endif
-                        <span class="dtree-text ml-0.5">{{ $category->name }}</span>
+                        <span class="dtree-text ml-1">{{ $category->name }}</span>
                     </div>
                     {{-- 하위 메뉴 --}}
                     @if($hasChildren)
@@ -53,23 +53,22 @@
                         @foreach($menus as $menuIndex => $menu)
                             @php
                                 $isLastMenu = $menuIndex === $menus->count() - 1;
-                                $useEmptyForLine = $isLastCategory;
                             @endphp
                             <div class="dTreeNode flex items-center">
                                 <span class="dtree-indent flex items-center flex-shrink-0 ml-[0.1rem]">
-                                    <img src="{{ $dtreeImg($useEmptyForLine ? 'empty.gif' : 'line.gif') }}" alt="" class="dtree-img" />
+                                    <img src="{{ $dtreeImg('empty.gif') }}" alt="" class="dtree-img" />
                                     <img src="{{ $dtreeImg($isLastMenu ? 'joinbottom.gif' : 'join.gif') }}" alt="" class="dtree-img" />
                                 </span>
-                                <x-laravel-admin::admin.icon name="file-lines" class="dtree-menu-icon dtree-menu-icon-page" />
+                                <x-laravel-admin::admin.icon :name="$menu->icon ?: 'file-lines'" class="dtree-menu-icon dtree-menu-icon-page" />
                                 @if($menu->target === '_blank')
                                     <a href="{{ $menu->url }}" target="_blank" title="{{ $menu->name }}"
-                                        class="node ml-0 {{ $menu->isCurrentPage() ? 'nodeSel' : '' }}">
+                                        class="node ml-1 {{ $menu->isCurrentPage() ? 'nodeSel' : '' }}">
                                         {{ $menu->name }}
                                     </a>
                                     <img src="{{ $dtreeImg('globe.gif') }}" alt="" class="w-3 h-3 ml-1 opacity-60 flex-shrink-0" />
                                 @else
                                     <a href="{{ $menu->url }}" target="{{ $menu->target ?? '_self' }}" title="{{ $menu->name }}"
-                                        class="node ml-0 {{ $menu->isCurrentPage() ? 'nodeSel' : '' }}">
+                                        class="node ml-1 {{ $menu->isCurrentPage() ? 'nodeSel' : '' }}">
                                         {{ $menu->name }}
                                     </a>
                                 @endif
