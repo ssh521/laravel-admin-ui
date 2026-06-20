@@ -110,7 +110,7 @@
                 }
 
                 this.isResizingSidebar = true;
-                document.body.classList.add('select-none');
+                document.body.classList.add('cursor-col-resize', 'select-none');
 
                 this.sidebarResizeMoveHandler = event => {
                     this.resizeSidebarTo(event.clientX);
@@ -135,7 +135,7 @@
                 }
 
                 if (this.isResizingSidebar) {
-                    document.body.classList.remove('select-none');
+                    document.body.classList.remove('cursor-col-resize', 'select-none');
                     this.isResizingSidebar = false;
                 }
 
@@ -164,14 +164,18 @@
                 x-on:pointerdown.prevent="startSidebarResize($event)"
                 x-on:keydown.arrow-left.prevent="resizeSidebarTo(sidebarWidth - 16); saveSidebarWidth()"
                 x-on:keydown.arrow-right.prevent="resizeSidebarTo(sidebarWidth + 16); saveSidebarWidth()"
-                class="group hidden w-2 shrink-0 cursor-col-resize items-stretch justify-center lg:flex"
+                class="group relative hidden w-3 shrink-0 cursor-col-resize items-stretch justify-center bg-gray-100/70 transition hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-indigo-500 lg:flex dark:bg-gray-800/70 dark:hover:bg-indigo-950/40"
                 role="separator"
                 aria-orientation="vertical"
                 aria-label="{{ __('왼쪽 메뉴 폭 조절') }}"
                 tabindex="0"
                 title="{{ __('왼쪽 메뉴 폭 조절') }}">
-                <div class="h-full w-px bg-gray-200 transition group-hover:w-1 group-hover:bg-indigo-400 dark:bg-gray-700 dark:group-hover:bg-indigo-500"
+                <div class="h-full w-0.5 bg-gray-300 transition group-hover:w-1 group-hover:bg-indigo-500 dark:bg-gray-600 dark:group-hover:bg-indigo-400"
                     :class="{ 'w-1 bg-indigo-500 dark:bg-indigo-400': isResizingSidebar }"></div>
+                <div class="pointer-events-none absolute top-1/2 flex h-9 w-4 -translate-y-1/2 items-center justify-center rounded bg-white/85 shadow-sm ring-1 ring-gray-300 transition group-hover:ring-indigo-400 dark:bg-gray-900/85 dark:ring-gray-600 dark:group-hover:ring-indigo-400">
+                    <span class="h-5 w-0.5 rounded-full bg-gray-400 dark:bg-gray-500"></span>
+                    <span class="ml-0.5 h-5 w-0.5 rounded-full bg-gray-400 dark:bg-gray-500"></span>
+                </div>
             </div>
 
             <!-- 메인 콘텐츠 영역 -->
