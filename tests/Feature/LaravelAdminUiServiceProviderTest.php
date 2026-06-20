@@ -58,6 +58,17 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('M12 9v4m0 4h.01', $html);
     }
 
+    public function test_icon_component_maps_font_awesome_classes_without_dependency(): void
+    {
+        Log::shouldReceive('warning')->never();
+
+        $html = Blade::render('<x-laravel-admin::admin.icon name="fas fa-home" class="text-xs" />');
+
+        $this->assertStringContainsString('<svg', $html);
+        $this->assertStringContainsString('m3 10.5 9-7.5 9 7.5', $html);
+        $this->assertStringContainsString('text-xs', $html);
+    }
+
     public function test_menu_search_uses_full_icon_map_and_disposable_listeners(): void
     {
         $source = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/partials/header-menu-search.blade.php');
@@ -127,7 +138,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
 
         $this->assertStringContainsString('.admin-sidebar-surface', $css);
         $this->assertStringContainsString('.dark .admin-sidebar-surface', $css);
-        $this->assertStringContainsString('--admin-sidebar-rail-width: 24px', $css);
+        $this->assertStringContainsString('--admin-sidebar-rail-width: 25px', $css);
         $this->assertStringContainsString('admin-sidebar-surface', $mobileMenu);
         $this->assertStringNotContainsString('menu_bg.gif', $css);
         $this->assertStringNotContainsString('sidebarBackground', $adminJs);
@@ -143,7 +154,13 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('name="chevron-down"', $leftMenu);
         $this->assertStringContainsString('dtree-folder-icon', $leftMenu);
         $this->assertStringContainsString('dtree-folder-icon-open', $leftMenu);
-        $this->assertStringContainsString('name="file-lines"', $leftMenu);
+        $this->assertStringContainsString('dtree-text ml-1', $leftMenu);
+        $this->assertStringContainsString('class="node ml-1', $leftMenu);
+        $this->assertStringContainsString("\$menu->icon ?: 'file-lines'", $leftMenu);
+        $this->assertStringContainsString("\$dtreeImg('empty.gif')", $leftMenu);
+        $this->assertStringNotContainsString("'line.gif'", $leftMenu);
+        $this->assertStringContainsString('.dtree .dTreeNode:hover', $css);
+        $this->assertStringContainsString('.dark .dtree .dTreeNode:hover', $css);
         $this->assertStringContainsString('.dtree-folder-icon::after', $css);
         $this->assertStringContainsString('.dark .dtree .dtree-folder-icon::after', $css);
 
