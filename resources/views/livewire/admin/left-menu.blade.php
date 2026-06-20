@@ -27,19 +27,23 @@
                         @if($hasChildren) @click="toggleNode()" @endif>
                         <span class="dtree-indent flex items-center">
                             @if($hasChildren)
-                                <a href="javascript:void(0)" class="dtree-toggle inline-block">
-                                    <img x-show="!isOpen" src="{{ $dtreeImg($isLastCategory ? 'plusbottom.gif' : 'plus.gif') }}" alt="" class="dtree-img" />
-                                    <img x-show="isOpen" x-cloak src="{{ $dtreeImg($isLastCategory ? 'minusbottom.gif' : 'minus.gif') }}" alt="" class="dtree-img" />
+                                <a href="javascript:void(0)" class="dtree-toggle inline-flex items-center justify-center">
+                                    <span x-show="!isOpen" class="dtree-toggle-control">
+                                        <x-laravel-admin::admin.icon name="plus" class="size-3" />
+                                    </span>
+                                    <span x-show="isOpen" x-cloak class="dtree-toggle-control">
+                                        <x-laravel-admin::admin.icon name="minus" class="size-3" />
+                                    </span>
                                 </a>
                             @else
                                 <img src="{{ $dtreeImg($isLastCategory ? 'joinbottom.gif' : 'join.gif') }}" alt="" class="dtree-img" />
                             @endif
                         </span>
                         @if($hasChildren)
-                            <img x-show="!isOpen" src="{{ $dtreeImg('folder.gif') }}" alt="" class="dtree-img flex-shrink-0" />
-                            <img x-show="isOpen" x-cloak src="{{ $dtreeImg('folderopen.gif') }}" alt="" class="dtree-img flex-shrink-0" />
+                            <x-laravel-admin::admin.icon x-show="!isOpen" name="folder" class="dtree-menu-icon dtree-menu-icon-folder" />
+                            <x-laravel-admin::admin.icon x-show="isOpen" x-cloak name="folder-open" class="dtree-menu-icon dtree-menu-icon-folder" />
                         @else
-                            <img src="{{ $dtreeImg('folder.gif') }}" alt="" class="dtree-img flex-shrink-0" />
+                            <x-laravel-admin::admin.icon name="folder" class="dtree-menu-icon dtree-menu-icon-folder" />
                         @endif
                         <span class="dtree-text ml-0.5">{{ $category->name }}</span>
                     </div>
@@ -56,7 +60,7 @@
                                     <img src="{{ $dtreeImg($useEmptyForLine ? 'empty.gif' : 'line.gif') }}" alt="" class="dtree-img" />
                                     <img src="{{ $dtreeImg($isLastMenu ? 'joinbottom.gif' : 'join.gif') }}" alt="" class="dtree-img" />
                                 </span>
-                                <img src="{{ $dtreeImg('page.gif') }}" alt="" class="dtree-img flex-shrink-0" />
+                                <x-laravel-admin::admin.icon name="file-lines" class="dtree-menu-icon dtree-menu-icon-page" />
                                 @if($menu->target === '_blank')
                                     <a href="{{ $menu->url }}" target="_blank" title="{{ $menu->name }}"
                                         class="node ml-0 {{ $menu->isCurrentPage() ? 'nodeSel' : '' }}">

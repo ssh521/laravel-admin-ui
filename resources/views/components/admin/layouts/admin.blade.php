@@ -49,7 +49,7 @@
             isMobileMenuOpen: false,
             isDesktop: false,
             sidebarWidth: 256,
-            sidebarMinWidth: 200,
+            sidebarMinWidth: 160,
             sidebarMaxWidth: 420,
             isResizingSidebar: false,
             keydownHandler: null,
@@ -151,8 +151,8 @@
         <div class="min-h-screen flex pt-16">
 
             <!-- 왼쪽 사이드바 -->
-            <div x-show="isDesktop" class="hidden shrink-0 lg:block shadow-lg border-r border-gray-200 dark:border-gray-700"
-                x-data="sidebarBackground" :style="`${backgroundStyle} width: ${sidebarWidth}px;`">
+            <div x-show="isDesktop" class="admin-sidebar-surface hidden shrink-0 lg:block shadow-lg border-r border-gray-200 dark:border-gray-700"
+                :style="`width: ${sidebarWidth}px;`">
                 <!-- 관리자 메뉴 네비게이션 -->
                 <nav class="h-full overflow-y-auto">
                     <livewire:admin.left-menu />

@@ -310,6 +310,18 @@ span.cursor-pointer:hover {
   .badge-info { @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700; }  
 
   /* dTree 스타일 (Classic ASP 메뉴 형식) */
+  .admin-sidebar-surface {
+    background-color: #d9f5ad;
+    background-image:
+      linear-gradient(90deg, rgb(134 205 160 / 0.38) 0, rgb(134 205 160 / 0.38) 45px, transparent 45px),
+      linear-gradient(180deg, #e9ffc8 0%, #d9f5ad 42%, #d2f0a3 100%);
+  }
+  .dark .admin-sidebar-surface {
+    background-color: #17251e;
+    background-image:
+      linear-gradient(90deg, rgb(48 83 66 / 0.55) 0, rgb(48 83 66 / 0.55) 45px, transparent 45px),
+      linear-gradient(180deg, #223127 0%, #17251e 48%, #132019 100%);
+  }
   .dtree {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 11px;
@@ -354,42 +366,99 @@ span.cursor-pointer:hover {
     flex-shrink: 0;
     vertical-align: middle;
   }
-  /* dTree: 고정 배경 이미지를 사용하므로 다크모드 시에도 링크 스타일 유지 */
+  .dtree .dtree-toggle {
+    width: 18px;
+    height: 20px;
+    color: #4f6f5a;
+    vertical-align: middle;
+  }
+  .dtree .dtree-toggle-control {
+    display: inline-flex;
+    width: 13px;
+    height: 13px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(79 111 90 / 0.58);
+    border-radius: 3px;
+    background-color: rgb(255 255 255 / 0.72);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6);
+  }
+  .dtree .dtree-menu-icon {
+    width: 18px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke-width: 2;
+    vertical-align: middle;
+  }
+  .dtree .dtree-menu-icon-folder {
+    color: #f3a400;
+    fill: rgb(243 164 0 / 0.22);
+  }
+  .dtree .dtree-menu-icon-page {
+    color: #687386;
+  }
   .dark .dtree a {
-    color: #000;
+    color: #e8f5df;
   }
   .dark .dtree a:hover {
-    color: #000;
+    color: #ffffff;
     text-decoration: underline;
   }
   .dark .dtree a.nodeSel {
-    background-color: #c0d2ec;
-    color: #000;
+    background-color: rgb(77 111 90 / 0.82);
+    color: #ffffff;
+  }
+  .dark .dtree .dtree-toggle {
+    color: #dcebd4;
+  }
+  .dark .dtree .dtree-toggle-control {
+    border-color: rgb(196 217 187 / 0.42);
+    background-color: rgb(9 18 14 / 0.65);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12);
+  }
+  .dark .dtree .dtree-menu-icon-folder {
+    color: #f4bf45;
+    fill: rgb(244 191 69 / 0.16);
+  }
+  .dark .dtree .dtree-menu-icon-page {
+    color: #c8d2c2;
   }
 }
 
-/* Left menu uses a fixed background image, so keep its palette independent from dark mode. */
+/* Keep the classic dTree palette readable on the CSS-rendered sidebar surface. */
 .dtree,
 .dtree .dtree-text,
 .dtree a,
 .dtree a.node,
-.dtree a.nodeSel,
+.dtree a.nodeSel {
+    color: #000 !important;
+}
+
 .dark .dtree,
 .dark .dtree .dtree-text,
 .dark .dtree a,
 .dark .dtree a.node,
 .dark .dtree a.nodeSel {
-    color: #000 !important;
+    color: #e8f5df !important;
 }
 
 .dtree a:hover,
 .dtree a.node:hover,
-.dtree a.nodeSel:hover,
+.dtree a.nodeSel:hover {
+    color: #000 !important;
+    text-decoration: underline !important;
+}
+
 .dark .dtree a:hover,
 .dark .dtree a.node:hover,
 .dark .dtree a.nodeSel:hover {
-    color: #000 !important;
+    color: #ffffff !important;
     text-decoration: underline !important;
+}
+
+.dark .dtree a.nodeSel {
+    background-color: rgb(77 111 90 / 0.82) !important;
+    color: #ffffff !important;
 }
 
 @media (min-width: 768px) {
