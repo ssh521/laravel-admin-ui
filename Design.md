@@ -6,6 +6,16 @@ This document defines the shared design rules for the laravel-admin-ui package.
 
 All Blade, Livewire, and Tailwind components should follow this document.
 
+## Package Namespace
+
+The package registers views and anonymous Blade components under the `laravel-admin` namespace.
+
+Usage examples:
+
+- x-laravel-admin::button
+- x-laravel-admin::card
+- x-laravel-admin::badge
+
 ## Color Tokens
 
 Brand colors are used for primary actions.
@@ -79,11 +89,11 @@ Use mobile-first layout.
 
 ## Component Naming
 
-- admin-ui::button
-- admin-ui::card
-- admin-ui::modal
-- admin-ui::badge
-- admin-ui::table
+- laravel-admin::button
+- laravel-admin::card
+- laravel-admin::modal
+- laravel-admin::badge
+- laravel-admin::table
 
 ## Props Convention
 
