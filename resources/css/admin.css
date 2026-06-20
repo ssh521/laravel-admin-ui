@@ -311,15 +311,16 @@ span.cursor-pointer:hover {
 
   /* dTree 스타일 (Classic ASP 메뉴 형식) */
   .admin-sidebar-surface {
+    --admin-sidebar-rail-width: 24px;
     background-color: #d9f5ad;
     background-image:
-      linear-gradient(90deg, rgb(119 195 144 / 0.46) 0, rgb(119 195 144 / 0.46) 45px, rgb(229 255 197 / 0.86) 45px, rgb(213 244 165 / 0.92) 100%),
+      linear-gradient(90deg, rgb(119 195 144 / 0.46) 0, rgb(119 195 144 / 0.46) var(--admin-sidebar-rail-width), rgb(229 255 197 / 0.86) var(--admin-sidebar-rail-width), rgb(213 244 165 / 0.92) 100%),
       linear-gradient(180deg, #f1ffd2 0%, #def8b5 34%, #d2f0a3 72%, #c8e895 100%);
   }
   .dark .admin-sidebar-surface {
     background-color: #17251e;
     background-image:
-      linear-gradient(90deg, rgb(20 43 32 / 0.94) 0, rgb(20 43 32 / 0.94) 45px, rgb(28 48 36 / 0.95) 45px, rgb(17 32 25 / 0.98) 100%),
+      linear-gradient(90deg, rgb(20 43 32 / 0.94) 0, rgb(20 43 32 / 0.94) var(--admin-sidebar-rail-width), rgb(28 48 36 / 0.95) var(--admin-sidebar-rail-width), rgb(17 32 25 / 0.98) 100%),
       linear-gradient(180deg, #263b2d 0%, #1b2d22 38%, #17251e 78%, #111d16 100%);
   }
   .dtree {
@@ -411,8 +412,8 @@ span.cursor-pointer:hover {
     position: absolute;
     content: "";
     display: block;
-    background: #d6a047;
-    border: 1px solid rgb(103 77 29 / 0.34);
+    background: #e2ad4d;
+    border: 1px solid rgb(117 82 24 / 0.3);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.32);
   }
   .dtree .dtree-folder-icon::before {
@@ -463,8 +464,8 @@ span.cursor-pointer:hover {
   }
   .dark .dtree .dtree-folder-icon::before,
   .dark .dtree .dtree-folder-icon::after {
-    background: #c7964b;
-    border-color: rgb(246 205 124 / 0.28);
+    background: #ddb15d;
+    border-color: rgb(255 219 139 / 0.3);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16);
   }
 }
