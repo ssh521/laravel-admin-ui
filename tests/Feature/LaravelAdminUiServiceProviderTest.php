@@ -127,6 +127,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
 
         $this->assertStringContainsString('.admin-sidebar-surface', $css);
         $this->assertStringContainsString('.dark .admin-sidebar-surface', $css);
+        $this->assertStringContainsString('--admin-sidebar-rail-width: 24px', $css);
         $this->assertStringContainsString('admin-sidebar-surface', $mobileMenu);
         $this->assertStringNotContainsString('menu_bg.gif', $css);
         $this->assertStringNotContainsString('sidebarBackground', $adminJs);
