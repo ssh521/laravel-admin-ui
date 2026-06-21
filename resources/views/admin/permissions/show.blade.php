@@ -70,9 +70,9 @@
                                 @if($permission->roles && $permission->roles->count() > 0)
                                     <div class="flex flex-wrap gap-1.5">
                                         @foreach($permission->roles as $role)
-                                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">
+                                            <x-laravel-admin::admin.badge>
                                                 {{ $role->name }}
-                                            </span>
+                                            </x-laravel-admin::admin.badge>
                                         @endforeach
                                     </div>
                                 @else

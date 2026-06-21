@@ -3,7 +3,6 @@
     $rolePermissions = $rolePermissions ?? [];
     $showActions = $showActions ?? true;
     $submitLabel = $submitLabel ?? __('저장하기');
-    $inputClass = 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white';
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
 @endphp
 
@@ -24,7 +23,7 @@
             <div class="sm:col-span-3">
                 <label for="name" class="{{ $labelClass }}">{{ __('Role Name') }}</label>
                 <div class="mt-2">
-                    <input id="name" name="name" type="text" value="{{ old('name', $role?->name) }}" autocomplete="name" placeholder="{{ __('Enter role name') }}" class="{{ $inputClass }}">
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $role?->name) }}" autocomplete="name" placeholder="{{ __('Enter role name') }}" />
                 </div>
                 @if ($errors->has('name'))
                     <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="[$role ? '역할명을 입력해 주세요!' : 'Please enter a role name!']" />
@@ -34,7 +33,7 @@
             <div class="sm:col-span-5">
                 <label for="description" class="{{ $labelClass }}">{{ __('Description') }}</label>
                 <div class="mt-2">
-                    <textarea id="description" name="description" rows="4" placeholder="{{ __('Enter role description') }}" class="{{ $inputClass }}">{{ old('description', $role->description ?? '') }}</textarea>
+                    <x-laravel-admin::admin.form-textarea id="description" name="description" rows="4" placeholder="{{ __('Enter role description') }}">{{ old('description', $role->description ?? '') }}</x-laravel-admin::admin.form-textarea>
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('description')" />
             </div>
@@ -87,15 +86,14 @@
                         </div>
                         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach($groupPermissions as $permission)
-                                <label for="permission_{{ $permission->id }}" title="{{ $permission->name }}" class="group relative flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:z-20 hover:bg-gray-50 focus-within:z-20 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800">
+                                <x-laravel-admin::admin.checkbox-row for="permission_{{ $permission->id }}" title="{{ $permission->name }}" class="group relative items-center px-4 py-3 text-sm font-medium hover:z-20 focus-within:z-20">
                                     <input id="permission_{{ $permission->id }}" name="permissions[]" type="checkbox"
                                            value="{{ $permission->id }}" @checked(in_array($permission->id, old('permissions', $role ? $rolePermissions : [])))
                                            class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
-                                    <span class="min-w-0 truncate">{{ $permission->name }}</span>
                                     <span class="pointer-events-none absolute left-10 top-full z-30 mt-1 hidden max-w-72 rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium leading-5 text-gray-900 shadow-lg group-hover:block group-focus-within:block dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
                                         {{ $permission->name }}
                                     </span>
-                                </label>
+                                </x-laravel-admin::admin.checkbox-row>
                             @endforeach
                         </div>
                     </div>

@@ -57,10 +57,10 @@
                             <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('인증상태') }}</dt>
                             <dd class="mt-1 text-sm leading-6 sm:mt-2">
                                 @if ($adminUser->email_verified_at)
-                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20">{{ __('Verified') }}</span>
+                                    <x-laravel-admin::admin.badge variant="success">{{ __('Verified') }}</x-laravel-admin::admin.badge>
                                     <span class="ml-2 text-gray-500 dark:text-gray-400">{{ $adminUser->email_verified_at->format('Y-m-d H:i:s') }}</span>
                                 @else
-                                    <span class="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-amber-600/20 ring-inset dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">{{ __('Not Verified') }}</span>
+                                    <x-laravel-admin::admin.badge variant="warning">{{ __('Not Verified') }}</x-laravel-admin::admin.badge>
                                 @endif
                             </dd>
                         </div>
@@ -68,7 +68,7 @@
                             <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('역할') }}</dt>
                             <dd class="mt-1 flex flex-wrap gap-1.5 text-sm leading-6 sm:mt-2">
                                 @forelse ($adminUser->getRoleNames() as $role)
-                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">{{ $role }}</span>
+                                    <x-laravel-admin::admin.badge>{{ $role }}</x-laravel-admin::admin.badge>
                                 @empty
                                     <span class="text-gray-500 dark:text-gray-400">{{ __('No roles assigned') }}</span>
                                 @endforelse

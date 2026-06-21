@@ -2,7 +2,6 @@
     $menuCategory = $menuCategory ?? null;
     $showActions = $showActions ?? true;
     $submitLabel = $submitLabel ?? __('저장하기');
-    $inputClass = 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white';
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
 @endphp
 
@@ -23,7 +22,7 @@
             <div class="sm:col-span-4">
                 <label for="name" class="{{ $labelClass }}">{{ __('카테고리명') }}</label>
                 <div class="mt-2">
-                    <input id="name" name="name" type="text" value="{{ old('name', $menuCategory?->name) }}" autocomplete="name" placeholder="Enter category name" required class="{{ $inputClass }}">
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $menuCategory?->name) }}" autocomplete="name" placeholder="Enter category name" required />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
@@ -31,19 +30,15 @@
             <div class="sm:col-span-2">
                 <label for="sort_order" class="{{ $labelClass }}">{{ __('정렬 순서') }}</label>
                 <div class="mt-2">
-                    <input id="sort_order" name="sort_order" type="number" value="{{ old('sort_order', $menuCategory->sort_order ?? 0) }}" min="0" class="{{ $inputClass }}">
+                    <x-laravel-admin::admin.form-input id="sort_order" name="sort_order" type="number" value="{{ old('sort_order', $menuCategory->sort_order ?? 0) }}" min="0" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('sort_order')" />
             </div>
 
             <div class="sm:col-span-5">
-                <label for="is_active" class="flex min-h-12 cursor-pointer items-start gap-3 rounded-md border border-gray-200 bg-white p-4 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800">
+                <x-laravel-admin::admin.checkbox-row for="is_active" title="{{ __('활성화') }}" description="{{ __('체크하면 메뉴 카테고리가 활성 상태로 표시됩니다.') }}">
                     <input id="is_active" name="is_active" type="checkbox" value="1" @checked(old('is_active', $menuCategory->is_active ?? true)) class="mt-0.5 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
-                    <span>
-                        <span class="block text-sm font-medium text-gray-900 dark:text-white">{{ __('활성화') }}</span>
-                        <span class="block text-sm text-gray-500 dark:text-gray-400">{{ __('체크하면 메뉴 카테고리가 활성 상태로 표시됩니다.') }}</span>
-                    </span>
-                </label>
+                </x-laravel-admin::admin.checkbox-row>
             </div>
         </div>
     </div>

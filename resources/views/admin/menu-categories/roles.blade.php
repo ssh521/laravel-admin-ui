@@ -55,10 +55,9 @@
                             <legend class="sr-only">{{ __('허용 역할 선택') }}</legend>
                             <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                                 @foreach($roles as $role)
-                                    <label for="role_{{ $role->id }}" title="{{ $role->name }}" class="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800">
+                                    <x-laravel-admin::admin.checkbox-row for="role_{{ $role->id }}" title="{{ $role->name }}" class="items-center px-4 py-3 text-sm font-medium">
                                         <input id="role_{{ $role->id }}" name="roles[]" type="checkbox" value="{{ $role->id }}" @checked(in_array($role->id, $allowedRoleIds)) class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
-                                        <span class="min-w-0 truncate">{{ $role->name }}</span>
-                                    </label>
+                                    </x-laravel-admin::admin.checkbox-row>
                                 @endforeach
                             </div>
                         </fieldset>

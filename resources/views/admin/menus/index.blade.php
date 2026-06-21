@@ -53,41 +53,36 @@
 
             <x-laravel-admin::admin.session-messages />
 
-            <div class="mt-6 rounded-md border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/60">
-                <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                    <div class="flex flex-wrap items-center gap-2 text-sm">
-                        <x-laravel-admin::admin.checkbox-controls />
-                        <button type="button" onclick="openCategorySelectionModal()" class="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800">
-                            <x-laravel-admin::admin.icon name="tags" class="mr-2 text-xs" />
-                            {{ __('분류선택') }}
-                        </button>
-                    </div>
-
-                    <form class="flex flex-col gap-2 sm:flex-row sm:items-center" action="{{ route('admin.menus.index') }}" method="GET">
-                        <label for="menu-search" class="sr-only">Search</label>
-                        <input
-                            id="menu-search"
-                            type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:w-72 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
-                            placeholder="{{ __('메뉴 검색') }}"
-                        >
-
-                        <div class="flex gap-2">
-                            @if(request('search'))
-                                <a href="{{ route('admin.menus.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-900 dark:!text-gray-100 dark:hover:bg-gray-800">
-                                    {{ __('초기화') }}
-                                </a>
-                            @endif
-
-                            <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                                {{ __('검색') }}
-                            </button>
-                        </div>
-                    </form>
+            <x-laravel-admin::admin.filter-bar action="{{ route('admin.menus.index') }}">
+                <div class="flex flex-wrap items-center gap-2 text-sm">
+                    <x-laravel-admin::admin.checkbox-controls />
+                    <button type="button" onclick="openCategorySelectionModal()" class="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800">
+                        <x-laravel-admin::admin.icon name="tags" class="mr-2 text-xs" />
+                        {{ __('분류선택') }}
+                    </button>
                 </div>
-            </div>
+
+                <label for="menu-search" class="sr-only">Search</label>
+                <div class="relative min-w-0 flex-1">
+                    <x-laravel-admin::admin.form-input
+                        id="menu-search"
+                        name="search"
+                        value="{{ request('search') }}"
+                        class="h-10 pr-9"
+                        placeholder="{{ __('메뉴 검색') }}"
+                    />
+                    @if(request('search'))
+                        <a href="{{ route('admin.menus.index') }}"
+                           class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
+                            <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
+                        </a>
+                    @endif
+                </div>
+
+                <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="w-full sm:w-auto">
+                    {{ __('검색') }}
+                </x-laravel-admin::admin.action-button>
+            </x-laravel-admin::admin.filter-bar>
 
             <div class="mt-6 flow-root">
                 <div class="-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -180,13 +175,13 @@
                                             @endif
 
                                             @if($menu->is_external)
-                                                <span class="ml-1 inline-flex items-center rounded-md bg-amber-50 px-1.5 py-0.5 text-xs font-medium text-amber-700 ring-1 ring-amber-600/20 ring-inset dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">{{ __('외부') }}</span>
+                                                <x-laravel-admin::admin.badge variant="warning" class="ml-1 px-1.5 py-0.5">{{ __('외부') }}</x-laravel-admin::admin.badge>
                                             @endif
                                         </td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm">
-                                            <span class="{{ $menu->is_active ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20' : 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20' }} inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset">
+                                            <x-laravel-admin::admin.badge variant="{{ $menu->is_active ? 'success' : 'danger' }}">
                                                 {{ $menu->is_active ? __('활성') : __('비활성') }}
-                                            </span>
+                                            </x-laravel-admin::admin.badge>
                                         </td>
                                         <td class="whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-0">
                                             <div class="flex justify-end gap-3">
