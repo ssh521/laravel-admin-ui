@@ -87,9 +87,11 @@ class LaravelAdminUiServiceProviderTest extends TestCase
 
         $this->assertStringContainsString('<a', $button);
         $this->assertStringContainsString('bg-indigo-600', $button);
+        $this->assertStringContainsString('!text-white', $button);
         $this->assertStringContainsString('dark:bg-indigo-500', $button);
         $this->assertStringContainsString('border-gray-300', $secondary);
-        $this->assertStringContainsString('text-red-700', $danger);
+        $this->assertStringContainsString('!text-gray-700', $secondary);
+        $this->assertStringContainsString('!text-red-700', $danger);
         $this->assertStringContainsString('bg-green-50', $badge);
         $this->assertStringContainsString('dark:bg-green-500/10', $badge);
         $this->assertStringContainsString('border-dashed', $emptyState);
