@@ -11,11 +11,6 @@ use Throwable;
 
 class LaravelAdminUiServiceProvider extends ServiceProvider
 {
-    public function register(): void
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/admin-ui.php', 'admin-ui');
-    }
-
     public function boot(): void
     {
         $this->registerViewLocations();
@@ -70,10 +65,6 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
             return;
         }
 
-        $config = [
-            __DIR__.'/../config/admin-ui.php' => config_path('admin-ui.php'),
-        ];
-
         $views = [
             __DIR__.'/../resources/views' => resource_path('views/vendor/laravel-admin'),
         ];
@@ -88,7 +79,6 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
             __DIR__.'/../public/images/dtree' => public_path('images/dtree'),
         ];
 
-        $this->publishes($config, 'laravel-admin-ui-config');
         $this->publishes($views, 'laravel-admin-ui-views');
         $this->publishes($components, 'laravel-admin-ui-components');
         $this->publishes($assets, 'laravel-admin-ui-assets');

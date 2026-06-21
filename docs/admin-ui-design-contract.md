@@ -128,6 +128,18 @@ Use consistent action hierarchy:
 - Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
 - Icons should use the shared `x-laravel-admin::admin.icon` Blade component instead of external icon font packages.
 
+## Reusable Components
+
+The package exposes small Blade components under the existing `x-laravel-admin::admin.*` namespace for repeated admin UI patterns.
+These components are helpers for this contract, not a separate theme system.
+
+- Use `admin.action-button` for primary, secondary, destructive, search, and inline link actions.
+- Use `admin.badge` for neutral, primary, success, warning, and danger status labels.
+- Use `admin.filter-bar`, `admin.table-shell`, and `admin.empty-state` for list screens.
+- Use `admin.form-input`, `admin.form-select`, `admin.form-textarea`, and `admin.checkbox-row` for sectioned resource forms.
+- Use `admin.page-section` for simple resource page headings and action slots when a page does not need custom structure.
+- Keep route names, form names, `wire:*`, `x-*`, and authorization checks in the package screen that owns the behavior.
+
 ## Dark Mode Contract
 
 Every package screen should include dark mode variants:

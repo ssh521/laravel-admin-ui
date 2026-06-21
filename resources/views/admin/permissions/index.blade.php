@@ -29,17 +29,16 @@
 
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
                     @can('create', arguments: Ssh521\LaravelAdmin\Models\Permission::class)
-                        <a href="{{ route('admin.permissions.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
+                        <x-laravel-admin::admin.action-button :href="route('admin.permissions.create')" size="sm" icon="plus">
                             {{ __('등록하기') }}
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     @endcan
                 </div>
             </div>
 
             <x-laravel-admin::admin.session-messages />
 
-            <form class="mt-6 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center dark:border-gray-700 dark:bg-gray-800/70" action="{{ route('admin.permissions.index') }}" method="GET">
+            <x-laravel-admin::admin.filter-bar action="{{ route('admin.permissions.index') }}">
                 @if(request('sort'))
                     <input type="hidden" name="sort" value="{{ request('sort') }}">
                 @endif
@@ -59,12 +58,10 @@
                     @endif
                 </div>
 
-                <button type="submit"
-                    class="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 sm:w-auto dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                    <x-laravel-admin::admin.icon name="magnifying-glass" class="mr-2 text-xs" />
+                <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="w-full sm:w-auto">
                     {{ __('검색') }}
-                </button>
-            </form>
+                </x-laravel-admin::admin.action-button>
+            </x-laravel-admin::admin.filter-bar>
 
             <div class="mt-6" x-data="permissionDragSort()" x-init="initNativeDrag()">
                 <div class="mb-4 flex flex-col gap-3 rounded-lg border border-gray-200 bg-white p-3 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700 dark:bg-gray-900">
@@ -88,9 +85,7 @@
                     </div>
                 </div>
 
-                <div class="flow-root">
-                    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <x-laravel-admin::admin.table-shell>
                             <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                                 <thead>
                                     <tr>
@@ -146,37 +141,33 @@
                                             </td>
                                             <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                                                 @can('view', $permission)
-                                                    <a class="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10"
-                                                        href="{{ route('admin.permissions.show', $permission) }}">
-                                                        <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
+                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.permissions.show', $permission)" icon="eye" class="h-auto px-2 py-1">
                                                         {{ __('보기') }}
-                                                    </a>
+                                                    </x-laravel-admin::admin.action-button>
                                                 @endcan
                                                 @can('update', $permission)
-                                                    <a class="ml-1 inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10"
-                                                        href="{{ route('admin.permissions.edit', $permission) }}">
-                                                        <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
+                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.permissions.edit', $permission)" icon="pen-to-square" class="ml-1 h-auto px-2 py-1">
                                                         {{ __('수정') }}
-                                                    </a>
+                                                    </x-laravel-admin::admin.action-button>
                                                 @endcan
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="px-3 py-16 text-center text-sm text-gray-500 dark:text-gray-400">
-                                                @if(request('search'))
-                                                    {{ __('No search results found for') }} "{{ request('search') }}".
-                                                @else
-                                                    {{ __('No permissions registered.') }}
-                                                @endif
+                                            <td colspan="4" class="px-3 py-6">
+                                                <x-laravel-admin::admin.empty-state>
+                                                    @if(request('search'))
+                                                        {{ __('No search results found for') }} "{{ request('search') }}".
+                                                    @else
+                                                        {{ __('No permissions registered.') }}
+                                                    @endif
+                                                </x-laravel-admin::admin.empty-state>
                                             </td>
                                         </tr>
                                     @endforelse
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                </div>
+                </x-laravel-admin::admin.table-shell>
             </div>
 
             @if($data->hasPages())
