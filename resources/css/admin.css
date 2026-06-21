@@ -289,7 +289,7 @@ span.cursor-pointer:hover {
 
   /* 모달 오버레이 */
   .overlay {
-    @apply fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 dark:bg-black/70;
+    @apply fixed inset-0 z-60 flex items-center justify-center bg-black/50 p-4 dark:bg-black/70;
   }
 
   /* 모달 창 */
