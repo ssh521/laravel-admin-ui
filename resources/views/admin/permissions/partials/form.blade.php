@@ -2,7 +2,6 @@
     $permission = $permission ?? null;
     $showActions = $showActions ?? true;
     $submitLabel = $submitLabel ?? __('저장하기');
-    $inputClass = 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white';
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
 @endphp
 
@@ -23,7 +22,7 @@
             <div class="sm:col-span-4">
                 <label for="name" class="{{ $labelClass }}">{{ __('Permission Name') }}</label>
                 <div class="mt-2">
-                    <input id="name" name="name" type="text" value="{{ old('name', $permission?->name) }}" autocomplete="name" placeholder="{{ __('Enter permission name') }}" class="{{ $inputClass }}">
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $permission?->name) }}" autocomplete="name" placeholder="{{ __('Enter permission name') }}" />
                 </div>
                 @if ($errors->has('name'))
                     <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="['Please enter a permission name!']" />
@@ -33,7 +32,7 @@
             <div class="sm:col-span-5">
                 <label for="description" class="{{ $labelClass }}">{{ __('Description') }}</label>
                 <div class="mt-2">
-                    <textarea id="description" name="description" rows="4" placeholder="{{ __('Enter permission description') }}" class="{{ $inputClass }}">{{ old('description', $permission->description ?? '') }}</textarea>
+                    <x-laravel-admin::admin.form-textarea id="description" name="description" rows="4" placeholder="{{ __('Enter permission description') }}">{{ old('description', $permission->description ?? '') }}</x-laravel-admin::admin.form-textarea>
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('description')" />
             </div>

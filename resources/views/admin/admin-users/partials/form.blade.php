@@ -1,7 +1,5 @@
 @php
     $isProfile = $isProfile ?? false;
-    $inputClass = 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white';
-    $lockedInputClass = $inputClass.' cursor-not-allowed bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
     $helpClass = 'mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400';
     $roleIds = $adminUser?->roles->pluck('id')->all() ?? [];
@@ -26,7 +24,7 @@
             <div class="sm:col-span-3">
                 <label for="name" class="{{ $labelClass }}">{{ __('이름') }}</label>
                 <div class="mt-2">
-                    <input id="name" name="name" type="text" value="{{ old('name', $adminUser?->name) }}" autocomplete="name" class="{{ $inputClass }}">
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $adminUser?->name) }}" autocomplete="name" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
@@ -34,7 +32,7 @@
             <div class="sm:col-span-4">
                 <label for="email" class="{{ $labelClass }}">{{ __('E-mail') }}</label>
                 <div class="mt-2">
-                    <input id="email" name="email" type="email" value="{{ $isProfile ? $adminUser?->email : old('email', $adminUser?->email) }}" autocomplete="email" class="{{ $isProfile ? $lockedInputClass : $inputClass }}" @disabled($isProfile)>
+                    <x-laravel-admin::admin.form-input id="email" name="email" type="email" value="{{ $isProfile ? $adminUser?->email : old('email', $adminUser?->email) }}" autocomplete="email" class="{{ $isProfile ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' : '' }}" :disabled="$isProfile" />
                 </div>
                 @if ($isProfile)
                     <p class="{{ $helpClass }}">{{ __('프로필 화면에서는 이메일을 변경할 수 없습니다.') }}</p>
@@ -60,7 +58,7 @@
             <div class="sm:col-span-3">
                 <label for="password" class="{{ $labelClass }}">{{ __('비밀번호') }}</label>
                 <div class="mt-2">
-                    <input id="password" name="password" type="password" autocomplete="new-password" class="{{ $inputClass }}">
+                    <x-laravel-admin::admin.form-input id="password" name="password" type="password" autocomplete="new-password" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('password')" />
             </div>
@@ -68,7 +66,7 @@
             <div class="sm:col-span-3">
                 <label for="confirm-password" class="{{ $labelClass }}">{{ __('비밀번호 확인') }}</label>
                 <div class="mt-2">
-                    <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" class="{{ $inputClass }}">
+                    <x-laravel-admin::admin.form-input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('confirm-password')" />
             </div>
@@ -91,13 +89,9 @@
             <fieldset>
                 <legend class="{{ $labelClass }}">{{ __('인증') }}</legend>
                 <div class="mt-3">
-                    <label for="email_verified" class="flex items-start gap-3 rounded-md border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900 @if($isProfile) cursor-not-allowed opacity-70 @else cursor-pointer @endif">
+                    <x-laravel-admin::admin.checkbox-row for="email_verified" title="{{ __('Email Verified') }}" description="{{ __('체크하면 이메일 인증이 완료된 관리자 계정으로 표시됩니다.') }}" class="{{ $isProfile ? 'cursor-not-allowed opacity-70' : '' }}">
                         <input id="email_verified" name="email_verified" type="checkbox" value="1" @checked($isProfile ? (bool) $adminUser?->email_verified_at : old('email_verified', $adminUser?->email_verified_at ? '1' : null) == '1') @disabled($isProfile) class="mt-0.5 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
-                        <span>
-                            <span class="block text-sm font-medium text-gray-900 dark:text-white">{{ __('Email Verified') }}</span>
-                            <span class="block text-sm text-gray-500 dark:text-gray-400">{{ __('체크하면 이메일 인증이 완료된 관리자 계정으로 표시됩니다.') }}</span>
-                        </span>
-                    </label>
+                    </x-laravel-admin::admin.checkbox-row>
                 </div>
             </fieldset>
 
@@ -105,10 +99,9 @@
                 <legend class="{{ $labelClass }}">{{ __('역할') }}</legend>
                 <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($roles as $role)
-                        <label for="role_{{ $role->id }}" title="{{ $role->name }}" class="flex min-h-12 items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white @if($isProfile) cursor-not-allowed opacity-70 @else cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 @endif">
+                        <x-laravel-admin::admin.checkbox-row for="role_{{ $role->id }}" title="{{ $role->name }}" class="items-center px-4 py-3 text-sm font-medium {{ $isProfile ? 'cursor-not-allowed opacity-70' : '' }}">
                             <input id="role_{{ $role->id }}" name="roles[]" type="checkbox" value="{{ $role->id }}" @checked(in_array($role->id, $isProfile ? $roleIds : old('roles', $roleIds))) @disabled($isProfile) class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
-                            <span class="min-w-0">{{ $role->name }}</span>
-                        </label>
+                        </x-laravel-admin::admin.checkbox-row>
                     @endforeach
                 </div>
                 <x-laravel-admin::admin.input-error-message class="col-span-full mt-1 text-xs" :messages="$errors->get('roles')" />

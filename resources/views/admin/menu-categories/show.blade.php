@@ -60,9 +60,9 @@
                         <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
                             <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('상태') }}</dt>
                             <dd class="mt-1 text-sm leading-6 sm:mt-2">
-                                <span class="{{ $menuCategory->is_active ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20' : 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20' }} inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset">
+                                <x-laravel-admin::admin.badge variant="{{ $menuCategory->is_active ? 'success' : 'danger' }}">
                                     {{ $menuCategory->is_active ? __('활성') : __('비활성') }}
-                                </span>
+                                </x-laravel-admin::admin.badge>
                             </dd>
                         </div>
 
@@ -72,7 +72,7 @@
                                 @if($menuCategory->roles->count() > 0)
                                     <div class="flex flex-wrap gap-1.5">
                                         @foreach($menuCategory->roles as $role)
-                                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">{{ $role->name }}</span>
+                                            <x-laravel-admin::admin.badge>{{ $role->name }}</x-laravel-admin::admin.badge>
                                         @endforeach
                                     </div>
                                 @else
@@ -119,9 +119,9 @@
                                                     <td class="whitespace-nowrap py-3 pr-3 font-medium text-gray-900 dark:text-white">{{ $menu->name }}</td>
                                                     <td class="whitespace-nowrap px-3 py-3 text-gray-600 dark:text-gray-300">{{ $menu->route_name ?: ($menu->url ?: '-') }}</td>
                                                     <td class="whitespace-nowrap px-3 py-3">
-                                                        <span class="{{ $menu->is_active ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20' : 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20' }} inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset">
+                                                        <x-laravel-admin::admin.badge variant="{{ $menu->is_active ? 'success' : 'danger' }}">
                                                             {{ $menu->is_active ? __('활성') : __('비활성') }}
-                                                        </span>
+                                                        </x-laravel-admin::admin.badge>
                                                     </td>
                                                     <td class="whitespace-nowrap py-3 pl-3 text-right">
                                                         <a href="{{ route('admin.menus.show', $menu) }}" class="text-sm font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">{{ __('보기') }}</a>

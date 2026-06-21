@@ -31,21 +31,20 @@
 
             <form method="GET" action="{{ route('admin.admin-users.index') }}" class="mt-6 grid gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:grid-cols-[minmax(0,180px)_minmax(0,1fr)_auto] sm:items-center dark:border-gray-700 dark:bg-gray-800/70">
                 <label for="admin-user-role" class="sr-only">{{ __('전체 역할') }}</label>
-                <select id="admin-user-role" name="role" class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white">
+                <x-laravel-admin::admin.form-select id="admin-user-role" name="role" class="h-10">
                     <option value="">{{ __('전체 역할') }}</option>
                     @foreach ($roles as $role)
                         <option value="{{ $role->name }}" @selected(request('role') === $role->name)>{{ $role->name }}</option>
                     @endforeach
-                </select>
+                </x-laravel-admin::admin.form-select>
                 <label for="admin-user-search" class="sr-only">{{ __('Search name or email') }}</label>
-                <input
+                <x-laravel-admin::admin.form-input
                     id="admin-user-search"
                     name="search"
-                    type="text"
                     value="{{ request('search') }}"
                     placeholder="{{ __('Search name or email') }}"
-                    class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
-                >
+                    class="h-10"
+                />
                 <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
                     <x-laravel-admin::admin.icon name="magnifying-glass" class="mr-2 text-xs" />
                     {{ __('검색') }}
@@ -79,7 +78,7 @@
                                                     <div class="mt-1 truncate text-gray-500 dark:text-gray-400">{{ $adminUser->email }}</div>
                                                     <div class="mt-2 flex flex-wrap gap-1 md:hidden">
                                                         @forelse ($adminUser->getRoleNames() as $role)
-                                                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">{{ $role }}</span>
+                                                            <x-laravel-admin::admin.badge>{{ $role }}</x-laravel-admin::admin.badge>
                                                         @empty
                                                             <span class="text-xs text-gray-500 dark:text-gray-400">{{ __('No roles') }}</span>
                                                         @endforelse
@@ -90,7 +89,7 @@
                                         <td class="hidden px-3 py-4 text-sm text-gray-500 md:table-cell dark:text-gray-400">
                                             <div class="flex flex-wrap gap-1.5">
                                                 @forelse ($adminUser->getRoleNames() as $role)
-                                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">{{ $role }}</span>
+                                                    <x-laravel-admin::admin.badge>{{ $role }}</x-laravel-admin::admin.badge>
                                                 @empty
                                                     <span>{{ __('No roles') }}</span>
                                                 @endforelse
@@ -98,9 +97,9 @@
                                         </td>
                                         <td class="hidden px-3 py-4 text-sm whitespace-nowrap sm:table-cell">
                                             @if ($adminUser->email_verified_at)
-                                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20">{{ __('Verified') }}</span>
+                                                <x-laravel-admin::admin.badge variant="success">{{ __('Verified') }}</x-laravel-admin::admin.badge>
                                             @else
-                                                <span class="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-amber-600/20 ring-inset dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">{{ __('Not Verified') }}</span>
+                                                <x-laravel-admin::admin.badge variant="warning">{{ __('Not Verified') }}</x-laravel-admin::admin.badge>
                                             @endif
                                         </td>
                                         <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">

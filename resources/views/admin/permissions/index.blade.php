@@ -4,7 +4,7 @@
 
         <x-laravel-admin::admin.admin-header>
             <x-slot name="navigation">
-                <a href="{{ route('admin.index') }}">{{ __('Admin Home') }}</a>
+                <a href="{{ route('admin.index') }}">{{ __('관리자 홈') }}</a>
             </x-slot>
             <x-slot name="description">
                 {{ __('권한 목록') }}
@@ -14,27 +14,21 @@
     </x-slot>
 
 
-    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
-        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
-            <div class="sm:flex sm:items-center sm:justify-between">
-                <div class="sm:flex-auto">
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('권한 목록') }}</h1>
-                    <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
-                        {{ __('관리자 권한 이름, 설명, 정렬 순서를 관리합니다.') }}
-                    </p>
-                    @if(request('search'))
-                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">"{{ request('search') }}" 검색 결과</p>
-                    @endif
-                </div>
+    <x-laravel-admin::admin.page-section
+        title="{{ __('권한 목록') }}"
+        description="{{ __('관리자 권한 이름, 설명, 정렬 순서를 관리합니다.') }}"
+    >
+            <x-slot name="actions">
+                @can('create', arguments: Ssh521\LaravelAdmin\Models\Permission::class)
+                    <x-laravel-admin::admin.action-button :href="route('admin.permissions.create')" size="sm" icon="plus">
+                        {{ __('등록하기') }}
+                    </x-laravel-admin::admin.action-button>
+                @endcan
+            </x-slot>
 
-                <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
-                    @can('create', arguments: Ssh521\LaravelAdmin\Models\Permission::class)
-                        <x-laravel-admin::admin.action-button :href="route('admin.permissions.create')" size="sm" icon="plus">
-                            {{ __('등록하기') }}
-                        </x-laravel-admin::admin.action-button>
-                    @endcan
-                </div>
-            </div>
+            @if(request('search'))
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">"{{ request('search') }}" 검색 결과</p>
+            @endif
 
             <x-laravel-admin::admin.session-messages />
 
@@ -47,9 +41,7 @@
                 @endif
                 <label for="permission-search" class="sr-only">권한 검색</label>
                 <div class="relative min-w-0 flex-1">
-                    <input id="permission-search" type="text" name="search" value="{{ request('search') }}"
-                        class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 pr-9 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
-                        placeholder="권한 이름 또는 설명 검색">
+                    <x-laravel-admin::admin.form-input id="permission-search" name="search" value="{{ request('search') }}" class="h-10 pr-9" placeholder="권한 이름 또는 설명 검색" />
                     @if(request('search'))
                         <a href="{{ route('admin.permissions.index') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
@@ -175,8 +167,7 @@
                     {!! $data->withQueryString()->links() !!}
                 </div>
             @endif
-        </div>
-    </div>
+    </x-laravel-admin::admin.page-section>
 
     <script>
         function permissionDragSort() {

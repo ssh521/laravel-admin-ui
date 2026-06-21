@@ -47,9 +47,7 @@
             <form class="mt-6 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center dark:border-gray-700 dark:bg-gray-800/70" action="{{ route('admin.roles.index') }}" method="GET">
                 <label for="role-search" class="sr-only">역할 검색</label>
                 <div class="relative min-w-0 flex-1">
-                    <input id="role-search" type="text" name="search" value="{{ request('search') }}"
-                        class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 pr-9 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
-                        placeholder="역할 이름 검색">
+                    <x-laravel-admin::admin.form-input id="role-search" name="search" value="{{ request('search') }}" class="h-10 pr-9" placeholder="역할 이름 검색" />
                     @if(request('search'))
                         <a href="{{ route('admin.roles.index') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
@@ -99,7 +97,7 @@
                                     @if($role->permissions->count() > 0)
                                         <div class="flex max-h-28 flex-wrap gap-1.5 overflow-y-auto pr-1">
                                             @foreach($role->permissions as $permission)
-                                                <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">{{ $permission->name }}</span>
+                                                <x-laravel-admin::admin.badge>{{ $permission->name }}</x-laravel-admin::admin.badge>
                                             @endforeach
                                         </div>
                                     @else
@@ -142,10 +140,7 @@
 
             <div class="mt-5 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/70">
                 <div class="relative">
-                    <input type="text"
-                           id="menu-category-search"
-                           placeholder="메뉴 카테고리 검색..."
-                           class="h-10 w-full rounded-md border border-gray-300 bg-white px-3 pl-10 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white">
+                    <x-laravel-admin::admin.form-input id="menu-category-search" placeholder="메뉴 카테고리 검색..." class="h-10 pl-10" />
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <x-laravel-admin::admin.icon name="magnifying-glass" class="text-sm text-gray-400" />
                     </div>
@@ -173,9 +168,9 @@
                                 <div class="category-roles-list mt-3 flex flex-wrap gap-1.5">
                                     @if($category->roles->count() > 0)
                                         @foreach($category->roles as $role)
-                                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700">
+                                            <x-laravel-admin::admin.badge>
                                                 {{ $role->name }}
-                                            </span>
+                                            </x-laravel-admin::admin.badge>
                                         @endforeach
                                     @else
                                         <span class="text-sm text-gray-500 dark:text-gray-400">허용된 역할 없음</span>
@@ -184,13 +179,13 @@
                             </div>
                             <div class="flex shrink-0 items-center gap-2">
                                 @if($category->is_active)
-                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20">
+                                    <x-laravel-admin::admin.badge variant="success">
                                         활성
-                                    </span>
+                                    </x-laravel-admin::admin.badge>
                                 @else
-                                    <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/20 ring-inset dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20">
+                                    <x-laravel-admin::admin.badge variant="danger">
                                         비활성
-                                    </span>
+                                    </x-laravel-admin::admin.badge>
                                 @endif
                                 <button type="button"
                                         class="inline-flex h-8 cursor-pointer items-center rounded-md px-2.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-500/10"
@@ -239,13 +234,12 @@
                         $allRoles = \Spatie\Permission\Models\Role::all();
                     @endphp
                     @foreach($allRoles as $role)
-                    <label class="flex min-h-11 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800" title="{{ $role->name }}">
+                    <x-laravel-admin::admin.checkbox-row title="{{ $role->name }}" class="min-h-11 items-center px-3 py-2 text-sm font-medium">
                         <input type="checkbox"
                                class="role-checkbox size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900"
                                value="{{ $role->id }}"
                                data-role-name="{{ $role->name }}">
-                        <span class="min-w-0 truncate">{{ $role->name }}</span>
-                    </label>
+                    </x-laravel-admin::admin.checkbox-row>
                     @endforeach
                 </div>
             </div>

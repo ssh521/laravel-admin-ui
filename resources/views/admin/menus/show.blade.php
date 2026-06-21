@@ -95,18 +95,18 @@
                         <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
                             <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('상태') }}</dt>
                             <dd class="mt-1 text-sm leading-6 sm:mt-2">
-                                <span class="{{ $menu->is_active ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20' : 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20' }} inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset">
+                                <x-laravel-admin::admin.badge variant="{{ $menu->is_active ? 'success' : 'danger' }}">
                                     {{ $menu->is_active ? __('활성') : __('비활성') }}
-                                </span>
+                                </x-laravel-admin::admin.badge>
                             </dd>
                         </div>
 
                         <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
                             <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('외부 링크') }}</dt>
                             <dd class="mt-1 text-sm leading-6 sm:mt-2">
-                                <span class="{{ $menu->is_external ? 'bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20' : 'bg-gray-50 text-gray-700 ring-gray-500/10 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700' }} inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset">
+                                <x-laravel-admin::admin.badge variant="{{ $menu->is_external ? 'warning' : 'neutral' }}">
                                     {{ $menu->is_external ? __('예') : __('아니오') }}
-                                </span>
+                                </x-laravel-admin::admin.badge>
                             </dd>
                         </div>
 
@@ -150,9 +150,9 @@
                                                     <td class="whitespace-nowrap py-3 pr-3 font-medium text-gray-900 dark:text-white">{{ $childMenu->name }}</td>
                                                     <td class="whitespace-nowrap px-3 py-3 text-gray-600 dark:text-gray-300">{{ $childMenu->route_name ?: ($childMenu->url ?: '-') }}</td>
                                                     <td class="whitespace-nowrap px-3 py-3">
-                                                        <span class="{{ $childMenu->is_active ? 'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/20' : 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-500/20' }} inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset">
+                                                        <x-laravel-admin::admin.badge variant="{{ $childMenu->is_active ? 'success' : 'danger' }}">
                                                             {{ $childMenu->is_active ? __('활성') : __('비활성') }}
-                                                        </span>
+                                                        </x-laravel-admin::admin.badge>
                                                     </td>
                                                     <td class="whitespace-nowrap py-3 pl-3 text-right">
                                                         <a href="{{ route('admin.menus.show', $childMenu) }}" class="text-sm font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">{{ __('보기') }}</a>
