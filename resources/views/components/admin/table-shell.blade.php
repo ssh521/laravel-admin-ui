@@ -1,6 +1,10 @@
-<div {{ $attributes->merge(['class' => 'flow-root']) }}>
-    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+@php
+    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
+@endphp
+
+<div {{ $attributes->merge(['class' => $theme->classes('table-shell.outer')]) }}>
+    <div class="{{ $theme->classes('table-shell.scroller') }}">
+        <div class="{{ $theme->classes('table-shell.inner') }}">
             {{ $slot }}
         </div>
     </div>

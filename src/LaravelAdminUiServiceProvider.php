@@ -6,11 +6,20 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Ssh521\LaravelAdminUi\Contracts\ThemeContract;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class LaravelAdminUiServiceProvider extends ServiceProvider
 {
+    public function register(): void
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/laravel-admin-ui.php', 'laravel-admin-ui');
+
+        $this->app->singleton(ThemeManager::class);
+        $this->app->bind(ThemeContract::class, fn ($app) => $app->make(ThemeManager::class)->current());
+    }
+
     public function boot(): void
     {
         $this->registerViewLocations();
@@ -78,6 +87,10 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
             __DIR__.'/../resources/js' => resource_path('vendor/laravel-admin'),
             __DIR__.'/../public/images/dtree' => public_path('images/dtree'),
         ];
+
+        $this->publishes([
+            __DIR__.'/../config/laravel-admin-ui.php' => config_path('laravel-admin-ui.php'),
+        ], 'laravel-admin-ui-config');
 
         $this->publishes($views, 'laravel-admin-ui-views');
         $this->publishes($components, 'laravel-admin-ui-components');

@@ -131,13 +131,11 @@ Use consistent action hierarchy:
 ## Reusable Components
 
 The package exposes small Blade components under the existing `x-laravel-admin::admin.*` namespace for repeated admin UI patterns.
-These components are helpers for this contract, not a separate theme system.
+These components define the stable UI contract. Their class output can be supplied by a registered `ThemeContract` implementation so style packages such as DaisyUI adapters can reuse the same Blade API without forking package screens.
 
-- Use `admin.action-button` for primary, secondary, destructive, search, and inline link actions.
-- Use `admin.badge` for neutral, primary, success, warning, and danger status labels.
-- Use `admin.filter-bar`, `admin.table-shell`, and `admin.empty-state` for list screens.
-- Use `admin.form-input`, `admin.form-select`, `admin.form-textarea`, and `admin.checkbox-row` for sectioned resource forms.
-- Use `admin.page-section` for simple resource page headings and action slots when a page does not need custom structure.
+- Start from the component catalog: [components.md](components.md).
+- Use page/list/form/detail components before copying raw utility classes into package screens.
+- Keep component usage semantic: list controls use filter components, record summaries use card/detail components, row actions use action menu/button components.
 - Keep route names, form names, `wire:*`, `x-*`, and authorization checks in the package screen that owns the behavior.
 
 ## Dark Mode Contract
@@ -180,4 +178,5 @@ For each resource migrated in another package:
 ## Source Documents
 
 - Detailed implementation rules: [admin-design-rules.md](admin-design-rules.md)
+- Component catalog: [components.md](components.md)
 - Package README: [../README.md](../README.md)

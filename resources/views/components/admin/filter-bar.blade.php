@@ -1,3 +1,7 @@
-<form {{ $attributes->merge(['method' => 'GET', 'class' => 'mt-6 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center dark:border-gray-700 dark:bg-gray-800/70']) }}>
+@php
+    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
+@endphp
+
+<form {{ $attributes->merge(['method' => 'GET', 'class' => $theme->classes('filter-bar')]) }}>
     {{ $slot }}
 </form>

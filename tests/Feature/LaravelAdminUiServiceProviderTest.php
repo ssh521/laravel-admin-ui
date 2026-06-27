@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Ssh521\LaravelAdminUi\LaravelAdminUiServiceProvider;
 use Ssh521\LaravelAdminUi\Tests\TestCase;
+use Ssh521\LaravelAdminUi\Tests\Fixtures\MinimalTheme;
+use Ssh521\LaravelAdminUi\Themes\TailwindTheme;
 
 class LaravelAdminUiServiceProviderTest extends TestCase
 {
@@ -45,7 +47,27 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertPublishesTo('laravel-admin-ui-assets', resource_path('vendor/laravel-admin/admin.css'));
         $this->assertPublishesTo('laravel-admin-ui-assets', resource_path('vendor/laravel-admin'));
         $this->assertPublishesTo('laravel-admin-ui-assets', public_path('images/dtree'));
-        $this->assertSame([], ServiceProvider::pathsToPublish(LaravelAdminUiServiceProvider::class, 'laravel-admin-ui-config'));
+        $this->assertPublishesTo('laravel-admin-ui-config', config_path('laravel-admin-ui.php'));
+    }
+
+    public function test_it_registers_tailwind_as_the_default_component_theme(): void
+    {
+        $this->assertSame('tailwind', config('laravel-admin-ui.theme'));
+        $this->assertSame(TailwindTheme::class, config('laravel-admin-ui.themes.tailwind'));
+    }
+
+    public function test_it_can_render_components_with_a_registered_theme_adapter(): void
+    {
+        config([
+            'laravel-admin-ui.theme' => 'minimal',
+            'laravel-admin-ui.themes.minimal' => MinimalTheme::class,
+        ]);
+
+        $html = Blade::render('<x-laravel-admin::admin.action-button>Save</x-laravel-admin::admin.action-button>');
+
+        $this->assertStringContainsString('custom-button', $html);
+        $this->assertStringContainsString('custom-size', $html);
+        $this->assertStringContainsString('custom-primary', $html);
     }
 
     public function test_icon_component_logs_unknown_icon_names_and_renders_warning_icon(): void
@@ -84,6 +106,81 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $select = Blade::render('<x-laravel-admin::admin.form-select name="role"><option>Admin</option></x-laravel-admin::admin.form-select>');
         $textarea = Blade::render('<x-laravel-admin::admin.form-textarea name="description">설명</x-laravel-admin::admin.form-textarea>');
         $checkboxRow = Blade::render('<x-laravel-admin::admin.checkbox-row title="활성화"><input type="checkbox"></x-laravel-admin::admin.checkbox-row>');
+        $dropdown = Blade::render('<x-laravel-admin::admin.dropdown><x-slot name="trigger"><button>열기</button></x-slot><x-slot name="content"><x-laravel-admin::admin.dropdown-link href="/admin">관리자</x-laravel-admin::admin.dropdown-link></x-slot></x-laravel-admin::admin.dropdown>');
+        $accordion = Blade::render('<x-laravel-admin::admin.accordion title="상세 정보" open>내용</x-laravel-admin::admin.accordion>');
+        $card = Blade::render('<x-laravel-admin::admin.card title="카드" description="설명"><x-slot name="actions">액션</x-slot>본문<x-slot name="footer">푸터</x-slot></x-laravel-admin::admin.card>');
+        $field = Blade::render('<x-laravel-admin::admin.field name="email" label="이메일" help="업무용 이메일" required><input id="email"></x-laravel-admin::admin.field>');
+        $formSection = Blade::render('<x-laravel-admin::admin.form-section title="기본 정보" description="필수 입력">필드</x-laravel-admin::admin.form-section>');
+        $descriptionList = Blade::render('<x-laravel-admin::admin.description-list :items="$items" />', [
+            'items' => ['상태' => '활성'],
+        ]);
+        $tabs = Blade::render('<x-laravel-admin::admin.tabs active="profile" :items="$items" />', [
+            'items' => [
+                'profile' => ['label' => '프로필', 'href' => '/profile'],
+                'security' => '보안',
+            ],
+        ]);
+        $confirmDialog = Blade::render('<x-laravel-admin::admin.confirm-dialog title="삭제 확인" description="정말 삭제할까요?"><x-slot name="trigger"><button>삭제</button></x-slot></x-laravel-admin::admin.confirm-dialog>');
+        $toast = Blade::render('<x-laravel-admin::admin.toast type="success" title="저장됨" message="변경사항이 저장되었습니다." dismissible />');
+        $pagination = Blade::render('<x-laravel-admin::admin.pagination>페이지 없음</x-laravel-admin::admin.pagination>');
+        $stat = Blade::render('<x-laravel-admin::admin.stat label="회원" value="120" description="이번 달" />');
+        $drawer = Blade::render('<x-laravel-admin::admin.drawer title="필터"><x-slot name="trigger"><button>열기</button></x-slot>내용</x-laravel-admin::admin.drawer>');
+        $breadcrumb = Blade::render('<x-laravel-admin::admin.breadcrumb :items="$items" />', [
+            'items' => [
+                ['label' => '관리자', 'href' => '/admin'],
+                ['label' => '회원', 'active' => true],
+            ],
+        ]);
+        $avatar = Blade::render('<x-laravel-admin::admin.avatar name="Admin User" size="lg" />');
+        $progress = Blade::render('<x-laravel-admin::admin.progress label="업로드" value="25" max="100" />');
+        $stepper = Blade::render('<x-laravel-admin::admin.stepper active="review" :items="$items" />', [
+            'items' => ['draft' => '작성', 'review' => '검토'],
+        ]);
+        $timeline = Blade::render('<x-laravel-admin::admin.timeline :items="$items" />', [
+            'items' => [
+                ['title' => '생성됨', 'meta' => '오늘', 'body' => '관리자가 생성했습니다.'],
+            ],
+        ]);
+        $skeleton = Blade::render('<x-laravel-admin::admin.skeleton height="2rem" width="50%" />');
+        $fileUpload = Blade::render('<x-laravel-admin::admin.file-upload name="attachment" label="첨부파일" help="PDF만 가능" accept="application/pdf" />');
+        $radioCard = Blade::render('<x-laravel-admin::admin.radio-card name="type" value="admin" title="관리자" description="관리 권한" checked />');
+        $checkboxCard = Blade::render('<x-laravel-admin::admin.checkbox-card name="permissions[]" value="edit" title="수정" description="수정 권한" checked />');
+        $bulkActionBar = Blade::render('<x-laravel-admin::admin.bulk-action-bar count="3"><x-laravel-admin::admin.action-button variant="danger">삭제</x-laravel-admin::admin.action-button></x-laravel-admin::admin.bulk-action-bar>');
+        $searchInput = Blade::render('<x-laravel-admin::admin.search-input name="q" value="admin" placeholder="검색어" clear-href="/admin" />');
+        $filterSelect = Blade::render('<x-laravel-admin::admin.filter-select name="status" label="상태" selected="active" placeholder="전체" :options="$options" />', [
+            'options' => ['active' => '활성', 'inactive' => '비활성'],
+        ]);
+        $dateRange = Blade::render('<x-laravel-admin::admin.date-range from="2026-06-01" to="2026-06-27" />');
+        $copyButton = Blade::render('<x-laravel-admin::admin.copy-button value="token-123" />');
+        $codeBlock = Blade::render('<x-laravel-admin::admin.code-block title="응답" language="json">{ "ok": true }</x-laravel-admin::admin.code-block>');
+        $kbd = Blade::render('<x-laravel-admin::admin.kbd>⌘K</x-laravel-admin::admin.kbd>');
+        $divider = Blade::render('<x-laravel-admin::admin.divider />');
+        $statusDot = Blade::render('<x-laravel-admin::admin.status-dot variant="success" label="활성" />');
+        $userCell = Blade::render('<x-laravel-admin::admin.user-cell name="Admin User" email="admin@example.com" />');
+        $actionMenu = Blade::render('<x-laravel-admin::admin.action-menu><x-laravel-admin::admin.dropdown-link href="/edit">수정</x-laravel-admin::admin.dropdown-link></x-laravel-admin::admin.action-menu>');
+        $tableEmptyRow = Blade::render('<table><tbody><x-laravel-admin::admin.table-empty-row colspan="3" message="데이터 없음" /></tbody></table>');
+        $loadingOverlay = Blade::render('<x-laravel-admin::admin.loading-overlay show label="저장 중">본문</x-laravel-admin::admin.loading-overlay>');
+        $notice = Blade::render('<x-laravel-admin::admin.notice type="warning" title="주의" message="삭제 전 확인하세요." />');
+        $keyValueGrid = Blade::render('<x-laravel-admin::admin.key-value-grid :items="$items" />', [
+            'items' => ['환경' => 'production'],
+        ]);
+        $sortControl = Blade::render('<x-laravel-admin::admin.sort-control sort="name" direction="desc" :fields="$fields" />', [
+            'fields' => ['name' => '이름', 'created_at' => '생성일'],
+        ]);
+        $columnToggle = Blade::render('<x-laravel-admin::admin.column-toggle :columns="$columns" />', [
+            'columns' => ['name' => '이름', 'email' => '이메일'],
+        ]);
+        $exportButton = Blade::render('<x-laravel-admin::admin.export-button :formats="$formats" />', [
+            'formats' => ['/export.csv' => 'CSV'],
+        ]);
+        $inlineEdit = Blade::render('<x-laravel-admin::admin.inline-edit name="title" value="제목" action="/save" method="PATCH" />');
+        $permissionMatrix = Blade::render('<x-laravel-admin::admin.permission-matrix :groups="$groups" :selected="$selected" />', [
+            'groups' => ['회원' => ['users.edit' => '회원 수정']],
+            'selected' => ['users.edit'],
+        ]);
+        $pageHeader = Blade::render('<x-laravel-admin::admin.page-header title="회원 관리" description="회원을 관리합니다." :breadcrumbs="$breadcrumbs"><x-slot name="actions">액션</x-slot></x-laravel-admin::admin.page-header>', [
+            'breadcrumbs' => [['label' => '관리자', 'href' => '/admin'], ['label' => '회원']],
+        ]);
 
         $this->assertStringContainsString('<a', $button);
         $this->assertStringContainsString('bg-indigo-600', $button);
@@ -105,6 +202,86 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('<select', $select);
         $this->assertStringContainsString('<textarea', $textarea);
         $this->assertStringContainsString('활성화', $checkboxRow);
+        $this->assertStringContainsString('rounded-md bg-white py-1', $dropdown);
+        $this->assertStringContainsString('관리자', $dropdown);
+        $this->assertStringContainsString('rounded-lg border border-gray-200', $accordion);
+        $this->assertStringContainsString('상세 정보', $accordion);
+        $this->assertStringContainsString('내용', $accordion);
+        $this->assertStringContainsString('카드', $card);
+        $this->assertStringContainsString('푸터', $card);
+        $this->assertStringContainsString('업무용 이메일', $field);
+        $this->assertStringContainsString('text-red-600', $field);
+        $this->assertStringContainsString('기본 정보', $formSection);
+        $this->assertStringContainsString('md:col-span-8', $formSection);
+        $this->assertStringContainsString('상태', $descriptionList);
+        $this->assertStringContainsString('활성', $descriptionList);
+        $this->assertStringContainsString('프로필', $tabs);
+        $this->assertStringContainsString('aria-current="page"', $tabs);
+        $this->assertStringContainsString('삭제 확인', $confirmDialog);
+        $this->assertStringContainsString('정말 삭제할까요?', $confirmDialog);
+        $this->assertStringContainsString('저장됨', $toast);
+        $this->assertStringContainsString('border-green-200', $toast);
+        $this->assertStringContainsString('페이지 없음', $pagination);
+        $this->assertStringContainsString('회원', $stat);
+        $this->assertStringContainsString('120', $stat);
+        $this->assertStringContainsString('필터', $drawer);
+        $this->assertStringContainsString('max-w-md', $drawer);
+        $this->assertStringContainsString('관리자', $breadcrumb);
+        $this->assertStringContainsString('aria-current="page"', $breadcrumb);
+        $this->assertStringContainsString('AU', $avatar);
+        $this->assertStringContainsString('size-12', $avatar);
+        $this->assertStringContainsString('업로드', $progress);
+        $this->assertStringContainsString('width: 25%', $progress);
+        $this->assertStringContainsString('검토', $stepper);
+        $this->assertStringContainsString('step-primary', $stepper);
+        $this->assertStringContainsString('생성됨', $timeline);
+        $this->assertStringContainsString('관리자가 생성했습니다.', $timeline);
+        $this->assertStringContainsString('animate-pulse', $skeleton);
+        $this->assertStringContainsString('height: 2rem', $skeleton);
+        $this->assertStringContainsString('첨부파일', $fileUpload);
+        $this->assertStringContainsString('application/pdf', $fileUpload);
+        $this->assertStringContainsString('type="radio"', $radioCard);
+        $this->assertStringContainsString('관리 권한', $radioCard);
+        $this->assertStringContainsString('type="checkbox"', $checkboxCard);
+        $this->assertStringContainsString('수정 권한', $checkboxCard);
+        $this->assertStringContainsString('3 선택됨', $bulkActionBar);
+        $this->assertStringContainsString('삭제', $bulkActionBar);
+        $this->assertStringContainsString('name="q"', $searchInput);
+        $this->assertStringContainsString('검색어', $searchInput);
+        $this->assertStringContainsString('상태', $filterSelect);
+        $this->assertStringContainsString('selected', $filterSelect);
+        $this->assertStringContainsString('2026-06-01', $dateRange);
+        $this->assertStringContainsString('2026-06-27', $dateRange);
+        $this->assertStringContainsString('token-123', $copyButton);
+        $this->assertStringContainsString('navigator.clipboard', $copyButton);
+        $this->assertStringContainsString('응답', $codeBlock);
+        $this->assertStringContainsString('{ "ok": true }', $codeBlock);
+        $this->assertStringContainsString('⌘K', $kbd);
+        $this->assertStringContainsString('<hr', $divider);
+        $this->assertStringContainsString('bg-green-500', $statusDot);
+        $this->assertStringContainsString('admin@example.com', $userCell);
+        $this->assertStringContainsString('작업 메뉴', $actionMenu);
+        $this->assertStringContainsString('수정', $actionMenu);
+        $this->assertStringContainsString('colspan="3"', $tableEmptyRow);
+        $this->assertStringContainsString('데이터 없음', $tableEmptyRow);
+        $this->assertStringContainsString('저장 중', $loadingOverlay);
+        $this->assertStringContainsString('animate-spin', $loadingOverlay);
+        $this->assertStringContainsString('주의', $notice);
+        $this->assertStringContainsString('삭제 전 확인하세요.', $notice);
+        $this->assertStringContainsString('환경', $keyValueGrid);
+        $this->assertStringContainsString('production', $keyValueGrid);
+        $this->assertStringContainsString('name="sort"', $sortControl);
+        $this->assertStringContainsString('내림차순', $sortControl);
+        $this->assertStringContainsString('컬럼', $columnToggle);
+        $this->assertStringContainsString('이메일', $columnToggle);
+        $this->assertStringContainsString('내보내기', $exportButton);
+        $this->assertStringContainsString('/export.csv', $exportButton);
+        $this->assertStringContainsString('name="title"', $inlineEdit);
+        $this->assertStringContainsString('value="제목"', $inlineEdit);
+        $this->assertStringContainsString('회원 수정', $permissionMatrix);
+        $this->assertStringContainsString('checked', $permissionMatrix);
+        $this->assertStringContainsString('회원 관리', $pageHeader);
+        $this->assertStringContainsString('회원을 관리합니다.', $pageHeader);
     }
 
     public function test_menu_search_uses_full_icon_map_and_disposable_listeners(): void
