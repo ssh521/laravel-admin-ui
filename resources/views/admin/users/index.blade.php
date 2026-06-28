@@ -13,11 +13,14 @@
     @php
         $users = $data;
         $search = request('search');
+        $pageDescription = $search
+            ? __('":keyword" 검색 결과를 확인합니다.', ['keyword' => $search])
+            : __('사이트 회원 계정을 조회하고 상세 정보를 확인합니다.');
     @endphp
 
     <x-laravel-admin::admin.page-section
         title="{{ __('회원 목록') }}"
-        description="{{ $search ? __('\":keyword\" 검색 결과를 확인합니다.', ['keyword' => $search]) : __('사이트 회원 계정을 조회하고 상세 정보를 확인합니다.') }}"
+        description="{{ $pageDescription }}"
     >
         <x-slot name="actions">
             @can('create', Ssh521\LaravelAdmin\Models\User::class)
