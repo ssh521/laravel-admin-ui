@@ -30,8 +30,8 @@
                 ])
             </form>
 
-            <div class="mx-auto flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
-                <div class="flex justify-start">
+            <div class="mx-auto flex w-full max-w-4xl flex-row items-center justify-between gap-3 px-2">
+                <div class="flex shrink-0 justify-start">
                     @can('delete', $permission)
                         <form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST">
                             @csrf
@@ -46,7 +46,7 @@
                     @endcan
                 </div>
 
-                <div class="flex flex-wrap justify-end gap-3">
+                <div class="flex shrink-0 flex-nowrap justify-end gap-3">
                     <a href="{{ route('admin.permissions.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
                         {{ __('목록보기') }}
                     </a>

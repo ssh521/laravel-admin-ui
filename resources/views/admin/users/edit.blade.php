@@ -35,21 +35,21 @@
                 ])
             </form>
 
-            <div class="mx-auto flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
-                <div class="flex justify-start">
+            <div class="mx-auto flex w-full max-w-4xl flex-row items-center justify-between gap-3 px-2">
+                <div class="flex shrink-0 justify-start">
                     @can('delete', $user)
                         <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
-                                <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
+                                <x-laravel-admin::admin.icon name="trash-can" class="mr-2 text-xs" />
                                 {{ __('삭제하기') }}
                             </button>
                         </form>
                     @endcan
                 </div>
 
-                <div class="flex flex-wrap justify-end gap-3">
+                <div class="flex shrink-0 flex-nowrap justify-end gap-3">
                     <a href="{{ route('admin.users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
                         {{ __('목록보기') }}
                     </a>
