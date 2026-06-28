@@ -352,6 +352,8 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('admin-sidebar-surface', $layout);
         $this->assertStringContainsString('font-sans antialiased h-full min-h-screen', $layout);
         $this->assertStringContainsString('min-h-screen flex pt-16 bg-[#E7E7D6] dark:bg-gray-900', $layout);
+        $this->assertStringContainsString('min-w-0 flex-1 flex flex-col md:mt-2 mx-0 md:mx-4 lg:mx-6', $layout);
+        $this->assertStringContainsString('border-gray-400 dark:border-gray-800 shadow-lg', $header);
         $this->assertStringNotContainsString('sidebarBackground', $layout);
         $this->assertStringNotContainsString("e.key === 'Escape' && open", $layout);
         $this->assertStringNotContainsString("route('home')", $legacyHeader);

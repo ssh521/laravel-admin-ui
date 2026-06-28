@@ -179,7 +179,7 @@
             </div>
 
             <!-- 메인 콘텐츠 영역 -->
-            <div class="min-w-0 flex-1 flex flex-col mt-2 mx-0 sm:mx-2 md:mx-4 lg:mx-6">
+            <div class="min-w-0 flex-1 flex flex-col md:mt-2 mx-0 md:mx-4 lg:mx-6">
 
                 <!-- Page Heading -->
                 @if (isset($header))
