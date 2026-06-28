@@ -21,6 +21,8 @@ Packages that adopt this contract should:
 
 ## Style Folder Contract
 
+For implementation details and AI-agent workflow, use [style-development-contract.md](style-development-contract.md).
+
 `x-laravel-admin::admin.*` is the stable public Blade API. The `components/admin` folder is a dispatcher layer and must not be removed or renamed.
 
 Actual component implementations live in style folders:
@@ -208,6 +210,7 @@ For each resource migrated in another package:
 
 ## Source Documents
 
+- Style development contract: [style-development-contract.md](style-development-contract.md)
 - Detailed implementation rules: [admin-design-rules.md](admin-design-rules.md)
 - Component catalog: [components.md](components.md)
 - Package README: [../README.md](../README.md)

@@ -138,6 +138,7 @@ php artisan view:clear
 기존 PHP class resolver는 공개 설정으로 노출하지 않습니다. 스타일 전환의 기준 API는 `LARAVEL_ADMIN_UI_STYLE`입니다.
 
 컴포넌트 목록과 사용 기준은 [docs/components.md](docs/components.md)를 기준으로 관리합니다.
+새 style 개발 계약과 AI 개발 체크리스트는 [docs/style-development-contract.md](docs/style-development-contract.md)를 기준으로 합니다.
 
 ## 퍼블리시 경로
 

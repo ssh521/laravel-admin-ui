@@ -10,6 +10,7 @@ It provides Blade views, anonymous Blade components, CSS, JavaScript, image asse
 
 - Package behavior: `README.md`
 - Portable admin UI contract: `docs/admin-ui-design-contract.md`
+- Style development contract: `docs/style-development-contract.md`
 - Detailed implementation rules: `docs/admin-design-rules.md`
 - Component catalog: `docs/components.md`
 - Style configuration: `config/laravel-admin-ui.php`
@@ -22,6 +23,7 @@ It provides Blade views, anonymous Blade components, CSS, JavaScript, image asse
 ## Style Contract
 
 Reusable components must keep the `x-laravel-admin::admin.*` Blade API stable.
+Read `docs/style-development-contract.md` before adding or extending a style folder.
 
 When a component needs style changes:
 

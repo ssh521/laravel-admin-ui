@@ -3,6 +3,7 @@
 이 문서는 `x-laravel-admin::admin.*` Blade 컴포넌트의 역할과 사용 기준을 정리합니다.
 
 컴포넌트는 Blade API를 안정적으로 유지하고, 실제 구현은 `laravel-admin-ui.style` 설정에 따라 style 폴더에서 선택됩니다.
+새 style 개발 절차와 검증 기준은 [style-development-contract.md](style-development-contract.md)를 기준으로 합니다.
 
 ```text
 resources/views/components/admin       dispatcher, public API
