@@ -114,13 +114,13 @@
     @if($showActions)
         <div class="col-span-full flex items-center justify-end gap-x-3">
             @unless ($isProfile)
-                <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                <x-laravel-admin::admin.action-button variant="secondary" :href="route('admin.admin-users.index')">
                     {{ __('취소') }}
-                </a>
+                </x-laravel-admin::admin.action-button>
             @endunless
-            <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+            <x-laravel-admin::admin.action-button type="submit">
                 {{ $submitLabel }}
-            </button>
+            </x-laravel-admin::admin.action-button>
         </div>
     @endif
 </div>

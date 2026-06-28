@@ -114,6 +114,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $button = Blade::render('<x-laravel-admin::admin.action-button href="/admin" icon="plus">등록하기</x-laravel-admin::admin.action-button>');
         $secondary = Blade::render('<x-laravel-admin::admin.action-button variant="secondary">목록</x-laravel-admin::admin.action-button>');
         $danger = Blade::render('<x-laravel-admin::admin.action-button variant="danger">삭제하기</x-laravel-admin::admin.action-button>');
+        $search = Blade::render('<x-laravel-admin::admin.action-button variant="search">검색</x-laravel-admin::admin.action-button>');
         $badge = Blade::render('<x-laravel-admin::admin.badge variant="success">활성</x-laravel-admin::admin.badge>');
         $emptyState = Blade::render('<x-laravel-admin::admin.empty-state title="비어 있음" description="표시할 항목이 없습니다." icon="folder-open" />');
         $filterBar = Blade::render('<x-laravel-admin::admin.filter-bar action="/admin"><input name="search"></x-laravel-admin::admin.filter-bar>');
@@ -206,6 +207,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('border-gray-300', $secondary);
         $this->assertStringContainsString('!text-gray-700', $secondary);
         $this->assertStringContainsString('!text-red-700', $danger);
+        $this->assertStringContainsString('laravel-admin-search-button', $search);
         $this->assertStringContainsString('bg-green-50', $badge);
         $this->assertStringContainsString('dark:bg-green-500/10', $badge);
         $this->assertStringContainsString('border-dashed', $emptyState);
@@ -347,6 +349,72 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('id="menu-order-modal"', $index);
         $this->assertStringContainsString('<livewire:admin.menus.menu-order-modal />', $index);
         $this->assertStringContainsString("Livewire.dispatch('admin-menus:menu-order-modal:open'", $index);
+    }
+
+    public function test_admin_users_search_uses_filter_bar_and_search_action_button(): void
+    {
+        $index = file_get_contents(__DIR__.'/../../resources/views/admin/admin-users/index.blade.php');
+
+        $this->assertStringContainsString('<x-laravel-admin::admin.filter-bar', $index);
+        $this->assertStringContainsString('<x-laravel-admin::admin.action-button type="submit" variant="search"', $index);
+        $this->assertStringContainsString('class="w-full shrink-0 sm:w-40"', $index);
+        $this->assertStringContainsString('class="w-full shrink-0 whitespace-nowrap sm:w-auto"', $index);
+        $this->assertStringNotContainsString('dark:bg-white dark:text-gray-900', $index);
+    }
+
+    public function test_index_search_forms_use_consistent_search_action_buttons(): void
+    {
+        foreach ([
+            'admin-users',
+            'users',
+            'roles',
+            'permissions',
+            'menus',
+            'menu-categories',
+        ] as $screen) {
+            $index = file_get_contents(__DIR__."/../../resources/views/admin/{$screen}/index.blade.php");
+
+            $this->assertStringContainsString('<x-laravel-admin::admin.filter-bar', $index, "{$screen} index should use the shared filter bar.");
+            $this->assertStringContainsString('<x-laravel-admin::admin.action-button type="submit" variant="search"', $index, "{$screen} index should use the shared search action button.");
+            $this->assertStringContainsString('class="w-full shrink-0 whitespace-nowrap sm:w-auto"', $index, "{$screen} search button should not wrap or collapse.");
+            $this->assertStringNotContainsString('dark:bg-white dark:text-gray-900', $index, "{$screen} index should not inline the old dark search button colors.");
+        }
+    }
+
+    public function test_admin_action_buttons_do_not_use_hard_coded_action_styles(): void
+    {
+        $viewFiles = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(__DIR__.'/../../resources/views/admin')
+        );
+
+        foreach ($viewFiles as $file) {
+            if (! $file->isFile() || $file->getExtension() !== 'php') {
+                continue;
+            }
+
+            $path = $file->getPathname();
+            $contents = file_get_contents($path);
+
+            preg_match_all('/<(?:a|button)\b[^>]*\sclass="([^"]*)"/', $contents, $matches);
+
+            foreach ($matches[1] as $classes) {
+                $this->assertDoesNotMatchRegularExpression(
+                    '/(?:bg-indigo-600|bg-gray-900|border-red-200|dark:bg-white dark:text-gray-900)/',
+                    $classes,
+                    "{$path} should use admin.action-button instead of hard-coded action button colors."
+                );
+            }
+        }
+    }
+
+    public function test_search_action_button_dark_mode_text_remains_readable(): void
+    {
+        $css = file_get_contents(__DIR__.'/../../resources/css/admin.css');
+        $button = Blade::render('<x-laravel-admin::admin.action-button variant="search">검색</x-laravel-admin::admin.action-button>');
+
+        $this->assertStringContainsString('laravel-admin-search-button', $button);
+        $this->assertStringContainsString('.dark .laravel-admin-search-button', $css);
+        $this->assertStringContainsString('color: #111827 !important;', $css);
     }
 
     public function test_admin_shell_guards_optional_navigation_features(): void

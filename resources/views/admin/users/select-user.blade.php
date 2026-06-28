@@ -54,17 +54,13 @@
                     </div>
 
                     <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <button type="button"
-                                @click="openUserSearchModal()"
-                                class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                        <x-laravel-admin::admin.action-button type="button" @click="openUserSearchModal()">
                             사용자 검색
-                        </button>
+                        </x-laravel-admin::admin.action-button>
 
-                        <button type="button"
-                                @click="clearForm()"
-                                class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
+                        <x-laravel-admin::admin.action-button type="button" variant="secondary" @click="clearForm()">
                             폼 초기화
-                        </button>
+                        </x-laravel-admin::admin.action-button>
                     </div>
 
                     <div x-show="selectedUser" x-cloak class="mt-6 rounded-md border border-green-200 bg-green-50 p-4 dark:border-green-500/30 dark:bg-green-500/10">

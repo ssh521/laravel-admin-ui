@@ -93,6 +93,19 @@ php artisan vendor:publish --tag=laravel-admin-ui-components
 </x-laravel-admin::admin.action-button>
 ```
 
+관리자 화면의 주요 액션은 hard-coded Tailwind `<a>`/`<button>` 스타일 대신 `admin.action-button`을 사용합니다.
+상단 `등록하기`, form footer의 `목록보기`/`취소`/`저장하기`/`수정하기`/`삭제하기`, 검색 submit, row link action은 같은 컴포넌트 API를 공유해야 style 전환과 dark mode 계약이 깨지지 않습니다.
+
+```blade
+<x-laravel-admin::admin.action-button :href="route('admin.users.create')" size="sm" icon="plus">
+    {{ __('등록하기') }}
+</x-laravel-admin::admin.action-button>
+
+<x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass">
+    {{ __('검색') }}
+</x-laravel-admin::admin.action-button>
+```
+
 기본 스타일은 현재 관리자 UI와 같은 `yaverstyle`입니다.
 
 ```php

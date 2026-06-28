@@ -101,10 +101,9 @@
                         <span>{{ __('Remember me') }}</span>
                     </label>
 
-                    <button type="submit" class="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                        <x-laravel-admin::admin.icon name="right-to-bracket" class="mr-2 text-xs" />
+                    <x-laravel-admin::admin.action-button type="submit" icon="right-to-bracket" class="w-full">
                         {{ __('Log in') }}
-                    </button>
+                    </x-laravel-admin::admin.action-button>
                 </form>
             </div>
         </section>

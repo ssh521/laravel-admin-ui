@@ -105,10 +105,9 @@
                     class="h-10"
                 />
 
-                <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                    <x-laravel-admin::admin.icon name="magnifying-glass" class="mr-2 text-xs" />
+                <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="shrink-0 whitespace-nowrap">
                     {{ __('검색') }}
-                </button>
+                </x-laravel-admin::admin.action-button>
             </form>
 
             <div class="mt-6 grid gap-4 lg:grid-cols-2">

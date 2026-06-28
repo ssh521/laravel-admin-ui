@@ -27,24 +27,20 @@
                 </div>
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
                     @can('create', \Spatie\Permission\Models\Role::class)
-                        <a href="{{ route('admin.roles.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
+                        <x-laravel-admin::admin.action-button :href="route('admin.roles.create')" size="sm" icon="plus">
                             {{ __('등록하기') }}
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     @endcan
 
-                    <button type="button"
-                            id="open-menu-category-selector"
-                            class="inline-flex h-9 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
-                        <x-laravel-admin::admin.icon name="folder-open" class="mr-2 text-xs" />
+                    <x-laravel-admin::admin.action-button type="button" id="open-menu-category-selector" variant="secondary" size="sm" icon="folder-open">
                         {{ __('메뉴 카테고리 관리') }}
-                    </button>
+                    </x-laravel-admin::admin.action-button>
                 </div>
             </div>
 
             <x-laravel-admin::admin.session-messages />
 
-            <form class="mt-6 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center dark:border-gray-700 dark:bg-gray-800/70" action="{{ route('admin.roles.index') }}" method="GET">
+            <x-laravel-admin::admin.filter-bar action="{{ route('admin.roles.index') }}">
                 <label for="role-search" class="sr-only">역할 검색</label>
                 <div class="relative min-w-0 flex-1">
                     <x-laravel-admin::admin.form-input id="role-search" name="search" value="{{ request('search') }}" class="h-10 pr-9" placeholder="역할 이름 검색" />
@@ -56,12 +52,10 @@
                     @endif
                 </div>
 
-                <button type="submit"
-                    class="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 sm:w-auto dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                    <x-laravel-admin::admin.icon name="magnifying-glass" class="mr-2 text-xs" />
+                <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="w-full shrink-0 whitespace-nowrap sm:w-auto">
                     {{ __('검색') }}
-                </button>
-            </form>
+                </x-laravel-admin::admin.action-button>
+            </x-laravel-admin::admin.filter-bar>
 
             <div class="mt-6">
                 @if($data->count() > 0)
@@ -85,11 +79,9 @@
                                     </div>
 
                                     @can('view', $role)
-                                        <a href="{{ route('admin.roles.show', $role) }}"
-                                            class="inline-flex h-8 shrink-0 items-center rounded-md px-2.5 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
-                                            <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
+                                        <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.roles.show', $role)" icon="eye" class="shrink-0">
                                             상세보기
-                                        </a>
+                                        </x-laravel-admin::admin.action-button>
                                     @endcan
                                 </div>
 
@@ -207,9 +199,9 @@
             </div>
 
             <div class="mt-6 flex justify-end border-t border-gray-200 pt-4 dark:border-gray-700">
-                <button type="button" id="close-menu-category-selector" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
+                <x-laravel-admin::admin.action-button type="button" id="close-menu-category-selector" variant="secondary">
                     닫기
-                </button>
+                </x-laravel-admin::admin.action-button>
             </div>
         </div>
     </x-laravel-admin::admin.draggable-modal>
@@ -245,12 +237,12 @@
             </div>
 
             <div class="mt-6 flex justify-end gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
-                <button type="button" id="cancel-role-management" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
+                <x-laravel-admin::admin.action-button type="button" id="cancel-role-management" variant="secondary">
                     취소
-                </button>
-                <button type="button" id="save-role-management" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                </x-laravel-admin::admin.action-button>
+                <x-laravel-admin::admin.action-button type="button" id="save-role-management">
                     저장
-                </button>
+                </x-laravel-admin::admin.action-button>
             </div>
         </div>
     </x-laravel-admin::admin.draggable-modal>

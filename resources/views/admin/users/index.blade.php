@@ -44,7 +44,7 @@
                 @endif
             </div>
 
-            <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="w-full sm:w-auto">
+            <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="w-full shrink-0 whitespace-nowrap sm:w-auto">
                 {{ __('검색') }}
             </x-laravel-admin::admin.action-button>
         </x-laravel-admin::admin.filter-bar>

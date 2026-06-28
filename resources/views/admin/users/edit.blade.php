@@ -41,21 +41,20 @@
                         <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
-                                <x-laravel-admin::admin.icon name="trash-can" class="mr-2 text-xs" />
+                            <x-laravel-admin::admin.action-button type="submit" variant="danger" icon="trash-can">
                                 {{ __('삭제하기') }}
-                            </button>
+                            </x-laravel-admin::admin.action-button>
                         </form>
                     @endcan
                 </div>
 
                 <div class="flex shrink-0 flex-nowrap justify-end gap-3">
-                    <a href="{{ route('admin.users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                    <x-laravel-admin::admin.action-button variant="secondary" :href="route('admin.users.index')">
                         {{ __('목록보기') }}
-                    </a>
-                    <button type="submit" form="user-edit-form" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                    </x-laravel-admin::admin.action-button>
+                    <x-laravel-admin::admin.action-button type="submit" form="user-edit-form">
                         {{ __('수정하기') }}
-                    </button>
+                    </x-laravel-admin::admin.action-button>
                 </div>
             </div>
         </div>

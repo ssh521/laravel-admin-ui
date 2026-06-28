@@ -20,36 +20,45 @@
                     </p>
                 </div>
                 <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <a href="{{ route('admin.admin-users.create') }}" class="inline-flex h-9 items-center justify-center rounded-md bg-indigo-600 px-3 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                        <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
+                    <x-laravel-admin::admin.action-button :href="route('admin.admin-users.create')" size="sm" icon="plus">
                         {{ __('등록하기') }}
-                    </a>
+                    </x-laravel-admin::admin.action-button>
                 </div>
             </div>
 
             <x-laravel-admin::admin.session-messages />
 
-            <form method="GET" action="{{ route('admin.admin-users.index') }}" class="mt-6 grid gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:grid-cols-[minmax(0,180px)_minmax(0,1fr)_auto] sm:items-center dark:border-gray-700 dark:bg-gray-800/70">
+            <x-laravel-admin::admin.filter-bar action="{{ route('admin.admin-users.index') }}">
                 <label for="admin-user-role" class="sr-only">{{ __('전체 역할') }}</label>
-                <x-laravel-admin::admin.form-select id="admin-user-role" name="role" class="h-10">
-                    <option value="">{{ __('전체 역할') }}</option>
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->name }}" @selected(request('role') === $role->name)>{{ $role->name }}</option>
-                    @endforeach
-                </x-laravel-admin::admin.form-select>
+                <div class="w-full shrink-0 sm:w-40">
+                    <x-laravel-admin::admin.form-select id="admin-user-role" name="role" class="h-10">
+                        <option value="">{{ __('전체 역할') }}</option>
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->name }}" @selected(request('role') === $role->name)>{{ $role->name }}</option>
+                        @endforeach
+                    </x-laravel-admin::admin.form-select>
+                </div>
                 <label for="admin-user-search" class="sr-only">{{ __('Search name or email') }}</label>
-                <x-laravel-admin::admin.form-input
-                    id="admin-user-search"
-                    name="search"
-                    value="{{ request('search') }}"
-                    placeholder="{{ __('Search name or email') }}"
-                    class="h-10"
-                />
-                <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                    <x-laravel-admin::admin.icon name="magnifying-glass" class="mr-2 text-xs" />
+                <div class="relative min-w-0 flex-1">
+                    <x-laravel-admin::admin.form-input
+                        id="admin-user-search"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="{{ __('Search name or email') }}"
+                        class="h-10 pr-9"
+                    />
+                    @if(request('search') || request('role'))
+                        <a href="{{ route('admin.admin-users.index') }}"
+                           class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
+                            <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
+                        </a>
+                    @endif
+                </div>
+
+                <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="w-full shrink-0 whitespace-nowrap sm:w-auto">
                     {{ __('검색') }}
-                </button>
-            </form>
+                </x-laravel-admin::admin.action-button>
+            </x-laravel-admin::admin.filter-bar>
 
             <div class="mt-6 flow-root">
                 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -103,14 +112,12 @@
                                             @endif
                                         </td>
                                         <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                            <a href="{{ route('admin.admin-users.show', $adminUser->getKey()) }}" class="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
-                                                <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
+                                            <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.admin-users.show', $adminUser->getKey())" icon="eye" class="h-auto px-2 py-1">
                                                 {{ __('보기') }}
-                                            </a>
-                                            <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="ml-1 inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold !text-indigo-600 hover:bg-indigo-50 hover:no-underline dark:!text-indigo-300 dark:hover:bg-indigo-500/10">
-                                                <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
+                                            </x-laravel-admin::admin.action-button>
+                                            <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.admin-users.edit', $adminUser->getKey())" icon="pen-to-square" class="ml-1 h-auto px-2 py-1">
                                                 {{ __('수정') }}
-                                            </a>
+                                            </x-laravel-admin::admin.action-button>
                                         </td>
                                     </tr>
                                 @empty

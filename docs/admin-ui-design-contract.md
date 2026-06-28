@@ -159,6 +159,9 @@ Use consistent action hierarchy:
 
 - Use `x-laravel-admin::admin.action-button` for primary, secondary, destructive, search, and link-style row actions.
 - Use `variant="primary"`, `variant="secondary"`, `variant="danger"`, `variant="search"`, and `variant="link"` instead of hard-coded style classes in feature package views.
+- Use `variant="search"` for list filter submit buttons; keep the search button shrink-wrapped on desktop with `shrink-0 whitespace-nowrap` when it sits next to a flexible input.
+- Use `variant="link"` for table/card row actions such as `보기`, `상세보기`, and `수정` when they are rendered as compact text actions.
+- Dynamic state controls such as sort mode toggles may keep local `:class`/`x-bind:class` color logic when the visual state itself is the behavior.
 - Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
 - Icons should use the shared `x-laravel-admin::admin.icon` Blade component instead of external icon font packages.
 

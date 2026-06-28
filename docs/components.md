@@ -38,7 +38,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 
 | Component | Purpose |
 | --- | --- |
-| `admin.action-button` | primary, secondary, danger, search, link action |
+| `admin.action-button` | primary, secondary, danger, search, link action; use for `등록하기`, `목록보기`/`취소`, `저장하기`/`수정하기`, `삭제하기`, 검색 submit, and compact row actions |
 | `admin.primary-button` | legacy primary submit button |
 | `admin.secondary-button` | legacy secondary button |
 | `admin.danger-button` | legacy destructive button |
@@ -54,7 +54,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 
 | Component | Purpose |
 | --- | --- |
-| `admin.filter-bar` | 목록 검색/필터 control wrapper |
+| `admin.filter-bar` | 목록 검색/필터 control wrapper; pair with `admin.action-button variant="search"` for submit |
 | `admin.search-input` | 검색 icon, input, clear link |
 | `admin.filter-select` | 목록 필터용 label/select |
 | `admin.date-range` | 시작일/종료일 필터 |

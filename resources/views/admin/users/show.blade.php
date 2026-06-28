@@ -24,9 +24,9 @@
                 </div>
 
                 <div class="mt-4 flex flex-wrap gap-3 sm:mt-0">
-                    <a href="{{ route('admin.users.index') }}" class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
+                    <x-laravel-admin::admin.action-button variant="secondary" :href="route('admin.users.index')">
                         {{ __('목록보기') }}
-                    </a>
+                    </x-laravel-admin::admin.action-button>
                 </div>
             </div>
 
@@ -78,9 +78,9 @@
                 <div class="flex justify-end border-t border-gray-200 px-4 py-4 sm:px-6 dark:border-gray-700">
                     <div class="flex flex-wrap justify-end gap-3">
                         @can('update', $user)
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                            <x-laravel-admin::admin.action-button :href="route('admin.users.edit', $user->id)">
                                 {{ __('수정하기') }}
-                            </a>
+                            </x-laravel-admin::admin.action-button>
                         @endcan
                     </div>
                 </div>

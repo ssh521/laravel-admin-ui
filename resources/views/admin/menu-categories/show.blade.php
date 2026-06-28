@@ -20,10 +20,9 @@
                         </p>
                     </div>
                     <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-6">
-                        <a href="{{ route('admin.menu-categories.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            <x-laravel-admin::admin.icon name="list" class="mr-2 text-xs" />
+                        <x-laravel-admin::admin.action-button variant="secondary" size="sm" :href="route('admin.menu-categories.index')" icon="list">
                             {{ __('목록보기') }}
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
                 </div>
             </div>
@@ -124,7 +123,7 @@
                                                         </x-laravel-admin::admin.badge>
                                                     </td>
                                                     <td class="whitespace-nowrap py-3 pl-3 text-right">
-                                                        <a href="{{ route('admin.menus.show', $menu) }}" class="text-sm font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">{{ __('보기') }}</a>
+                                                        <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menus.show', $menu)" class="h-auto px-0 py-0">{{ __('보기') }}</x-laravel-admin::admin.action-button>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -142,9 +141,9 @@
                     <div class="flex justify-end">
                         <div class="flex flex-wrap justify-end gap-2">
                             @can('update', $menuCategory)
-                                <a href="{{ route('admin.menu-categories.edit', $menuCategory) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                                <x-laravel-admin::admin.action-button :href="route('admin.menu-categories.edit', $menuCategory)">
                                     {{ __('수정하기') }}
-                                </a>
+                                </x-laravel-admin::admin.action-button>
                             @endcan
                         </div>
                     </div>

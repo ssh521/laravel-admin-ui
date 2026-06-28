@@ -49,18 +49,18 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                         <h3 class="text-lg font-semibold mb-4">관리자 계정</h3>
                         <p class="text-gray-600 mb-4">관리자 로그인 계정을 관리합니다.</p>
-                        <a href="{{ route('admin.admin-users.index') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                        <x-laravel-admin::admin.action-button :href="route('admin.admin-users.index')">
                             관리하기
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
 
                     @if (Route::has('admin.users.index'))
                         <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                             <h3 class="text-lg font-semibold mb-4">사용자 관리</h3>
                             <p class="text-gray-600 mb-4">시스템 사용자들을 관리합니다.</p>
-                            <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            <x-laravel-admin::admin.action-button :href="route('admin.users.index')">
                                 관리하기
-                            </a>
+                            </x-laravel-admin::admin.action-button>
                         </div>
                     @endif
                     @endcan
@@ -69,9 +69,9 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                         <h3 class="text-lg font-semibold mb-4">역할 관리</h3>
                         <p class="text-gray-600 mb-4">사용자 역할을 관리합니다.</p>
-                        <a href="{{ route('admin.roles.index') }}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                        <x-laravel-admin::admin.action-button :href="route('admin.roles.index')">
                             관리하기
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
                     @endcan
 
@@ -79,9 +79,9 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                         <h3 class="text-lg font-semibold mb-4">권한 관리</h3>
                         <p class="text-gray-600 mb-4">시스템 권한을 관리합니다.</p>
-                        <a href="{{ route('admin.permissions.index') }}" class="inline-flex items-center px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700">
+                        <x-laravel-admin::admin.action-button :href="route('admin.permissions.index')">
                             관리하기
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
                     @endcan
 
@@ -89,9 +89,9 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                         <h3 class="text-lg font-semibold mb-4">메뉴 관리</h3>
                         <p class="text-gray-600 mb-4">시스템 메뉴를 관리합니다.</p>
-                        <a href="{{ route('admin.menu-categories.index') }}" class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+                        <x-laravel-admin::admin.action-button :href="route('admin.menu-categories.index')">
                             관리하기
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
                     @endcan
 
@@ -99,9 +99,9 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                         <h3 class="text-lg font-semibold mb-4">시스템 로그</h3>
                         <p class="text-gray-600 mb-4">시스템 로그를 확인합니다.</p>
-                        <a href="#" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                        <x-laravel-admin::admin.action-button href="#" variant="secondary">
                             확인하기
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
                     @endcan
 
@@ -109,9 +109,9 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                         <h3 class="text-lg font-semibold mb-4">시스템 설정</h3>
                         <p class="text-gray-600 mb-4">시스템 설정을 관리합니다.</p>
-                        <a href="#" class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                        <x-laravel-admin::admin.action-button href="#" variant="secondary">
                             설정하기
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
                     @endcan
 

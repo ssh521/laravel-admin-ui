@@ -90,6 +90,26 @@ span.cursor-pointer:hover {
     text-decoration: none;
 }
 
+.laravel-admin-search-button {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+}
+
+.laravel-admin-search-button:hover {
+    background-color: #374151 !important;
+    color: #ffffff !important;
+}
+
+.dark .laravel-admin-search-button {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+}
+
+.dark .laravel-admin-search-button:hover {
+    background-color: #e5e7eb !important;
+    color: #111827 !important;
+}
+
 @layer utilities {
     /**
      * Scrollbar utilities

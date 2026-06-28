@@ -190,7 +190,7 @@ class YaverstyleClassResolver implements StyleClassResolver
             'primary' => 'bg-indigo-600 !text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400',
             'secondary' => 'border border-gray-300 bg-white !text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700',
             'danger' => 'border border-red-200 bg-white !text-red-700 shadow-sm hover:bg-red-50 focus-visible:outline-red-600 dark:border-red-500/30 dark:bg-gray-900 dark:!text-red-300 dark:hover:bg-red-500/10',
-            'search' => 'bg-gray-900 !text-white shadow-sm hover:bg-gray-700 focus-visible:outline-gray-900 dark:bg-white dark:!text-gray-900 dark:hover:bg-gray-200',
+            'search' => 'laravel-admin-search-button shadow-sm focus-visible:outline-gray-900',
             'link' => '!text-indigo-600 hover:bg-indigo-50 dark:!text-indigo-300 dark:hover:bg-indigo-500/10',
         ][$variant] ?? 'bg-indigo-600 !text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400';
     }

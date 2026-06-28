@@ -49,10 +49,9 @@
                 </div>
                 <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-6">
                     @can('create', Ssh521\LaravelAdmin\Models\MenuCategory::class)
-                        <a href="{{ route('admin.menu-categories.create') }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
-                            <x-laravel-admin::admin.icon name="plus" class="mr-2 text-xs" />
+                        <x-laravel-admin::admin.action-button :href="route('admin.menu-categories.create')" size="sm" icon="plus">
                             {{ __('등록하기') }}
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     @endcan
                 </div>
             </div>
@@ -77,7 +76,7 @@
                     @endif
                 </div>
 
-                <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="w-full sm:w-auto">
+                <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="w-full shrink-0 whitespace-nowrap sm:w-auto">
                     {{ __('검색') }}
                 </x-laravel-admin::admin.action-button>
             </x-laravel-admin::admin.filter-bar>
@@ -160,10 +159,9 @@
                                         <td class="whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-0">
                                             <div class="flex justify-end gap-3">
                                                 @can('view', $category)
-                                                    <a href="{{ route('admin.menu-categories.show', $category) }}" class="inline-flex items-center font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">
-                                                        <x-laravel-admin::admin.icon name="eye" class="mr-1.5 text-xs" />
+                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menu-categories.show', $category)" icon="eye" class="h-auto px-0 py-0">
                                                         {{ __('상세보기') }}
-                                                    </a>
+                                                    </x-laravel-admin::admin.action-button>
                                                 @endcan
                                                 @can('update', $category)
                                                     <x-laravel-admin::admin.modal-trigger
@@ -175,10 +173,9 @@
                                                         class="cursor-pointer"
                                                         data-category-id="{{ $category->id }}"
                                                         data-category-name="{{ $category->name }}" />
-                                                    <a href="{{ route('admin.menu-categories.edit', $category) }}" class="inline-flex items-center font-semibold !text-indigo-600 hover:!text-indigo-500 hover:no-underline dark:!text-indigo-400">
-                                                        <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
+                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menu-categories.edit', $category)" icon="pen-to-square" class="h-auto px-0 py-0">
                                                         {{ __('수정') }}
-                                                    </a>
+                                                    </x-laravel-admin::admin.action-button>
                                                 @endcan
                                             </div>
                                         </td>
@@ -224,15 +221,15 @@
                 </div>
 
                 <div class="flex items-center justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
-                    <button type="button"
+                    <x-laravel-admin::admin.action-button type="button"
+                        variant="secondary"
                         @click="$dispatch('close-modal', { modalId: 'roles-modal', action: 'close' })"
-                        class="inline-flex h-10 items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
+                    >
                         {{ __('취소') }}
-                    </button>
-                    <button id="roles-submit-btn" type="submit"
-                        class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                    </x-laravel-admin::admin.action-button>
+                    <x-laravel-admin::admin.action-button id="roles-submit-btn" type="submit">
                         {{ __('저장') }}
-                    </button>
+                    </x-laravel-admin::admin.action-button>
                 </div>
             </form>
         </div>

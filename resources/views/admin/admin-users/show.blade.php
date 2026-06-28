@@ -22,10 +22,9 @@
                         </p>
                     </div>
                     <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-6">
-                        <a href="{{ route('admin.admin-users.index') }}" class="inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-3 text-sm font-semibold !text-gray-700 shadow-sm hover:bg-gray-50 hover:no-underline dark:border-gray-600 dark:bg-gray-800 dark:!text-gray-100 dark:hover:bg-gray-700">
-                            <x-laravel-admin::admin.icon name="list" class="mr-2 text-xs" />
+                        <x-laravel-admin::admin.action-button variant="secondary" size="sm" :href="route('admin.admin-users.index')" icon="list">
                             {{ __('목록보기') }}
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
                 </div>
             </div>
@@ -87,9 +86,9 @@
 
                 <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 dark:border-gray-700 dark:bg-gray-800/70">
                     <div class="flex flex-wrap justify-end gap-2">
-                        <a href="{{ route('admin.admin-users.edit', $adminUser->getKey()) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline dark:bg-indigo-500 dark:hover:bg-indigo-400">
+                        <x-laravel-admin::admin.action-button :href="route('admin.admin-users.edit', $adminUser->getKey())">
                             {{ __('수정하기') }}
-                        </a>
+                        </x-laravel-admin::admin.action-button>
                     </div>
                 </div>
             </div>
