@@ -14,19 +14,51 @@ Use it when another package needs to match the `laravel-admin-ui` look, layout, 
 
 Packages that adopt this contract should:
 
-- Use Tailwind CSS utility classes compatible with the host admin UI build.
 - Render inside the existing admin layout component when available.
-- Support light and dark mode classes on every new surface.
-- Use existing admin Blade components for layout, session messages, buttons, modal wrappers, and validation messages when they are available.
+- Use existing `x-laravel-admin::admin.*` Blade components for layout, session messages, buttons, form controls, list wrappers, modal wrappers, and validation messages when they are available.
 - Avoid adding package-local visual systems unless the package has a truly specialized workflow.
+- Keep package screens style-neutral where possible so the host app can switch `laravel-admin-ui` styles without editing feature package views.
+
+## Style Folder Contract
+
+`x-laravel-admin::admin.*` is the stable public Blade API. The `components/admin` folder is a dispatcher layer and must not be removed or renamed.
+
+Actual component implementations live in style folders:
+
+```text
+resources/views/components/admin
+resources/views/components/yaverstyle
+resources/views/components/daisystyle
+```
+
+The host app selects the implementation with:
+
+```env
+LARAVEL_ADMIN_UI_STYLE=yaverstyle
+LARAVEL_ADMIN_UI_STYLE=daisystyle
+```
+
+Dispatcher lookup order:
+
+```php
+laravel-admin::components.{style}.{component}
+laravel-admin::components.yaverstyle.{component}
+```
+
+Rules:
+
+- `yaverstyle` is the default implementation and fallback.
+- `daisystyle` uses DaisyUI classes and may implement components incrementally.
+- Custom styles should be added as sibling folders such as `components/customstyle`, not by editing or renaming `components/admin`.
+- A missing component in the selected style must fall back to `yaverstyle`.
+- Feature packages should keep using `x-laravel-admin::admin.*`; they should not call `components.yaverstyle.*` or `components.daisystyle.*` directly.
+- PHP class resolver internals are not a public styling API. Folder-based styles are the cross-package styling API.
 
 ## Page Contract
 
 Every resource page should use the same structural rhythm:
 
-- Page canvas for forms and details: `mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900`.
-- Page canvas for lists: `w-full bg-white px-2 py-2 dark:bg-gray-900`.
-- Inner page padding: `px-4 py-6 sm:px-6 lg:px-8`.
+- Prefer `x-laravel-admin::admin.page-section` for page canvas, title, description, and actions.
 - Forms and detail cards should align on `mx-auto max-w-4xl`.
 - Page title should be concise, with one short helper sentence below it.
 - Primary actions should sit at the top-right on desktop and below the title on mobile.
@@ -51,7 +83,7 @@ Use a card grid when each item contains variable-length nested data such as badg
 
 List screens should:
 
-- Keep search and filters in a compact bordered bar above the list.
+- Keep search and filters in `x-laravel-admin::admin.filter-bar` above the list.
 - Keep search controls on one line on desktop and stacked on small screens.
 - Put fixed-width filter selects before the flexible search input; selects and action buttons should not stretch on desktop.
 - Do not show a self-referential list navigation button on the list page itself.
@@ -121,28 +153,24 @@ Implementation rules:
 
 Use consistent action hierarchy:
 
-- Primary: indigo filled button.
-- Secondary: white/dark bordered button.
-- Destructive: red bordered button, preferably with an icon.
-- Links styled as buttons should override global admin link colors with Tailwind important text classes, such as `!text-white` or `!text-gray-700`.
+- Use `x-laravel-admin::admin.action-button` for primary, secondary, destructive, search, and link-style row actions.
+- Use `variant="primary"`, `variant="secondary"`, `variant="danger"`, `variant="search"`, and `variant="link"` instead of hard-coded style classes in feature package views.
 - Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
 - Icons should use the shared `x-laravel-admin::admin.icon` Blade component instead of external icon font packages.
 
 ## Reusable Components
 
 The package exposes small Blade components under the existing `x-laravel-admin::admin.*` namespace for repeated admin UI patterns.
-These components are helpers for this contract, not a separate theme system.
+These components define the stable UI contract. Their implementation is selected by the `laravel-admin-ui.style` config value so style folders can reuse the same Blade API without forking package screens.
 
-- Use `admin.action-button` for primary, secondary, destructive, search, and inline link actions.
-- Use `admin.badge` for neutral, primary, success, warning, and danger status labels.
-- Use `admin.filter-bar`, `admin.table-shell`, and `admin.empty-state` for list screens.
-- Use `admin.form-input`, `admin.form-select`, `admin.form-textarea`, and `admin.checkbox-row` for sectioned resource forms.
-- Use `admin.page-section` for simple resource page headings and action slots when a page does not need custom structure.
+- Start from the component catalog: [components.md](components.md).
+- Use page/list/form/detail components before copying raw utility classes into package screens.
+- Keep component usage semantic: list controls use filter components, record summaries use card/detail components, row actions use action menu/button components.
 - Keep route names, form names, `wire:*`, `x-*`, and authorization checks in the package screen that owns the behavior.
 
 ## Dark Mode Contract
 
-Every package screen should include dark mode variants:
+When a package must write raw classes directly, every package screen should include dark mode variants:
 
 - Main background: `dark:bg-gray-900`.
 - Secondary background: `dark:bg-gray-800`.
@@ -180,4 +208,5 @@ For each resource migrated in another package:
 ## Source Documents
 
 - Detailed implementation rules: [admin-design-rules.md](admin-design-rules.md)
+- Component catalog: [components.md](components.md)
 - Package README: [../README.md](../README.md)

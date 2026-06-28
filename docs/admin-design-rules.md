@@ -17,6 +17,20 @@ For rules that other packages can adopt as a cross-package contract, see [admin-
 - Use restrained neutral surfaces with clear borders, subtle shadows, and indigo as the primary action color.
 - Keep layout width consistent across related screens. For resource management pages, use `max-w-4xl` for forms/detail. Lists may be full-width tables or card grids depending on the data shape.
 - Preserve existing routes, authorization checks, validation, and data behavior when changing presentation.
+- Prefer `x-laravel-admin::admin.*` components over raw utility class clusters when the pattern already exists. This keeps screens compatible with folder-based styles such as `yaverstyle` and `daisystyle`.
+
+## Style Switching
+
+The public Blade API is `x-laravel-admin::admin.*`. Screens should not reference style folders directly.
+
+The host app selects the style with:
+
+```env
+LARAVEL_ADMIN_UI_STYLE=yaverstyle
+LARAVEL_ADMIN_UI_STYLE=daisystyle
+```
+
+`components/admin` dispatches to `components/{style}` and falls back to `components/yaverstyle`. New reusable patterns should be added as admin components first, then implemented in the required style folders.
 
 ## Page Structure
 

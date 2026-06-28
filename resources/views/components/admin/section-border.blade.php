@@ -1,5 +1,4 @@
-<div class="hidden sm:block">
-    <div class="py-4">
-        <div class="border-t border-gray-200 dark:border-gray-700"></div>
-    </div>
-</div>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.section-border',
+    'laravel-admin::components.yaverstyle.section-border',
+])
