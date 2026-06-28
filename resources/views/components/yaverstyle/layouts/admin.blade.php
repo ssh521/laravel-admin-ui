@@ -148,7 +148,7 @@
         <livewire:admin.left-menu-mobile />
         <livewire:admin.header-nav />
 
-        <div class="min-h-screen flex pt-16 bg-white md:bg-[#E7E7D6] dark:bg-gray-900">
+        <div class="min-h-screen flex pt-16 bg-[#E7E7D6] dark:bg-gray-900">
 
             <!-- 왼쪽 사이드바 -->
             <div x-show="isDesktop" class="admin-sidebar-surface hidden shrink-0 lg:block shadow-lg border-r border-gray-200 dark:border-gray-700"
