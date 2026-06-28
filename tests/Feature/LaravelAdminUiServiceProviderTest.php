@@ -338,6 +338,17 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         }
     }
 
+    public function test_menu_categories_can_open_menu_order_modal_from_category_name(): void
+    {
+        $index = file_get_contents(__DIR__.'/../../resources/views/admin/menu-categories/index.blade.php');
+
+        $this->assertStringContainsString('data-menu-order-category-id', $index);
+        $this->assertStringContainsString('data-menu-order-category-name', $index);
+        $this->assertStringContainsString('id="menu-order-modal"', $index);
+        $this->assertStringContainsString('<livewire:admin.menus.menu-order-modal />', $index);
+        $this->assertStringContainsString("Livewire.dispatch('admin-menus:menu-order-modal:open'", $index);
+    }
+
     public function test_admin_shell_guards_optional_navigation_features(): void
     {
         $layout = file_get_contents(__DIR__.'/../../resources/views/components/yaverstyle/layouts/admin.blade.php');

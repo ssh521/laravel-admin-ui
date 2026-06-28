@@ -121,7 +121,14 @@
                                         <td class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 sm:table-cell dark:text-gray-300">{{ $category->id }}</td>
                                         <td class="px-3 py-4 text-sm">
                                             @can('view', $category)
-                                                <a href="{{ route('admin.menu-categories.show', $category) }}" class="font-semibold !text-gray-900 hover:!text-indigo-600 hover:no-underline dark:!text-white dark:hover:!text-indigo-400">{{ $category->name }}</a>
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex cursor-pointer items-center gap-1.5 font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400"
+                                                    data-menu-order-category-id="{{ $category->id }}"
+                                                    data-menu-order-category-name="{{ $category->name }}">
+                                                    <span>{{ $category->name }}</span>
+                                                    <x-laravel-admin::admin.icon name="grip-lines" class="text-xs text-gray-400" />
+                                                </button>
                                             @else
                                                 <span class="font-semibold text-gray-900 dark:text-white">{{ $category->name }}</span>
                                             @endcan
@@ -229,6 +236,16 @@
                 </div>
             </form>
         </div>
+    </x-laravel-admin::admin.draggable-modal>
+
+    <x-laravel-admin::admin.draggable-modal
+        id="menu-order-modal"
+        title="메뉴 순서 변경"
+        width="560"
+        height="640"
+        :close-on-backdrop-click="false"
+    >
+        <livewire:admin.menus.menu-order-modal />
     </x-laravel-admin::admin.draggable-modal>
 
     <script>
@@ -425,6 +442,35 @@
                     loadCategoryRoles(categoryId);
                 }
             }
+        });
+
+        document.addEventListener('click', function(event) {
+            const trigger = event.target?.closest ? event.target.closest('[data-menu-order-category-id]') : null;
+
+            if (!trigger) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const categoryId = trigger.getAttribute('data-menu-order-category-id');
+            const categoryName = trigger.getAttribute('data-menu-order-category-name');
+
+            if (!categoryId || !categoryName) {
+                return;
+            }
+
+            window.dispatchEvent(new CustomEvent('open-modal', {
+                detail: { modalId: 'menu-order-modal' }
+            }));
+
+            Livewire.dispatch('admin-menus:menu-order-modal:open', {
+                data: {
+                    categoryId: parseInt(categoryId),
+                    categoryName: categoryName
+                }
+            });
         });
 
         const getRolesModalUrlBase = '{{ route('admin.menu-categories.get-roles-modal', ['menuCategory' => '__ID__']) }}';

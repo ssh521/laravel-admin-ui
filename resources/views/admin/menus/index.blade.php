@@ -236,8 +236,8 @@
     <x-laravel-admin::admin.draggable-modal
         id="menu-order-modal"
         title="메뉴 순서 변경"
-        width="600"
-        height="500"
+        width="560"
+        height="640"
         :close-on-backdrop-click="false"
     >
         <livewire:admin.menus.menu-order-modal />
@@ -285,7 +285,15 @@
             });
 
             Livewire.on('admin-menus:menu-order-modal:notification', (data) => {
-                alert(data.message);
+                if (window.menuOrderNotificationListenerRegistered && document.getElementById('menu-list-sortable')) {
+                    return;
+                }
+
+                if (typeof window.showMenuOrderNotification === 'function') {
+                    window.showMenuOrderNotification(data.message, data.type || 'error');
+                } else {
+                    alert(data.message);
+                }
             });
         });
     </script>
