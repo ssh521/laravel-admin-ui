@@ -59,6 +59,7 @@ Rules:
 Every resource page should use the same structural rhythm:
 
 - Prefer `x-laravel-admin::admin.page-section` for page canvas, title, description, and actions.
+- The admin layout main area must own the admin shell background so long list pages do not reveal the body background while scrolling.
 - Forms and detail cards should align on `mx-auto max-w-4xl`.
 - Page title should be concise, with one short helper sentence below it.
 - Primary actions should sit at the top-right on desktop and below the title on mobile.

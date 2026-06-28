@@ -42,7 +42,7 @@
     <!-- Styles -->
     @livewireStyles
 </head>
-<body class="font-sans antialiased bg-[#E7E7D6] dark:bg-gray-900 h-full min-h-screen">
+<body class="font-sans antialiased h-full min-h-screenbg-[#E7E7D6] dark:bg-gray-900">
     <x-laravel-admin::admin.banner />
 
     <div x-data="{
@@ -148,7 +148,7 @@
         <livewire:admin.left-menu-mobile />
         <livewire:admin.header-nav />
 
-        <div class="min-h-screen flex pt-16">
+        <div class="min-h-screen flex pt-16 bg-[#E7E7D6] dark:bg-gray-900">
 
             <!-- 왼쪽 사이드바 -->
             <div x-show="isDesktop" class="admin-sidebar-surface hidden shrink-0 lg:block shadow-lg border-r border-gray-200 dark:border-gray-700"
@@ -183,7 +183,7 @@
 
                 <!-- Page Heading -->
                 @if (isset($header))
-                <header class="px-2 sm:px-0">
+                <header class="hidden md:block px-2 sm:px-0">
                     <div class="mb-3">
                         {{ $header }}
                     </div>
