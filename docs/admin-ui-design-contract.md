@@ -118,7 +118,8 @@ Footer rules:
 
 - Place destructive actions on the left.
 - Place cancel/list/save actions on the right.
-- Keep both groups on the same row on desktop and stacked cleanly on mobile.
+- Keep destructive and save actions visible on the same footer row on mobile and desktop.
+- Use `flex-row`, `items-center`, `justify-between`, and non-wrapping action groups for edit footers so a narrow viewport does not split delete and save actions into separate rows.
 - Avoid extra top margin on footer rows immediately after section dividers.
 - Reuse a shared form partial for create/edit when fields overlap, while keeping page titles, routes, HTTP methods, and edit-only external actions in the page wrapper.
 - Form page titles should include the resource, information scope, and action, such as `회원 정보 등록` or `회원 정보 수정`.
