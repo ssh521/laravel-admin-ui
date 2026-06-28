@@ -1,7 +1,4 @@
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<select {{ $attributes->merge(['class' => $theme->classes('form.select')]) }}>
-    {{ $slot }}
-</select>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.form-select',
+    'laravel-admin::components.yaverstyle.form-select',
+])

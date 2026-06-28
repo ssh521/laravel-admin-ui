@@ -1,10 +1,10 @@
 <?php
 
-namespace Ssh521\LaravelAdminUi\Themes;
+namespace Ssh521\LaravelAdminUi\Styles;
 
-use Ssh521\LaravelAdminUi\Contracts\ThemeContract;
+use Ssh521\LaravelAdminUi\Contracts\StyleClassResolver;
 
-class TailwindTheme implements ThemeContract
+class YaverstyleClassResolver implements StyleClassResolver
 {
     /**
      * @param  array<string, mixed>  $context

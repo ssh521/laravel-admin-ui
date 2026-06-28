@@ -2,7 +2,7 @@
 
 namespace Ssh521\LaravelAdminUi\Contracts;
 
-interface ThemeContract
+interface StyleClassResolver
 {
     /**
      * @param  array<string, mixed>  $context

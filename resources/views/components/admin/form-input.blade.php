@@ -1,12 +1,4 @@
-@props([
-    'type' => 'text',
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.form-input',
+    'laravel-admin::components.yaverstyle.form-input',
 ])
-
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<input
-    type="{{ $type }}"
-    {{ $attributes->merge(['class' => $theme->classes('form.input')]) }}
->

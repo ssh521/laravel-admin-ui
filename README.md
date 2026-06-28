@@ -82,45 +82,60 @@ php artisan vendor:publish --tag=laravel-admin-ui-views
 php artisan vendor:publish --tag=laravel-admin-ui-components
 ```
 
-## 테마 어댑터
+## 스타일 설정
 
-반복되는 Blade 컴포넌트는 고정된 컴포넌트 API를 유지하고, 실제 class 문자열은 `ThemeContract`가 반환합니다.
-
-기본 테마는 현재 관리자 UI와 같은 Tailwind class를 사용하는 `tailwind`입니다.
-
-```php
-// config/laravel-admin-ui.php
-'theme' => 'tailwind',
-
-'themes' => [
-    'tailwind' => Ssh521\LaravelAdminUi\Themes\TailwindTheme::class,
-],
-```
-
-스타일별 패키지는 같은 컴포넌트 계약을 구현하는 테마 class를 등록합니다.
-
-```php
-config([
-    'laravel-admin-ui.themes' => array_merge(
-        config('laravel-admin-ui.themes', []),
-        ['daisyui' => Ssh521\LaravelAdminUiDaisyui\DaisyuiTheme::class],
-    ),
-]);
-```
-
-호스트 앱에서는 테마 이름만 바꿉니다.
-
-```php
-'theme' => 'daisyui',
-```
-
-Blade 사용법은 바뀌지 않습니다.
+관리자 Blade 화면에서는 기존처럼 `x-laravel-admin::admin.*` 컴포넌트를 사용합니다.
+`admin` 컴포넌트 네임스페이스는 외부 API로 유지되고, 실제 구현은 설정된 스타일 폴더로 위임됩니다.
 
 ```blade
 <x-laravel-admin::admin.action-button variant="primary">
     저장하기
 </x-laravel-admin::admin.action-button>
 ```
+
+기본 스타일은 현재 관리자 UI와 같은 `yaverstyle`입니다.
+
+```php
+// config/laravel-admin-ui.php
+'style' => env('LARAVEL_ADMIN_UI_STYLE', 'yaverstyle'),
+```
+
+환경 변수로 스타일을 전환할 수 있습니다.
+
+```env
+LARAVEL_ADMIN_UI_STYLE=yaverstyle
+LARAVEL_ADMIN_UI_STYLE=daisystyle
+```
+
+컴포넌트 dispatcher는 아래 순서로 구현을 찾습니다.
+
+```php
+laravel-admin::components.{style}.{component}
+laravel-admin::components.yaverstyle.{component}
+```
+
+따라서 특정 스타일 폴더에 아직 없는 컴포넌트는 `yaverstyle` 구현으로 fallback 됩니다.
+
+`daisystyle`을 사용할 때는 호스트 앱에 DaisyUI 플러그인을 추가하고 관리자 CSS를 다시 빌드해야 합니다.
+
+```bash
+npm install daisyui --save-dev
+```
+
+`resources/vendor/laravel-admin/admin.css`:
+
+```css
+@import "tailwindcss";
+@plugin "daisyui";
+```
+
+```bash
+npm run build
+php artisan config:clear
+php artisan view:clear
+```
+
+기존 PHP class resolver는 공개 설정으로 노출하지 않습니다. 스타일 전환의 기준 API는 `LARAVEL_ADMIN_UI_STYLE`입니다.
 
 컴포넌트 목록과 사용 기준은 [docs/components.md](docs/components.md)를 기준으로 관리합니다.
 

@@ -1,24 +1,4 @@
-@props([
-    'title' => null,
-    'description' => null,
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.form-section',
+    'laravel-admin::components.yaverstyle.form-section',
 ])
-
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<section {{ $attributes->merge(['class' => $theme->classes('form-section.container')]) }}>
-    <div class="{{ $theme->classes('form-section.header') }}">
-        @if ($title)
-            <h2 class="{{ $theme->classes('form-section.title') }}">{{ $title }}</h2>
-        @endif
-
-        @if ($description)
-            <p class="{{ $theme->classes('form-section.description') }}">{{ $description }}</p>
-        @endif
-    </div>
-
-    <div class="{{ $theme->classes('form-section.body') }}">
-        {{ $slot }}
-    </div>
-</section>

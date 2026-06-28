@@ -1,7 +1,4 @@
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<form {{ $attributes->merge(['method' => 'GET', 'class' => $theme->classes('filter-bar')]) }}>
-    {{ $slot }}
-</form>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.filter-bar',
+    'laravel-admin::components.yaverstyle.filter-bar',
+])

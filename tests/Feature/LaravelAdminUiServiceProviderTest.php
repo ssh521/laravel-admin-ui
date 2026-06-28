@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Ssh521\LaravelAdminUi\LaravelAdminUiServiceProvider;
 use Ssh521\LaravelAdminUi\Tests\TestCase;
-use Ssh521\LaravelAdminUi\Tests\Fixtures\MinimalTheme;
-use Ssh521\LaravelAdminUi\Themes\TailwindTheme;
 
 class LaravelAdminUiServiceProviderTest extends TestCase
 {
@@ -50,24 +48,43 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertPublishesTo('laravel-admin-ui-config', config_path('laravel-admin-ui.php'));
     }
 
-    public function test_it_registers_tailwind_as_the_default_component_theme(): void
+    public function test_it_registers_yaverstyle_as_the_default_component_style(): void
     {
-        $this->assertSame('tailwind', config('laravel-admin-ui.theme'));
-        $this->assertSame(TailwindTheme::class, config('laravel-admin-ui.themes.tailwind'));
-    }
-
-    public function test_it_can_render_components_with_a_registered_theme_adapter(): void
-    {
-        config([
-            'laravel-admin-ui.theme' => 'minimal',
-            'laravel-admin-ui.themes.minimal' => MinimalTheme::class,
-        ]);
+        $this->assertSame('yaverstyle', config('laravel-admin-ui.style'));
 
         $html = Blade::render('<x-laravel-admin::admin.action-button>Save</x-laravel-admin::admin.action-button>');
 
-        $this->assertStringContainsString('custom-button', $html);
-        $this->assertStringContainsString('custom-size', $html);
-        $this->assertStringContainsString('custom-primary', $html);
+        $this->assertStringContainsString('bg-indigo-600', $html);
+    }
+
+    public function test_it_can_render_components_with_the_daisyui_style_folder(): void
+    {
+        config(['laravel-admin-ui.style' => 'daisystyle']);
+
+        $button = Blade::render('<x-laravel-admin::admin.action-button variant="danger">삭제</x-laravel-admin::admin.action-button>');
+        $badge = Blade::render('<x-laravel-admin::admin.badge variant="success">활성</x-laravel-admin::admin.badge>');
+        $input = Blade::render('<x-laravel-admin::admin.form-input name="name" />');
+        $primaryButton = Blade::render('<x-laravel-admin::admin.primary-button>저장</x-laravel-admin::admin.primary-button>');
+        $card = Blade::render('<x-laravel-admin::admin.card title="카드">본문</x-laravel-admin::admin.card>');
+        $filterSelect = Blade::render('<x-laravel-admin::admin.filter-select name="status" placeholder="전체" :options="$options" />', [
+            'options' => ['active' => '활성'],
+        ]);
+        $searchInput = Blade::render('<x-laravel-admin::admin.search-input name="q" value="admin" clear-href="/admin" />');
+        $stat = Blade::render('<x-laravel-admin::admin.stat label="회원" value="120" />');
+        $notice = Blade::render('<x-laravel-admin::admin.notice type="warning" title="주의" />');
+        $fallback = Blade::render('<x-laravel-admin::admin.action-menu><button>열기</button></x-laravel-admin::admin.action-menu>');
+
+        $this->assertStringContainsString('btn', $button);
+        $this->assertStringContainsString('btn-error', $button);
+        $this->assertStringContainsString('badge-success', $badge);
+        $this->assertStringContainsString('input input-bordered', $input);
+        $this->assertStringContainsString('btn-primary', $primaryButton);
+        $this->assertStringContainsString('card', $card);
+        $this->assertStringContainsString('select select-bordered', $filterSelect);
+        $this->assertStringContainsString('input input-bordered', $searchInput);
+        $this->assertStringContainsString('stat-value', $stat);
+        $this->assertStringContainsString('alert-warning', $notice);
+        $this->assertStringContainsString('작업 메뉴', $fallback);
     }
 
     public function test_icon_component_logs_unknown_icon_names_and_renders_warning_icon(): void
@@ -323,9 +340,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
 
     public function test_admin_shell_guards_optional_navigation_features(): void
     {
-        $layout = file_get_contents(__DIR__.'/../../resources/views/components/admin/layouts/admin.blade.php');
+        $layout = file_get_contents(__DIR__.'/../../resources/views/components/yaverstyle/layouts/admin.blade.php');
         $header = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/header-nav.blade.php');
-        $legacyHeader = file_get_contents(__DIR__.'/../../resources/views/components/admin/admin-header.blade.php');
+        $legacyHeader = file_get_contents(__DIR__.'/../../resources/views/components/yaverstyle/admin-header.blade.php');
         $login = file_get_contents(__DIR__.'/../../resources/views/admin/auth/login.blade.php');
 
         $this->assertStringContainsString('this.isMobileMenuOpen = false', $layout);
@@ -360,7 +377,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertFileDoesNotExist(__DIR__.'/../../resources/js/sidebarBackground.js');
     }
 
-    public function test_left_menu_uses_themeable_controls_for_primary_tree_icons(): void
+    public function test_left_menu_uses_styleable_controls_for_primary_tree_icons(): void
     {
         $leftMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu.blade.php');
         $css = file_get_contents(__DIR__.'/../../resources/css/admin.css');

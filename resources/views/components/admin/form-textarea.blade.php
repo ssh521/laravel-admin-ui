@@ -1,5 +1,4 @@
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<textarea {{ $attributes->merge(['class' => $theme->classes('form.textarea')]) }}>{{ $slot }}</textarea>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.form-textarea',
+    'laravel-admin::components.yaverstyle.form-textarea',
+])

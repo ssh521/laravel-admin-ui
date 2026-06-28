@@ -1,19 +1,4 @@
-@props([
-    'language' => null,
-    'title' => null,
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.code-block',
+    'laravel-admin::components.yaverstyle.code-block',
 ])
-
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<section {{ $attributes->merge(['class' => $theme->classes('code-block.container')]) }}>
-    @if ($title || $language)
-        <header class="{{ $theme->classes('code-block.header') }}">
-            <span>{{ $title }}</span>
-            <span>{{ $language }}</span>
-        </header>
-    @endif
-
-    <pre class="{{ $theme->classes('code-block.pre') }}"><code>{{ $slot }}</code></pre>
-</section>

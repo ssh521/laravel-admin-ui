@@ -1,5 +1,4 @@
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<hr {{ $attributes->merge(['class' => $theme->classes('divider')]) }}>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.divider',
+    'laravel-admin::components.yaverstyle.divider',
+])

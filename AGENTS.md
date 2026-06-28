@@ -12,18 +12,19 @@ It does not own admin authentication, route registration, policies, models, seed
 - Portable admin UI contract: `docs/admin-ui-design-contract.md`
 - Detailed implementation rules: `docs/admin-design-rules.md`
 - Component catalog: `docs/components.md`
-- Theme configuration: `config/laravel-admin-ui.php`
-- Default component class output: `src/Themes/TailwindTheme.php`
+- Style configuration: `config/laravel-admin-ui.php`
+- Internal yaverstyle class helper: `src/Styles/YaverstyleClassResolver.php`
 - Service provider and view namespace registration: `src/LaravelAdminUiServiceProvider.php`
 
-## Theme Contract
+## Style Contract
 
 Reusable components must keep the `x-laravel-admin::admin.*` Blade API stable.
 
 When a component needs style changes:
 
-- add or update a stable class key in `ThemeContract` implementations
-- keep the default Tailwind output in `TailwindTheme`
+- add or update a style-folder component implementation under `resources/views/components/{style}`
+- keep `resources/views/components/admin` as the public dispatcher API
+- keep internal `YaverstyleClassResolver` changes limited to yaverstyle components that still depend on class keys
 - keep style package assumptions out of consuming package screens
 - update `docs/components.md` when a new public component is added
 

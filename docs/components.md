@@ -2,7 +2,24 @@
 
 이 문서는 `x-laravel-admin::admin.*` Blade 컴포넌트의 역할과 사용 기준을 정리합니다.
 
-컴포넌트는 Blade API를 안정적으로 유지하고, 실제 class 출력은 현재 등록된 `ThemeContract`가 결정합니다. 기본 테마는 `tailwind`이며, `ssh521/laravel-admin-ui-daisyui` 같은 어댑터 패키지는 같은 컴포넌트 API를 다른 class 체계로 렌더링합니다.
+컴포넌트는 Blade API를 안정적으로 유지하고, 실제 구현은 `laravel-admin-ui.style` 설정에 따라 style 폴더에서 선택됩니다.
+
+```text
+resources/views/components/admin       dispatcher, public API
+resources/views/components/yaverstyle  default implementation
+resources/views/components/daisystyle  DaisyUI implementation
+```
+
+기본 style은 `yaverstyle`입니다.
+
+```env
+LARAVEL_ADMIN_UI_STYLE=yaverstyle
+LARAVEL_ADMIN_UI_STYLE=daisystyle
+```
+
+`components/admin`은 외부 API용 dispatcher이므로 제거하거나 이름을 바꾸지 않습니다. 커스텀 style은 `components/customstyle` 같은 새 폴더로 추가합니다.
+
+Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로 fallback 합니다.
 
 ## Page And Layout
 
@@ -114,9 +131,23 @@
 | `admin.modal-trigger` | modal open trigger |
 | `admin.draggable-modal` | draggable modal wrapper |
 
+## DaisyUI Coverage
+
+현재 `daisystyle`에 별도 구현이 있는 컴포넌트는 다음과 같습니다.
+
+| Area | Components |
+| --- | --- |
+| Actions | `admin.action-button`, `admin.primary-button`, `admin.secondary-button` |
+| Feedback | `admin.alert`, `admin.badge`, `admin.notice` |
+| Forms | `admin.form-input`, `admin.form-select`, `admin.form-textarea`, `admin.checkbox-row`, `admin.input-error-message` |
+| Lists | `admin.filter-bar`, `admin.filter-select`, `admin.search-input`, `admin.table-shell`, `admin.table-empty-row`, `admin.empty-state` |
+| Page/Data | `admin.page-section`, `admin.page-header`, `admin.card`, `admin.key-value-grid`, `admin.stat` |
+
+나머지 컴포넌트는 `daisystyle`에서도 `yaverstyle` 구현으로 fallback 됩니다.
+
 ## Adoption Notes
 
 - Keep package-owned routes, policies, form names, `wire:*`, `x-*`, and authorization checks in the consuming package.
-- Prefer replacing repeated Tailwind class clusters with components before creating new component types.
+- Prefer replacing repeated Tailwind class clusters with `x-laravel-admin::admin.*` components before creating new component types.
 - Add a new component only when at least one real package screen needs the pattern.
-- When a component needs styling, add a stable key to `ThemeContract` implementations rather than embedding a style package assumption in package screens.
+- When a package needs custom styling, add a style folder implementation such as `components/customstyle/{component}.blade.php` rather than editing feature package screens for each style.

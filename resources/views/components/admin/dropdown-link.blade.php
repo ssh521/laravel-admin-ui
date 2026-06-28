@@ -1,5 +1,4 @@
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<a {{ $attributes->merge(['class' => $theme->classes('dropdown-link')]) }}>{{ $slot }}</a>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.dropdown-link',
+    'laravel-admin::components.yaverstyle.dropdown-link',
+])

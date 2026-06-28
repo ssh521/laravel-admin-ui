@@ -1,5 +1,4 @@
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<kbd {{ $attributes->merge(['class' => $theme->classes('kbd')]) }}>{{ $slot }}</kbd>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.kbd',
+    'laravel-admin::components.yaverstyle.kbd',
+])

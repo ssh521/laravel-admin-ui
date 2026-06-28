@@ -1,7 +1,4 @@
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<button {{ $attributes->merge(['type' => 'button', 'class' => $theme->classes('legacy-button.danger')]) }}>
-    {{ $slot }}
-</button>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.danger-button',
+    'laravel-admin::components.yaverstyle.danger-button',
+])

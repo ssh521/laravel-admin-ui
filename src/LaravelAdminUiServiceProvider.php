@@ -6,7 +6,8 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Ssh521\LaravelAdminUi\Contracts\ThemeContract;
+use Ssh521\LaravelAdminUi\Contracts\StyleClassResolver;
+use Ssh521\LaravelAdminUi\Styles\YaverstyleClassResolver;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -16,8 +17,7 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laravel-admin-ui.php', 'laravel-admin-ui');
 
-        $this->app->singleton(ThemeManager::class);
-        $this->app->bind(ThemeContract::class, fn ($app) => $app->make(ThemeManager::class)->current());
+        $this->app->singleton(StyleClassResolver::class, YaverstyleClassResolver::class);
     }
 
     public function boot(): void

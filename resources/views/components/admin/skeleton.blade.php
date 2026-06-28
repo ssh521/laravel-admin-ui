@@ -1,10 +1,4 @@
-@props([
-    'height' => '1rem',
-    'width' => '100%',
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.skeleton',
+    'laravel-admin::components.yaverstyle.skeleton',
 ])
-
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<span {{ $attributes->merge(['class' => $theme->classes('skeleton')]) }} style="display: block; width: {{ $width }}; height: {{ $height }};" aria-hidden="true"></span>

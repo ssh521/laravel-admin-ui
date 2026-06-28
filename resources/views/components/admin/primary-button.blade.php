@@ -1,7 +1,4 @@
-@php
-    $theme = app(\Ssh521\LaravelAdminUi\Contracts\ThemeContract::class);
-@endphp
-
-<button {{ $attributes->merge(['type' => 'submit', 'class' => $theme->classes('legacy-button.primary')]) }}>
-    {{ $slot }}
-</button>
+@includeFirst([
+    'laravel-admin::components.'.config('laravel-admin-ui.style', 'yaverstyle').'.primary-button',
+    'laravel-admin::components.yaverstyle.primary-button',
+])
