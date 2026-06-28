@@ -37,18 +37,16 @@
 
             <div class="mx-auto flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex justify-start">
-                    @if($user->id != auth()->user()->id)
-                        @can('delete', $user)
-                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
-                                    <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
-                                    {{ __('삭제하기') }}
-                                </button>
-                            </form>
-                        @endcan
-                    @endif
+                    @can('delete', $user)
+                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-white px-4 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50 dark:border-red-500/30 dark:bg-gray-900 dark:text-red-300 dark:hover:bg-red-500/10">
+                                <i class="fa-regular fa-trash-can mr-2 text-xs" aria-hidden="true"></i>
+                                {{ __('삭제하기') }}
+                            </button>
+                        </form>
+                    @endcan
                 </div>
 
                 <div class="flex flex-wrap justify-end gap-3">
