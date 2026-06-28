@@ -33,7 +33,7 @@
     x-transition:enter-start="transform -translate-y-full" x-transition:enter-end="transform translate-y-0"
     x-transition:leave="transition ease-in duration-300" x-transition:leave-start="transform translate-y-0"
     x-transition:leave-end="transform -translate-y-full"
-    class="fixed top-0 left-0 w-full z-50 bg-white dark:bg-[#000000] border-b border-gray-400 dark:border-gray-800 shadow-lg flex items-center h-16 px-4">
+    class="fixed top-0 left-0 w-full z-50 bg-white dark:bg-[#000000] border-b border-gray-400 dark:border-gray-800 md:shadow-lg flex items-center h-16 px-4">
 
     <!-- 햄버거 버튼 -->
     <button class="block lg:hidden mr-0 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-purple-800 transition"

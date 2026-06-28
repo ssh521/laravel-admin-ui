@@ -42,7 +42,7 @@
     <!-- Styles -->
     @livewireStyles
 </head>
-<body class="font-sans antialiased h-full min-h-screenbg-[#E7E7D6] dark:bg-gray-900">
+<body class="font-sans antialiased h-full min-h-screen">
     <x-laravel-admin::admin.banner />
 
     <div x-data="{
