@@ -90,6 +90,16 @@ span.cursor-pointer:hover {
     text-decoration: none;
 }
 
+.laravel-admin-action-button,
+.laravel-admin-action-button * {
+    cursor: pointer;
+}
+
+.laravel-admin-action-button[disabled],
+.laravel-admin-action-button[disabled] * {
+    cursor: not-allowed;
+}
+
 .laravel-admin-search-button {
     background-color: #111827 !important;
     color: #ffffff !important;

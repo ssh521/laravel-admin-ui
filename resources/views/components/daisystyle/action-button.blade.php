@@ -25,7 +25,7 @@
         'ghost' => 'btn-ghost',
     ][$variant] ?? 'btn-primary';
 
-    $classes = trim("btn {$sizeClasses} {$variantClasses} gap-2 hover:!no-underline");
+    $classes = trim("laravel-admin-action-button btn cursor-pointer {$sizeClasses} {$variantClasses} gap-2 hover:!no-underline");
 @endphp
 
 @if ($tag === 'a')

@@ -91,6 +91,11 @@ List screens should:
 - Put fixed-width filter selects before the flexible search input; selects and action buttons should not stretch on desktop.
 - Do not show a self-referential list navigation button on the list page itself.
 - Put the primary identity field first.
+- Do not expose technical identifiers or generated ordering values such as database IDs, key IDs, or sort order as primary list/detail display fields unless an admin workflow explicitly needs the raw value.
+- Render table headers as a quiet header band: `border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80`.
+- Use compact table rhythm: `py-3` on header cells and body cells. Reduce avatars/icons inside dense rows to `h-9 w-9` or `size-9` when needed.
+- Center the first visible identity column header when the table starts with the primary name/title column. If utility columns such as order handles, checkboxes, or row numbers appear before it, keep those utility headers visually minimal and center the first real identity header instead.
+- For ordinary sortable list pages, make sortable column titles direct links that preserve the current query string and toggle sort direction. Reserve drag-sort and click/drag mode switches for resource-ordering pages such as `admin/permissions`.
 - Use avatars only for person/user records where recognition helps.
 - Render statuses as badges.
 - Hide secondary columns on small screens and repeat critical info inside the first column.
@@ -161,6 +166,7 @@ Use consistent action hierarchy:
 - Use `variant="primary"`, `variant="secondary"`, `variant="danger"`, `variant="search"`, and `variant="link"` instead of hard-coded style classes in feature package views.
 - Use `variant="search"` for list filter submit buttons; keep the search button shrink-wrapped on desktop with `shrink-0 whitespace-nowrap` when it sits next to a flexible input.
 - Use `variant="link"` for table/card row actions such as `보기`, `상세보기`, and `수정` when they are rendered as compact text actions.
+- Action buttons must expose a pointer cursor on the button/link and its icon/text children. Keep the shared `laravel-admin-action-button` hook in every style implementation and mirror any required cursor CSS into the published admin CSS/build output used by the host app.
 - Dynamic state controls such as sort mode toggles may keep local `:class`/`x-bind:class` color logic when the visual state itself is the behavior.
 - Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
 - Icons should use the shared `x-laravel-admin::admin.icon` Blade component instead of external icon font packages.

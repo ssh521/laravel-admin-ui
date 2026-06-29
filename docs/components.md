@@ -38,7 +38,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 
 | Component | Purpose |
 | --- | --- |
-| `admin.action-button` | primary, secondary, danger, search, link action; use for `등록하기`, `목록보기`/`취소`, `저장하기`/`수정하기`, `삭제하기`, 검색 submit, and compact row actions |
+| `admin.action-button` | primary, secondary, danger, search, link action; use for `등록하기`, `목록보기`/`취소`, `저장하기`/`수정하기`, `삭제하기`, 검색 submit, and compact row actions; must keep pointer cursor on the whole hit area |
 | `admin.primary-button` | legacy primary submit button |
 | `admin.secondary-button` | legacy secondary button |
 | `admin.danger-button` | legacy destructive button |

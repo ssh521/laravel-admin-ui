@@ -52,12 +52,17 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
   - `flow-root` wrapper
   - responsive horizontal overflow
   - `divide-y` table separators
+  - quiet header band with `border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80`
   - compact text with `text-sm`
+  - compact vertical rhythm with `py-3` on header and body cells
 - Base card list screens on:
   - `ul role="list"`
   - `grid grid-cols-1 gap-4 lg:grid-cols-2`
   - card items with border, white/dark background, subtle shadow, and hover state
 - Put the primary identity field first.
+- Do not expose technical identifiers or generated ordering values such as database IDs, key IDs, or sort order as primary list/detail display fields unless an admin workflow explicitly needs the raw value.
+- Center the first visible identity column header. Utility columns such as order handles, checkboxes, or row numbers may appear before it, but they should not compete visually with the identity column.
+- For ordinary sortable list pages, use clickable column titles that preserve the current query string and toggle direction. Keep drag-sort and click/drag sort mode switches only for resource-ordering pages such as `admin/permissions`.
 - Use avatars only when they add recognition value, such as user records. Do not add decorative avatars to abstract records like roles.
 - Hide secondary columns on small screens and repeat critical secondary info inside the first column when needed.
 - Render statuses and roles as small badges, not plain comma-separated text.
@@ -124,6 +129,7 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Destructive actions should be spatially separated from primary actions, but remain in the same footer row on desktop. Prefer left alignment for delete buttons and right alignment for navigation/edit/save buttons.
 - Use the package Blade icon component for common actions.
 - Override global admin link colors with Tailwind important text classes, for example `!text-white` or `!text-gray-700`, when a link is styled as a button.
+- Buttons and link-style row actions should show the pointer cursor across the whole hit area, including nested SVG icons. If CSS is published into a host app, rebuild or republish the host admin CSS so the cursor rule is present in the loaded asset.
 
 ## Dark Mode
 

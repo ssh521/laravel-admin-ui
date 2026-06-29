@@ -152,34 +152,34 @@
                 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                         <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
-                            <thead>
+                            <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                                 <tr>
-                                    <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">{{ __('그룹') }}</th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('컴포넌트') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('역할') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">{{ __('스타일 구현') }}</th>
+                                    <th scope="col" class="py-3 pr-3 pl-4 text-center text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">{{ __('그룹') }}</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('컴포넌트') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('역할') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3 text-left text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">{{ __('스타일 구현') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">
                                 @forelse ($componentRows as $componentMeta)
                                     @continue(request('search') && ! str_contains($componentMeta['name'].' '.$componentMeta['description'].' '.$componentMeta['section'], request('search')))
                                     <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/80">
-                                        <td class="py-4 pr-3 pl-4 text-sm sm:pl-0">
+                                        <td class="py-3 pr-3 pl-4 text-sm sm:pl-0">
                                             <div class="font-medium text-gray-900 dark:text-white">{{ $componentMeta['section'] }}</div>
-                                            <div class="mt-1 text-gray-500 md:hidden dark:text-gray-400">{{ $componentMeta['description'] }}</div>
-                                            <div class="mt-2 flex flex-wrap gap-1 sm:hidden">
+                                            <div class="mt-0.5 text-gray-500 md:hidden dark:text-gray-400">{{ $componentMeta['description'] }}</div>
+                                            <div class="mt-1.5 flex flex-wrap gap-1 sm:hidden">
                                                 @foreach (explode(', ', $componentMeta['coverage']) as $styleName)
                                                     <x-laravel-admin::admin.badge variant="{{ $styleName === $currentStyle ? 'success' : 'neutral' }}">{{ $styleName }}</x-laravel-admin::admin.badge>
                                                 @endforeach
                                             </div>
                                         </td>
-                                        <td class="px-3 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                                        <td class="px-3 py-3 text-sm font-medium text-gray-900 dark:text-white">
                                             <code>{{ $componentMeta['name'] }}</code>
                                         </td>
-                                        <td class="hidden px-3 py-4 text-sm text-gray-500 md:table-cell dark:text-gray-400">
+                                        <td class="hidden px-3 py-3 text-sm text-gray-500 md:table-cell dark:text-gray-400">
                                             {{ $componentMeta['description'] }}
                                         </td>
-                                        <td class="hidden px-3 py-4 text-sm sm:table-cell">
+                                        <td class="hidden px-3 py-3 text-sm sm:table-cell">
                                             <div class="flex flex-wrap gap-1.5">
                                                 @foreach (explode(', ', $componentMeta['coverage']) as $styleName)
                                                     <x-laravel-admin::admin.badge variant="{{ $styleName === $currentStyle ? 'success' : 'neutral' }}">{{ $styleName }}</x-laravel-admin::admin.badge>

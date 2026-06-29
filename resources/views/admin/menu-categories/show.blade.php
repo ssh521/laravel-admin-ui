@@ -42,18 +42,8 @@
                 <div class="px-4 py-6 sm:px-6">
                     <dl class="grid grid-cols-1 sm:grid-cols-2">
                         <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('ID') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->id }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
                             <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('카테고리명') }}</dt>
                             <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->name }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('정렬 순서') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->sort_order }}</dd>
                         </div>
 
                         <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
@@ -104,9 +94,9 @@
                             <div class="-mx-4 overflow-x-auto sm:-mx-6">
                                 <div class="inline-block min-w-full align-middle sm:px-6">
                                     <table class="min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
-                                        <thead>
+                                        <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                                             <tr>
-                                                <th scope="col" class="py-3 pr-3 text-left font-semibold text-gray-900 dark:text-white">{{ __('Menu Name') }}</th>
+                                                <th scope="col" class="py-3 pr-3 text-center font-semibold text-gray-900 dark:text-white">{{ __('Menu Name') }}</th>
                                                 <th scope="col" class="px-3 py-3 text-left font-semibold text-gray-900 dark:text-white">{{ __('Link') }}</th>
                                                 <th scope="col" class="px-3 py-3 text-left font-semibold text-gray-900 dark:text-white">{{ __('Status') }}</th>
                                                 <th scope="col" class="py-3 pl-3 text-right font-semibold text-gray-900 dark:text-white">{{ __('Actions') }}</th>

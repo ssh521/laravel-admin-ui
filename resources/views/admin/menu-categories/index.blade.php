@@ -34,6 +34,22 @@
         }
     </style>
 
+    @php
+        $currentSort = $sort ?? request('sort', 'sort_order');
+        $currentDirection = ($direction ?? request('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
+        $getNextDirection = fn (string $field): string => $currentSort === $field && $currentDirection === 'asc' ? 'desc' : 'asc';
+        $sortLinkClass = 'inline-flex items-center justify-center gap-1 !text-gray-900 hover:!text-indigo-600 hover:no-underline dark:!text-white dark:hover:!text-indigo-400';
+        $renderSortIcon = function (string $field) use ($currentSort, $currentDirection) {
+            if ($currentSort !== $field) {
+                return '<svg xmlns="http://www.w3.org/2000/svg" class="size-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7l4-4 4 4M16 17l-4 4-4-4" /></svg>';
+            }
+
+            return $currentDirection === 'asc'
+                ? '<svg xmlns="http://www.w3.org/2000/svg" class="size-3" viewBox="0 0 20 20" fill="currentColor" aria-label="오름차순"><path fill-rule="evenodd" d="M3.293 12.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L10 7.414l-5.293 5.293a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" class="size-3" viewBox="0 0 20 20" fill="currentColor" aria-label="내림차순"><path fill-rule="evenodd" d="M16.707 7.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6A1 1 0 014.707 7.293L10 12.586l5.293-5.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>';
+        };
+    @endphp
+
     <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
         <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="sm:flex sm:items-start sm:justify-between">
@@ -59,6 +75,12 @@
             <x-laravel-admin::admin.session-messages />
 
             <x-laravel-admin::admin.filter-bar action="{{ route('admin.menu-categories.index') }}">
+                @if(request('sort'))
+                    <input type="hidden" name="sort" value="{{ request('sort') }}">
+                @endif
+                @if(request('direction'))
+                    <input type="hidden" name="direction" value="{{ request('direction') }}">
+                @endif
                 <label for="category-search" class="sr-only">Search</label>
                 <div class="relative min-w-0 flex-1">
                     <x-laravel-admin::admin.form-input
@@ -85,19 +107,38 @@
                 <div class="-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead>
+                            <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                                 <tr>
-                                    <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
+                                    <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
                                         <span class="sr-only">순서</span>
                                     </th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">ID</th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('카테고리명') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('메뉴 개수') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">{{ __('정렬 순서') }}</th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('상태') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 xl:table-cell dark:text-white">{{ __('허용 역할') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">{{ __('생성일') }}</th>
-                                    <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
+                                    <th scope="col" class="px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
+                                        <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'name', 'direction' => $getNextDirection('name')])) }}" class="{{ $sortLinkClass }}">
+                                            <span>{{ __('카테고리명') }}</span>
+                                            {!! $renderSortIcon('name') !!}
+                                        </a>
+                                    </th>
+                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
+                                        <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'menus_count', 'direction' => $getNextDirection('menus_count')])) }}" class="{{ $sortLinkClass }}">
+                                            <span>{{ __('메뉴 개수') }}</span>
+                                            {!! $renderSortIcon('menus_count') !!}
+                                        </a>
+                                    </th>
+                                    <th scope="col" class="px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
+                                        <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'is_active', 'direction' => $getNextDirection('is_active')])) }}" class="{{ $sortLinkClass }}">
+                                            <span>{{ __('상태') }}</span>
+                                            {!! $renderSortIcon('is_active') !!}
+                                        </a>
+                                    </th>
+                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 xl:table-cell dark:text-white">{{ __('허용 역할') }}</th>
+                                    <th scope="col" class="px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">{{ __('권한 수정') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
+                                        <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'created_at', 'direction' => $getNextDirection('created_at')])) }}" class="{{ $sortLinkClass }}">
+                                            <span>{{ __('생성일') }}</span>
+                                            {!! $renderSortIcon('created_at') !!}
+                                        </a>
+                                    </th>
+                                    <th scope="col" class="relative py-3 pr-4 pl-3 sm:pr-0">
                                         <span class="sr-only">Actions</span>
                                     </th>
                                 </tr>
@@ -112,41 +153,36 @@
                                         @dragover.prevent="dragOver($event)"
                                         @drop.prevent="dropRow()"
                                         @dragend="endDrag()">
-                                        <td class="whitespace-nowrap py-4 pr-3 pl-4 text-sm sm:pl-0">
+                                        <td class="whitespace-nowrap py-3 pr-3 pl-4 text-sm sm:pl-0">
                                             <div class="drag-handle inline-flex size-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
                                                 <x-laravel-admin::admin.icon name="grip-lines" />
                                             </div>
                                         </td>
-                                        <td class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 sm:table-cell dark:text-gray-300">{{ $category->id }}</td>
-                                        <td class="px-3 py-4 text-sm">
+                                        <td class="px-3 py-3 text-sm">
                                             @can('view', $category)
                                                 <button
                                                     type="button"
-                                                    class="inline-flex cursor-pointer items-center gap-1.5 font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400"
+                                                    class="inline-flex cursor-pointer items-center font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-400"
                                                     data-menu-order-category-id="{{ $category->id }}"
                                                     data-menu-order-category-name="{{ $category->name }}">
-                                                    <span>{{ $category->name }}</span>
-                                                    <x-laravel-admin::admin.icon name="grip-lines" class="text-xs text-gray-400" />
+                                                    {{ $category->name }}
                                                 </button>
                                             @else
                                                 <span class="font-semibold text-gray-900 dark:text-white">{{ $category->name }}</span>
                                             @endcan
-                                            <div class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-gray-500 md:hidden dark:text-gray-400">
+                                            <div class="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-gray-500 md:hidden dark:text-gray-400">
                                                 <span>{{ $category->menus_count }} {{ __('menus') }}</span>
-                                                <span aria-hidden="true">/</span>
-                                                <span class="sort-order-cell">{{ $category->sort_order }}</span>
                                             </div>
                                         </td>
-                                        <td class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 md:table-cell dark:text-gray-300">{{ $category->menus_count }}</td>
-                                        <td class="sort-order-cell hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 lg:table-cell dark:text-gray-300">{{ $category->sort_order }}</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm">
+                                        <td class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 md:table-cell dark:text-gray-300">{{ $category->menus_count }}</td>
+                                        <td class="whitespace-nowrap px-3 py-3 text-center text-sm">
                                             <x-laravel-admin::admin.badge variant="{{ $category->is_active ? 'success' : 'danger' }}">
                                                 {{ $category->is_active ? __('활성') : __('비활성') }}
                                             </x-laravel-admin::admin.badge>
                                         </td>
-                                        <td class="hidden px-3 py-4 text-sm xl:table-cell" data-roles-cell="{{ $category->id }}">
+                                        <td class="hidden px-3 py-3 text-center text-sm xl:table-cell" data-roles-cell="{{ $category->id }}">
                                             @if($category->roles->count() > 0)
-                                                <div class="flex flex-wrap gap-1.5">
+                                                <div class="flex flex-wrap justify-center gap-1.5">
                                                     @foreach($category->roles as $role)
                                                         <x-laravel-admin::admin.badge>{{ $role->name }}</x-laravel-admin::admin.badge>
                                                     @endforeach
@@ -155,8 +191,23 @@
                                                 <span class="text-gray-500 dark:text-gray-400">{{ __('없음') }}</span>
                                             @endif
                                         </td>
-                                        <td class="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-600 lg:table-cell dark:text-gray-300">{{ $category->created_at->format('Y-m-d H:i') }}</td>
-                                        <td class="whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-0">
+                                        <td class="whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
+                                            @can('update', $category)
+                                                <x-laravel-admin::admin.modal-trigger
+                                                    text="권한 수정"
+                                                    modal-id="roles-modal"
+                                                    type="link"
+                                                    variant="primary"
+                                                    modal-type="single"
+                                                    class="cursor-pointer"
+                                                    data-category-id="{{ $category->id }}"
+                                                    data-category-name="{{ $category->name }}" />
+                                            @else
+                                                <span class="text-gray-400 dark:text-gray-500">-</span>
+                                            @endcan
+                                        </td>
+                                        <td class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 lg:table-cell dark:text-gray-300">{{ $category->created_at->format('Y-m-d H:i') }}</td>
+                                        <td class="whitespace-nowrap py-3 pr-4 pl-3 text-right text-sm font-medium sm:pr-0">
                                             <div class="flex justify-end gap-3">
                                                 @can('view', $category)
                                                     <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menu-categories.show', $category)" icon="eye" class="h-auto px-0 py-0">
@@ -164,15 +215,6 @@
                                                     </x-laravel-admin::admin.action-button>
                                                 @endcan
                                                 @can('update', $category)
-                                                    <x-laravel-admin::admin.modal-trigger
-                                                        text="권한"
-                                                        modal-id="roles-modal"
-                                                        type="link"
-                                                        variant="primary"
-                                                        modal-type="single"
-                                                        class="cursor-pointer"
-                                                        data-category-id="{{ $category->id }}"
-                                                        data-category-name="{{ $category->name }}" />
                                                     <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menu-categories.edit', $category)" icon="pen-to-square" class="h-auto px-0 py-0">
                                                         {{ __('수정') }}
                                                     </x-laravel-admin::admin.action-button>
@@ -182,7 +224,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="9" class="py-12 text-center text-sm text-gray-500 dark:text-gray-400">
+                                        <td colspan="8" class="py-12 text-center text-sm text-gray-500 dark:text-gray-400">
                                             @if(request('search'))
                                                 {{ __('":keyword"에 대한 검색 결과가 없습니다.', ['keyword' => request('search')]) }}
                                             @else
@@ -346,7 +388,6 @@
                         }
                     });
 
-                    updateSortOrderNumbers();
                 },
 
                 updateCategoryOrder(newOrder, previousOrder = []) {
@@ -386,7 +427,6 @@
                     .then(data => {
                         if (data.success) {
                             showNotification('카테고리 순서가 성공적으로 변경되었습니다.', 'success');
-                            updateSortOrderNumbers();
                             refreshLeftMenu();
                         } else {
                             this.restoreCategoryOrder(previousOrder);
@@ -407,15 +447,6 @@
                     window.Livewire.dispatch('admin-menu-categories:menu-categories:reordered');
                 } catch (error) {}
             }
-        }
-
-        function updateSortOrderNumbers() {
-            const rows = document.querySelectorAll('#categories-tbody tr[data-category-id]');
-            rows.forEach((row, index) => {
-                row.querySelectorAll('.sort-order-cell').forEach(cell => {
-                    cell.textContent = index + 1;
-                });
-            });
         }
 
         function showNotification(message, type) {

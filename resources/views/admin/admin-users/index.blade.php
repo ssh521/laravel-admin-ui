@@ -10,6 +10,12 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
+    @php
+        $currentSortField = request('sortField', 'created_at');
+        $currentSortDirection = request('sortDirection', 'desc') === 'asc' ? 'asc' : 'desc';
+        $getNextSortDirection = fn (string $field): string => $currentSortField === $field && $currentSortDirection === 'asc' ? 'desc' : 'asc';
+    @endphp
+
     <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
         <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="sm:flex sm:items-center sm:justify-between">
@@ -29,6 +35,12 @@
             <x-laravel-admin::admin.session-messages />
 
             <x-laravel-admin::admin.filter-bar action="{{ route('admin.admin-users.index') }}">
+                @if(request('sortField'))
+                    <input type="hidden" name="sortField" value="{{ request('sortField') }}">
+                @endif
+                @if(request('sortDirection'))
+                    <input type="hidden" name="sortDirection" value="{{ request('sortDirection') }}">
+                @endif
                 <label for="admin-user-role" class="sr-only">{{ __('전체 역할') }}</label>
                 <div class="w-full shrink-0 sm:w-40">
                     <x-laravel-admin::admin.form-select id="admin-user-role" name="role" class="h-10">
@@ -64,12 +76,22 @@
                 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                         <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
-                            <thead>
+                            <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                                 <tr>
-                                    <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">{{ __('Name') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('역할 목록') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">{{ __('Verified') }}</th>
-                                    <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
+                                    <th scope="col" class="py-3 pr-3 pl-4 text-center text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
+                                        <a href="{{ route('admin.admin-users.index', array_merge(request()->query(), ['sortField' => 'name', 'sortDirection' => $getNextSortDirection('name')])) }}"
+                                           class="inline-flex items-center justify-center gap-1 !text-gray-900 hover:!text-indigo-600 hover:no-underline dark:!text-white dark:hover:!text-indigo-400">
+                                            <span>{{ __('Name') }}</span>
+                                            @if($currentSortField === 'name')
+                                                <x-laravel-admin::admin.icon name="{{ $currentSortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="text-xs" />
+                                            @else
+                                                <x-laravel-admin::admin.icon name="sort" class="text-xs text-gray-400" />
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('역할 목록') }}</th>
+                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">{{ __('Verified') }}</th>
+                                    <th scope="col" class="relative py-3 pr-4 pl-3 sm:pr-0">
                                         <span class="sr-only">{{ __('Actions') }}</span>
                                     </th>
                                 </tr>
@@ -77,15 +99,15 @@
                             <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">
                                 @forelse ($adminUsers as $adminUser)
                                     <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/80">
-                                        <td class="py-4 pr-3 pl-4 text-sm sm:pl-0">
+                                        <td class="py-3 pr-3 pl-4 text-sm sm:pl-0">
                                             <div class="flex items-center">
-                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-sm font-semibold text-indigo-700 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20">
+                                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-sm font-semibold text-indigo-700 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20">
                                                     {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($adminUser->name, 0, 1)) }}
                                                 </div>
-                                                <div class="ml-4 min-w-0">
+                                                <div class="ml-3 min-w-0">
                                                     <div class="font-medium text-gray-900 dark:text-white">{{ $adminUser->name }}</div>
-                                                    <div class="mt-1 truncate text-gray-500 dark:text-gray-400">{{ $adminUser->email }}</div>
-                                                    <div class="mt-2 flex flex-wrap gap-1 md:hidden">
+                                                    <div class="mt-0.5 truncate text-gray-500 dark:text-gray-400">{{ $adminUser->email }}</div>
+                                                    <div class="mt-1.5 flex flex-wrap gap-1 md:hidden">
                                                         @forelse ($adminUser->getRoleNames() as $role)
                                                             <x-laravel-admin::admin.badge>{{ $role }}</x-laravel-admin::admin.badge>
                                                         @empty
@@ -95,8 +117,8 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="hidden px-3 py-4 text-sm text-gray-500 md:table-cell dark:text-gray-400">
-                                            <div class="flex flex-wrap gap-1.5">
+                                        <td class="hidden px-3 py-3 text-center text-sm text-gray-500 md:table-cell dark:text-gray-400">
+                                            <div class="flex flex-wrap justify-center gap-1.5">
                                                 @forelse ($adminUser->getRoleNames() as $role)
                                                     <x-laravel-admin::admin.badge>{{ $role }}</x-laravel-admin::admin.badge>
                                                 @empty
@@ -104,14 +126,14 @@
                                                 @endforelse
                                             </div>
                                         </td>
-                                        <td class="hidden px-3 py-4 text-sm whitespace-nowrap sm:table-cell">
+                                        <td class="hidden px-3 py-3 text-center text-sm whitespace-nowrap sm:table-cell">
                                             @if ($adminUser->email_verified_at)
                                                 <x-laravel-admin::admin.badge variant="success">{{ __('Verified') }}</x-laravel-admin::admin.badge>
                                             @else
                                                 <x-laravel-admin::admin.badge variant="warning">{{ __('Not Verified') }}</x-laravel-admin::admin.badge>
                                             @endif
                                         </td>
-                                        <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                                        <td class="py-3 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                                             <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.admin-users.show', $adminUser->getKey())" icon="eye" class="h-auto px-2 py-1">
                                                 {{ __('보기') }}
                                             </x-laravel-admin::admin.action-button>

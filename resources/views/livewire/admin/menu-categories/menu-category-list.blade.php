@@ -58,45 +58,38 @@
                 </div>
 
                 <div class="relative overflow-x-auto my-2">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead
-                            class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-200 dark:bg-gray-700 border-b border-t border-gray-300 dark:border-gray-600">
+                    <table class="w-full divide-y divide-gray-200 text-left text-sm text-gray-500 rtl:text-right dark:divide-gray-700 dark:text-gray-400">
+                        <thead class="border-y border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-800/80 dark:text-gray-300">
                             <tr>
-                                <th scope="col" class="px-2 py-3 w-8">
+                                <th scope="col" class="w-8 px-2 py-3">
                                     <span class="sr-only">순서</span>
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    ID
-                                </th>
-                                <th scope="col" class="px-2 py-3">
+                                <th scope="col" class="px-2 py-3 text-center">
                                     카테고리명
                                 </th>
-                                <th scope="col" class="px-2 py-3">
+                                <th scope="col" class="px-2 py-3 text-center">
                                     메뉴 개수
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    정렬 순서
-                                </th>
-                                <th scope="col" class="px-2 py-3">
+                                <th scope="col" class="px-2 py-3 text-center">
                                     상태
                                 </th>
-                                <th scope="col" class="px-2 py-3">
+                                <th scope="col" class="px-2 py-3 text-center">
                                     허용 역할
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    생성일
+                                <th scope="col" class="px-2 py-3 text-center">
+                                    권한 수정
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    <span class="sr-only">Edit</span>
+                                <th scope="col" class="px-2 py-3 text-center">
+                                    생성일
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="categories-tbody">
+                        <tbody id="categories-tbody" class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">
                             @forelse($categories as $category)
                             <tr data-category-id="{{ $category->id }}"
-                                class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                class="text-gray-500 transition-colors hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800/80">
 
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-3">
                                     <div class="drag-handle flex items-center justify-center">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -105,11 +98,8 @@
                                     </div>
                                 </td>
 
-                                <td class="px-2 py-2">
-                                    {{ $category->id }}
-                                </td>
                                 <th scope="row"
-                                    class="px-2 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                    class="whitespace-nowrap px-2 py-3 font-medium text-gray-900 dark:text-white">
                                     @if($canView($category))
                                     <a class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                         href="{{ route('menu-categories.show', $category) }}">{{ $category->name }}</a>
@@ -117,21 +107,18 @@
                                     {{ $category->name }}
                                     @endif
                                 </th>
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-3 text-center">
                                     {{ $category->menus_count }}
                                 </td>
-                                <td class="px-2 py-2 sort-order-cell">
-                                    {{ $category->sort_order }}
-                                </td>
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-3 text-center">
                                     <span
                                         class="px-2 py-1 text-xs font-semibold rounded-full {{ $category->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' }}">
                                         {{ $category->is_active ? '활성' : '비활성' }}
                                     </span>
                                 </td>
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-3 text-center">
                                     @if($category->roles->count() > 0)
-                                    <div class="flex flex-wrap gap-1">
+                                    <div class="flex flex-wrap justify-center gap-1">
                                         @foreach($category->roles as $role)
                                         <span
                                             class="px-2 py-1 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
@@ -143,13 +130,10 @@
                                     <span class="text-gray-400 dark:text-gray-500 text-xs">없음</span>
                                     @endif
                                 </td>
-                                <td class="px-2 py-2">
-                                    {{ $category->created_at->format('Y-m-d H:i') }}
-                                </td>
-                                <td class="px-2 py-2 text-right">
+                                <td class="px-2 py-3 text-center">
                                     @if($canUpdate($category))
                                     <x-laravel-admin::admin.modal-trigger
-                                        text="권한"
+                                        text="권한 수정"
                                         modal-id="roles-modal"
                                         type="link"
                                         variant="primary"
@@ -157,12 +141,17 @@
                                         class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 cursor-pointer"
                                         data-category-id="{{ $category->id }}"
                                         data-category-name="{{ $category->name }}" />
+                                    @else
+                                    <span class="text-gray-400 dark:text-gray-500 text-xs">-</span>
                                     @endif
+                                </td>
+                                <td class="px-2 py-3 text-center">
+                                    {{ $category->created_at->format('Y-m-d H:i') }}
                                 </td>
                             </tr>
                             @empty
                             <tr class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                                <td colspan="9" class="px-2 py-4 text-center text-gray-500 dark:text-gray-400">
+                                <td colspan="7" class="px-2 py-4 text-center text-gray-500 dark:text-gray-400">
                                     @if($search)
                                     "{{ $search }}"에 대한 검색 결과가 없습니다.
                                     @else
@@ -307,7 +296,6 @@
             }
         });
 
-        updateSortOrderNumbers();
     }
 
     function updateCategoryOrder(newOrder, previousOrder = []) {
@@ -333,8 +321,6 @@
             if (data.success) {
                 // 성공 메시지 표시
                 showNotification('카테고리 순서가 성공적으로 변경되었습니다.', 'success');
-                // 페이지 새로고침 없이 순서 번호 업데이트
-                updateSortOrderNumbers();
 
                 // Livewire left-menu 컴포넌트 refresh
                 refreshLeftMenu();
@@ -368,16 +354,6 @@
                 console.error('Livewire 이벤트 dispatch 실패:', error);
             }
         }
-    }
-
-    function updateSortOrderNumbers() {
-        const rows = document.querySelectorAll('#categories-tbody tr[data-category-id]');
-        rows.forEach((row, index) => {
-            const sortOrderCell = row.querySelector('.sort-order-cell');
-            if (sortOrderCell) {
-                sortOrderCell.textContent = index + 1;
-            }
-        });
     }
 
     function showNotification(message, type) {

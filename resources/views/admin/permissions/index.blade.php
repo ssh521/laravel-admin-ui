@@ -79,15 +79,15 @@
 
                 <x-laravel-admin::admin.table-shell>
                             <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
-                                <thead>
+                                <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                                     <tr>
-                                        <th scope="col" class="w-10 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
+                                        <th scope="col" class="w-10 py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
                                             <span x-show="sortMode === 'drag'" class="text-gray-400">⋮⋮</span>
                                         </th>
-                                        <th scope="col" class="py-3.5 pr-3 pl-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                                        <th scope="col" class="py-3 pr-3 pl-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
                                             <button type="button" x-show="sortMode === 'click'"
                                                     @click="sortBy('name')"
-                                                    class="inline-flex cursor-pointer items-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
+                                                    class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
                                                 <span>{{ __('Permission Name') }}</span>
                                                 <x-laravel-admin::admin.icon name="arrow-up" x-show="sortField === 'name' && sortDirection === 'asc'" class="text-xs" />
                                                 <x-laravel-admin::admin.icon name="arrow-down" x-show="sortField === 'name' && sortDirection === 'desc'" class="text-xs" />
@@ -95,10 +95,10 @@
                                             </button>
                                             <span x-show="sortMode === 'drag'">{{ __('Permission Name') }}</span>
                                         </th>
-                                        <th scope="col" class="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
+                                        <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
                                             <button type="button" x-show="sortMode === 'click'"
                                                     @click="sortBy('description')"
-                                                    class="inline-flex cursor-pointer items-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
+                                                    class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
                                                 <span>{{ __('Permission Description') }}</span>
                                                 <x-laravel-admin::admin.icon name="arrow-up" x-show="sortField === 'description' && sortDirection === 'asc'" class="text-xs" />
                                                 <x-laravel-admin::admin.icon name="arrow-down" x-show="sortField === 'description' && sortDirection === 'desc'" class="text-xs" />
@@ -106,7 +106,7 @@
                                             </button>
                                             <span x-show="sortMode === 'drag'">{{ __('Permission Description') }}</span>
                                         </th>
-                                        <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-0">
+                                        <th scope="col" class="relative py-3 pr-4 pl-3 sm:pr-0">
                                             <span class="sr-only">Actions</span>
                                         </th>
                                     </tr>
@@ -121,17 +121,17 @@
                                             @dragover.prevent="dragOver($event)"
                                             @drop.prevent="dropRow($event)"
                                             @dragend="endDrag()">
-                                            <td class="py-4 pr-3 pl-4 text-sm sm:pl-0">
+                                            <td class="py-3 pr-3 pl-4 text-sm sm:pl-0">
                                                 <span x-show="sortMode === 'drag'" class="cursor-move text-gray-400">⋮⋮</span>
                                             </td>
-                                            <th scope="row" class="py-4 pr-3 pl-3 text-left text-sm">
+                                            <th scope="row" class="py-3 pr-3 pl-3 text-left text-sm">
                                                 <div class="font-medium text-gray-900 dark:text-white">{{ $permission->name }}</div>
-                                                <div class="mt-1 text-xs text-gray-500 md:hidden dark:text-gray-400">{{ $permission->description ?: '설명 없음' }}</div>
+                                                <div class="mt-0.5 text-xs text-gray-500 md:hidden dark:text-gray-400">{{ $permission->description ?: '설명 없음' }}</div>
                                             </th>
-                                            <td class="hidden px-3 py-4 text-sm text-gray-500 md:table-cell dark:text-gray-400">
+                                            <td class="hidden px-3 py-3 text-center text-sm text-gray-500 md:table-cell dark:text-gray-400">
                                                 {{ $permission->description ?: '설명 없음' }}
                                             </td>
-                                            <td class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                                            <td class="py-3 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                                                 @can('view', $permission)
                                                     <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.permissions.show', $permission)" icon="eye" class="h-auto px-2 py-1">
                                                         {{ __('보기') }}

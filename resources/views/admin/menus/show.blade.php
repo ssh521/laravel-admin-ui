@@ -135,9 +135,9 @@
                             <div class="-mx-4 overflow-x-auto sm:-mx-6">
                                 <div class="inline-block min-w-full align-middle sm:px-6">
                                     <table class="min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
-                                        <thead>
+                                        <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                                             <tr>
-                                                <th scope="col" class="py-3 pr-3 text-left font-semibold text-gray-900 dark:text-white">{{ __('Child Menu') }}</th>
+                                                <th scope="col" class="py-3 pr-3 text-center font-semibold text-gray-900 dark:text-white">{{ __('Child Menu') }}</th>
                                                 <th scope="col" class="px-3 py-3 text-left font-semibold text-gray-900 dark:text-white">{{ __('Route/URL') }}</th>
                                                 <th scope="col" class="px-3 py-3 text-left font-semibold text-gray-900 dark:text-white">{{ __('Status') }}</th>
                                                 <th scope="col" class="py-3 pl-3 text-right font-semibold text-gray-900 dark:text-white">{{ __('Actions') }}</th>
