@@ -63,7 +63,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 | `admin.table-shell` | responsive table overflow wrapper |
 | `admin.table-empty-row` | `<tbody>` 내부 empty row |
 | `admin.empty-state` | 표 밖의 빈 상태 안내 |
-| `admin.pagination` | simple previous/next paginator wrapper |
+| `admin.pagination` | simple previous/next paginator wrapper for explicit simple-pagination cases; ordinary resource lists should use Laravel paginator `links()` to match `admin/users` |
 
 ## Forms
 

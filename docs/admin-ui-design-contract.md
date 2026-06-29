@@ -96,6 +96,7 @@ List screens should:
 - Use compact table rhythm: `py-3` on header cells and body cells. Reduce avatars/icons inside dense rows to `h-9 w-9` or `size-9` when needed.
 - Center the first visible identity column header when the table starts with the primary name/title column. If utility columns such as order handles, checkboxes, or row numbers appear before it, keep those utility headers visually minimal and center the first real identity header instead.
 - For ordinary sortable list pages, make sortable column titles direct links that preserve the current query string and toggle sort direction. Reserve drag-sort and click/drag mode switches for resource-ordering pages such as `admin/permissions`.
+- For paginator controls on resource list pages, match the `admin/users` baseline: render Laravel's paginator links inside `@if($items->hasPages()) <div class="mt-6 text-sm">...</div> @endif`, using `links()` with `appends(request()->query())` or `withQueryString()` so filters remain intact. Do not replace numbered list pagination with a custom previous/next-only component unless the resource explicitly uses simple pagination.
 - Use avatars only for person/user records where recognition helps.
 - Render statuses as badges.
 - Hide secondary columns on small screens and repeat critical info inside the first column.
