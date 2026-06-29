@@ -45,7 +45,7 @@
             @endif
             <label for="user-search" class="sr-only">{{ __('회원 검색') }}</label>
             <div class="relative min-w-0 flex-1">
-                <x-laravel-admin::admin.form-input id="user-search" name="search" value="{{ $search }}" class="h-10 pr-9" placeholder="이름 또는 이메일 검색" />
+                <x-laravel-admin::admin.form-input id="user-search" name="search" value="{{ $search }}" class="w-full h-10 pr-9" placeholder="이름 또는 이메일 검색" />
                 @if($search)
                     <a href="{{ route('admin.users.index') }}"
                        class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">

@@ -22,7 +22,7 @@
             <div class="sm:col-span-4">
                 <label for="name" class="{{ $labelClass }}">{{ __('메뉴명') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $menu?->name) }}" autocomplete="name" placeholder="Enter menu name" required />
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $menu?->name) }}" autocomplete="name" placeholder="Enter menu name" required class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
@@ -71,7 +71,7 @@
             <div class="sm:col-span-4">
                 <label for="route_name" class="{{ $labelClass }}">{{ __('Route Name') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="route_name" name="route_name" value="{{ old('route_name', $menu?->route_name) }}" placeholder="예: users.index" />
+                    <x-laravel-admin::admin.form-input id="route_name" name="route_name" value="{{ old('route_name', $menu?->route_name) }}" placeholder="예: users.index" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('route_name')" />
             </div>
@@ -79,7 +79,7 @@
             <div class="sm:col-span-4">
                 <label for="route_parameters" class="{{ $labelClass }}">{{ __('Route Params') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="route_parameters" name="route_parameters" value="{{ old('route_parameters', $menu?->route_parameters) }}" placeholder='예: {"id": 1}' />
+                    <x-laravel-admin::admin.form-input id="route_parameters" name="route_parameters" value="{{ old('route_parameters', $menu?->route_parameters) }}" placeholder='예: {"id": 1}' class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('route_parameters')" />
             </div>
@@ -87,7 +87,7 @@
             <div class="sm:col-span-4">
                 <label for="url" class="{{ $labelClass }}">{{ __('Direct URL') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="url" name="url" value="{{ old('url', $menu?->getRawUrlAttribute()) }}" placeholder="예: /admin/users" />
+                    <x-laravel-admin::admin.form-input id="url" name="url" value="{{ old('url', $menu?->getRawUrlAttribute()) }}" placeholder="예: /admin/users" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('url')" />
             </div>
@@ -124,7 +124,7 @@
             <div class="sm:col-span-2">
                 <label for="sort_order" class="{{ $labelClass }}">{{ __('정렬 순서') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="sort_order" name="sort_order" type="number" value="{{ old('sort_order', $menu->sort_order ?? 0) }}" min="0" />
+                    <x-laravel-admin::admin.form-input id="sort_order" name="sort_order" type="number" value="{{ old('sort_order', $menu->sort_order ?? 0) }}" min="0" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('sort_order')" />
             </div>
@@ -132,7 +132,7 @@
             <div class="sm:col-span-3">
                 <label for="icon" class="{{ $labelClass }}">{{ __('Icon') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="icon" name="icon" value="{{ old('icon', $menu?->icon) }}" placeholder="house" />
+                    <x-laravel-admin::admin.form-input id="icon" name="icon" value="{{ old('icon', $menu?->icon) }}" placeholder="house" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('icon')" />
             </div>

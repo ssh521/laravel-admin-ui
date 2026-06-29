@@ -41,7 +41,7 @@
                 @endif
                 <label for="permission-search" class="sr-only">권한 검색</label>
                 <div class="relative min-w-0 flex-1">
-                    <x-laravel-admin::admin.form-input id="permission-search" name="search" value="{{ request('search') }}" class="h-10 pr-9" placeholder="권한 이름 또는 설명 검색" />
+                    <x-laravel-admin::admin.form-input id="permission-search" name="search" value="{{ request('search') }}" class="w-full h-10 pr-9" placeholder="권한 이름 또는 설명 검색" />
                     @if(request('search'))
                         <a href="{{ route('admin.permissions.index') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">

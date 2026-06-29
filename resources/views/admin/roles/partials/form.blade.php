@@ -23,7 +23,7 @@
             <div class="sm:col-span-3">
                 <label for="name" class="{{ $labelClass }}">{{ __('Role Name') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $role?->name) }}" autocomplete="name" placeholder="{{ __('Enter role name') }}" />
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $role?->name) }}" autocomplete="name" placeholder="{{ __('Enter role name') }}" class="w-full" />
                 </div>
                 @if ($errors->has('name'))
                     <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="[$role ? '역할명을 입력해 주세요!' : 'Please enter a role name!']" />

@@ -57,7 +57,7 @@
                         name="search"
                         value="{{ request('search') }}"
                         placeholder="{{ __('Search name or email') }}"
-                        class="h-10 pr-9"
+                        class="w-full h-10 pr-9"
                     />
                     @if(request('search') || request('role'))
                         <a href="{{ route('admin.admin-users.index') }}"

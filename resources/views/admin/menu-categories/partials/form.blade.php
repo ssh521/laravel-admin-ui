@@ -22,7 +22,7 @@
             <div class="sm:col-span-4">
                 <label for="name" class="{{ $labelClass }}">{{ __('카테고리명') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $menuCategory?->name) }}" autocomplete="name" placeholder="Enter category name" required />
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $menuCategory?->name) }}" autocomplete="name" placeholder="Enter category name" required class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
@@ -30,7 +30,7 @@
             <div class="sm:col-span-2">
                 <label for="sort_order" class="{{ $labelClass }}">{{ __('정렬 순서') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="sort_order" name="sort_order" type="number" value="{{ old('sort_order', $menuCategory->sort_order ?? 0) }}" min="0" />
+                    <x-laravel-admin::admin.form-input id="sort_order" name="sort_order" type="number" value="{{ old('sort_order', $menuCategory->sort_order ?? 0) }}" min="0" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('sort_order')" />
             </div>

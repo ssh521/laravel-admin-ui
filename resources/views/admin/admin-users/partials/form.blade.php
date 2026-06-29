@@ -24,7 +24,7 @@
             <div class="sm:col-span-3">
                 <label for="name" class="{{ $labelClass }}">{{ __('이름') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $adminUser?->name) }}" autocomplete="name" />
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $adminUser?->name) }}" autocomplete="name" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
@@ -32,7 +32,7 @@
             <div class="sm:col-span-4">
                 <label for="email" class="{{ $labelClass }}">{{ __('E-mail') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="email" name="email" type="email" value="{{ $isProfile ? $adminUser?->email : old('email', $adminUser?->email) }}" autocomplete="email" class="{{ $isProfile ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' : '' }}" :disabled="$isProfile" />
+                    <x-laravel-admin::admin.form-input id="email" name="email" type="email" value="{{ $isProfile ? $adminUser?->email : old('email', $adminUser?->email) }}" autocomplete="email" class="w-full {{ $isProfile ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' : '' }}" :disabled="$isProfile" />
                 </div>
                 @if ($isProfile)
                     <p class="{{ $helpClass }}">{{ __('프로필 화면에서는 이메일을 변경할 수 없습니다.') }}</p>
@@ -58,7 +58,7 @@
             <div class="sm:col-span-3">
                 <label for="password" class="{{ $labelClass }}">{{ __('비밀번호') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="password" name="password" type="password" autocomplete="new-password" />
+                    <x-laravel-admin::admin.form-input id="password" name="password" type="password" autocomplete="new-password" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('password')" />
             </div>
@@ -66,7 +66,7 @@
             <div class="sm:col-span-3">
                 <label for="confirm-password" class="{{ $labelClass }}">{{ __('비밀번호 확인') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" />
+                    <x-laravel-admin::admin.form-input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('confirm-password')" />
             </div>

@@ -22,7 +22,7 @@
             <div class="sm:col-span-4">
                 <label for="name" class="{{ $labelClass }}">{{ __('Permission Name') }}</label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $permission?->name) }}" autocomplete="name" placeholder="{{ __('Enter permission name') }}" />
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $permission?->name) }}" autocomplete="name" placeholder="{{ __('Enter permission name') }}" class="w-full" />
                 </div>
                 @if ($errors->has('name'))
                     <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="['Please enter a permission name!']" />

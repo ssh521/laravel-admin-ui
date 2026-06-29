@@ -71,7 +71,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 | --- | --- |
 | `admin.form-section` | 12-column form section layout |
 | `admin.field` | label, help text, validation error wrapper |
-| `admin.form-input` | text/date/number 등 기본 input |
+| `admin.form-input` | text/date/number 등 기본 input. 폭이 필요한 곳에서 `w-full`, `w-16` 같은 width 클래스를 호출부에 명시 |
 | `admin.form-select` | select control |
 | `admin.form-textarea` | textarea control |
 | `admin.checkbox-row` | bordered checkbox row |

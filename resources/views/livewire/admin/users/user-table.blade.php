@@ -33,7 +33,7 @@
             <x-laravel-admin::admin.form-input
                 id="user-search"
                 wire:model.live.debounce.300ms="search"
-                class="h-10 pr-9"
+                class="w-full h-10 pr-9"
                 placeholder="이름 또는 이메일 검색"
             />
             @if($search)

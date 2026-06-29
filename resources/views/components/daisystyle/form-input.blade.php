@@ -4,5 +4,5 @@
 
 <input
     type="{{ $type }}"
-    {{ $attributes->merge(['class' => 'input input-bordered w-full']) }}
+    {{ $attributes->merge(['class' => 'input input-bordered']) }}
 >

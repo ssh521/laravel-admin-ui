@@ -43,7 +43,7 @@
             <x-laravel-admin::admin.filter-bar action="{{ route('admin.roles.index') }}">
                 <label for="role-search" class="sr-only">역할 검색</label>
                 <div class="relative min-w-0 flex-1">
-                    <x-laravel-admin::admin.form-input id="role-search" name="search" value="{{ request('search') }}" class="h-10 pr-9" placeholder="역할 이름 검색" />
+                    <x-laravel-admin::admin.form-input id="role-search" name="search" value="{{ request('search') }}" class="w-full h-10 pr-9" placeholder="역할 이름 검색" />
                     @if(request('search'))
                         <a href="{{ route('admin.roles.index') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
@@ -132,7 +132,7 @@
 
             <div class="mt-5 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/70">
                 <div class="relative">
-                    <x-laravel-admin::admin.form-input id="menu-category-search" placeholder="메뉴 카테고리 검색..." class="h-10 pl-10" />
+                    <x-laravel-admin::admin.form-input id="menu-category-search" placeholder="메뉴 카테고리 검색..." class="w-full h-10 !pl-10" />
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <x-laravel-admin::admin.icon name="magnifying-glass" class="text-sm text-gray-400" />
                     </div>

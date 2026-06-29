@@ -75,7 +75,7 @@
                         id="menu-search"
                         name="search"
                         value="{{ request('search') }}"
-                        class="h-10 pr-9"
+                        class="w-full h-10 pr-9"
                         placeholder="{{ __('메뉴 검색') }}"
                     />
                     @if(request('search'))

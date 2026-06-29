@@ -102,7 +102,7 @@
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="{{ __('컴포넌트 검색') }}"
-                    class="h-10"
+                    class="w-full h-10"
                 />
 
                 <x-laravel-admin::admin.action-button type="submit" variant="search" icon="magnifying-glass" class="shrink-0 whitespace-nowrap">

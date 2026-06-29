@@ -87,7 +87,7 @@
                         id="category-search"
                         name="search"
                         value="{{ request('search') }}"
-                        class="h-10 pr-9"
+                        class="w-full h-10 pr-9"
                         placeholder="{{ __('카테고리 검색') }}"
                     />
                     @if(request('search'))
@@ -147,14 +147,14 @@
                                 @forelse($categories as $category)
                                     <tr data-category-id="{{ $category->id }}"
                                         class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70"
-                                        :class="sortMode === 'drag' ? 'cursor-move' : 'cursor-default'"
-                                        :draggable="sortMode === 'drag'"
-                                        @dragstart="startDrag($event)"
                                         @dragover.prevent="dragOver($event)"
                                         @drop.prevent="dropRow()"
                                         @dragend="endDrag()">
                                         <td class="whitespace-nowrap py-3 pr-3 pl-4 text-sm sm:pl-0">
-                                            <div class="drag-handle inline-flex size-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300">
+                                            <div class="drag-handle inline-flex size-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                                                 :draggable="sortMode === 'drag'"
+                                                 @dragstart="startDrag($event)"
+                                                 aria-label="순서 변경">
                                                 <x-laravel-admin::admin.icon name="grip-lines" />
                                             </div>
                                         </td>
@@ -312,7 +312,14 @@
                         return;
                     }
 
-                    this.draggedRow = event.currentTarget;
+                    const row = event.target.closest('tr[data-category-id]');
+
+                    if (!row) {
+                        event.preventDefault();
+                        return;
+                    }
+
+                    this.draggedRow = row;
                     this.originalOrder = this.captureCategoryOrder();
                     this.dropHandled = false;
                     this.draggedRow.classList.add('sortable-ghost');
