@@ -206,6 +206,24 @@
 
     <x-laravel-admin::admin.client-notification />
 
+    @if (class_exists(\Ssh521\LaravelBroadcastNotification\LaravelBroadcastNotificationServiceProvider::class))
+        <x-laravel-broadcast-notification::public.toast />
+
+        @php
+            $broadcastNotificationAsset = public_path('vendor/laravel-broadcast-notification/js/listener.js');
+            $broadcastNotificationProvider = new \ReflectionClass(\Ssh521\LaravelBroadcastNotification\LaravelBroadcastNotificationServiceProvider::class);
+            $broadcastNotificationSource = dirname($broadcastNotificationProvider->getFileName(), 2).'/resources/js/listener.js';
+        @endphp
+
+        @if (file_exists($broadcastNotificationAsset))
+            <script src="{{ asset('vendor/laravel-broadcast-notification/js/listener.js') }}"></script>
+        @elseif (file_exists($broadcastNotificationSource))
+            <script>
+                {!! file_get_contents($broadcastNotificationSource) !!}
+            </script>
+        @endif
+    @endif
+
     @livewireScripts
 </body>
 </html>

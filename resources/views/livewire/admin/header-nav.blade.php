@@ -77,6 +77,10 @@
 
     <!-- 우측: 드롭다운 메뉴 -->
     <div class="flex items-center gap-4">
+        @if (class_exists(\Ssh521\LaravelBroadcastNotification\LaravelBroadcastNotificationServiceProvider::class))
+            <x-laravel-broadcast-notification::admin.dropdown />
+        @endif
+
         @php
             $user = Auth::user();
             $hasJetstream = class_exists(\Laravel\Jetstream\Jetstream::class);
