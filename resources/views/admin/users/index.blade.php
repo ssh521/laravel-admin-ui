@@ -112,7 +112,7 @@
                                                     type="button"
                                                     variant="link"
                                                     size="sm"
-                                                    x-on:click="$dispatch('open-modal', { modalId: 'user-detail-modal' }); Livewire.dispatch('admin-user-management:user-detail-modal:open', { userId: {{ $user->id }} })"
+                                                    x-on:click="Livewire.dispatch('admin:modal-stack:push', { id: 'user-show-{{ $user->id }}-' + Date.now(), component: 'admin.users.user-show-modal', params: { userId: {{ $user->id }} }, title: '사용자 상세 정보', size: 'lg' })"
                                                     class="h-auto px-0 py-0"
                                                 >
                                                     {{ $user->name }}
@@ -158,6 +158,16 @@
                                     </x-laravel-admin::admin.action-button>
                                 @endcan
                                 @can('update', $user)
+                                    <x-laravel-admin::admin.action-button
+                                        variant="link"
+                                        size="sm"
+                                        type="button"
+                                        icon="pen-to-square"
+                                        x-on:click="Livewire.dispatch('admin:modal-stack:push', { id: 'user-edit-{{ $user->id }}-' + Date.now(), component: 'admin.users.user-edit-modal', params: { userId: {{ $user->id }} }, title: '사용자 수정', size: 'md' })"
+                                        class="ml-1 h-auto px-2 py-1"
+                                    >
+                                        {{ __('모달수정') }}
+                                    </x-laravel-admin::admin.action-button>
                                     <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.users.edit', $user)" icon="pen-to-square" class="ml-1 h-auto px-2 py-1">
                                         {{ __('수정') }}
                                     </x-laravel-admin::admin.action-button>
@@ -188,5 +198,5 @@
         @endif
     </x-laravel-admin::admin.page-section>
 
-    <livewire:admin.users.user-detail-modal />
+    <livewire:admin.modal-stack />
 </x-laravel-admin::admin.layouts.admin>

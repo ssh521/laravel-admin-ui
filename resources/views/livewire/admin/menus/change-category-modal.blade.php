@@ -29,7 +29,7 @@
     <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
         <x-laravel-admin::admin.secondary-button
             type="button"
-            wire:click="$dispatch('close-modal', { modalId: 'category-selection-modal' })">
+            wire:click="$dispatch('admin:modal-stack:close', { id: '{{ $modalStackId }}' })">
             취소
         </x-laravel-admin::admin.secondary-button>
         @if (count($selectedMenuIds) === 0)

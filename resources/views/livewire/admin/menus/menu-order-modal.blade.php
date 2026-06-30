@@ -70,7 +70,7 @@
                     <button
                         type="button"
                         @click.stop="
-                            $dispatch('close-modal', { modalId: 'menu-order-modal' });
+                            $dispatch('admin:modal-stack:close', { id: '{{ $modalStackId }}' });
                             setTimeout(() => {
                                 window.location.href = '{{ route('admin.menus.edit', ['menu' => $menu['id']]) }}';
                             }, 100);
@@ -103,7 +103,7 @@
         </button>
         <x-laravel-admin::admin.secondary-button
             type="button"
-            @click="$dispatch('close-modal', { modalId: 'menu-order-modal' })">
+            @click="$dispatch('admin:modal-stack:close', { id: '{{ $modalStackId }}' })">
             닫기
         </x-laravel-admin::admin.secondary-button>
     </div>
@@ -365,15 +365,6 @@
                     }, 100);
                 }
             });
-        });
-
-        // 모달이 열릴 때 초기화
-        window.addEventListener('opened-modal', function(event) {
-            if (event.detail.modalId === 'menu-order-modal') {
-                setTimeout(() => {
-                    initMenuNativeDrag();
-                }, 200);
-            }
         });
 
         // 초기 마운트 시 초기화 시도

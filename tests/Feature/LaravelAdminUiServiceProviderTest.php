@@ -316,18 +316,21 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('magnifying-glass', $source);
     }
 
-    public function test_modal_manager_clears_stale_pointer_event_styles(): void
+    public function test_modal_stack_owns_drag_and_resize_contract(): void
     {
-        $source = file_get_contents(__DIR__.'/../../resources/js/modal-manager.js');
+        $source = file_get_contents(__DIR__.'/../../resources/js/modal-stack.js');
+        $view = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/modal-stack.blade.php');
 
-        $this->assertStringContainsString('resetModalElement', $source);
-        $this->assertStringContainsString("modalElement.style.pointerEvents = ''", $source);
+        $this->assertStringContainsString('createDragHandler', $source);
+        $this->assertStringContainsString('createResizeHandler', $source);
+        $this->assertStringContainsString("Alpine.data('modalStackModal'", file_get_contents(__DIR__.'/../../resources/js/admin.js'));
+        $this->assertStringContainsString('@livewire($modal[\'component\'], $modal[\'params\'], key($modal[\'key\']))', $view);
+        $this->assertStringContainsString('wire:ignore.self', $view);
     }
 
     public function test_menu_category_drag_sort_restores_cancelled_or_failed_reorders(): void
     {
         $index = file_get_contents(__DIR__.'/../../resources/views/admin/menu-categories/index.blade.php');
-        $livewire = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/menu-categories/menu-category-list.blade.php');
 
         $this->assertStringContainsString('x-data="menuCategoryDragSort()"', $index);
         $this->assertStringContainsString('class="drag-handle inline-flex size-8', $index);
@@ -338,11 +341,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringNotContainsString('new Sortable', $index);
         $this->assertStringNotContainsString('Sortable.create', $index);
 
-        foreach ([$index, $livewire] as $source) {
-            $this->assertStringContainsString('originalOrder', $source);
-            $this->assertStringContainsString('dropHandled', $source);
-            $this->assertStringContainsString('restoreCategoryOrder', $source);
-        }
+        $this->assertStringContainsString('originalOrder', $index);
+        $this->assertStringContainsString('dropHandled', $index);
+        $this->assertStringContainsString('restoreCategoryOrder', $index);
     }
 
     public function test_menu_categories_can_open_menu_order_modal_from_category_name(): void
@@ -353,9 +354,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('data-menu-order-category-name', $index);
         $this->assertStringContainsString('{{ $category->name }}', $index);
         $this->assertStringNotContainsString('<x-laravel-admin::admin.icon name="grip-lines" class="text-xs text-gray-400" />', $index);
-        $this->assertStringContainsString('id="menu-order-modal"', $index);
-        $this->assertStringContainsString('<livewire:admin.menus.menu-order-modal />', $index);
-        $this->assertStringContainsString("Livewire.dispatch('admin-menus:menu-order-modal:open'", $index);
+        $this->assertStringContainsString('<livewire:admin.modal-stack />', $index);
+        $this->assertStringContainsString("component: 'admin.menus.menu-order-modal'", $index);
+        $this->assertStringContainsString("Livewire.dispatch('admin:modal-stack:push'", $index);
     }
 
     public function test_admin_users_search_uses_filter_bar_and_search_action_button(): void
@@ -433,7 +434,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
     public function test_menu_categories_tables_align_secondary_data_columns_to_center(): void
     {
         $index = file_get_contents(__DIR__.'/../../resources/views/admin/menu-categories/index.blade.php');
-        $livewire = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/menu-categories/menu-category-list.blade.php');
+        $managerModal = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/menu-categories/menu-category-manager-modal.blade.php');
 
         $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white"', $index);
         $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 md:table-cell dark:text-gray-300"', $index);
@@ -444,7 +445,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString("['sort' => 'is_active', 'direction' => \$getNextDirection('is_active')]", $index);
         $this->assertStringContainsString("['sort' => 'created_at', 'direction' => \$getNextDirection('created_at')]", $index);
         $this->assertStringContainsString("{{ __('권한 수정') }}", $index);
-        $this->assertStringContainsString('text="권한 수정"', $index);
+        $this->assertStringContainsString('onclick="openMenuCategoryRolesModal({{ $category->id }}, @js($category->name))"', $index);
         $this->assertMatchesRegularExpression("/\\{\\{ __\\('허용 역할'\\) \\}\\}.*\\{\\{ __\\('권한 수정'\\) \\}\\}/s", $index);
         $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm xl:table-cell"', $index);
         $this->assertStringContainsString('class="flex flex-wrap justify-center gap-1.5"', $index);
@@ -452,14 +453,14 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringNotContainsString('{{ $category->id }}</td>', $index);
         $this->assertStringContainsString('colspan="8"', $index);
 
-        $this->assertStringContainsString('class="px-2 py-3 text-center"', $livewire);
-        $this->assertStringContainsString('권한 수정', $livewire);
-        $this->assertMatchesRegularExpression('/허용 역할.*권한 수정/s', $livewire);
-        $this->assertStringNotContainsString('<span class="sr-only">Edit</span>', $livewire);
-        $this->assertStringContainsString('class="flex flex-wrap justify-center gap-1"', $livewire);
-        $this->assertStringNotContainsString('정렬 순서', $livewire);
-        $this->assertStringNotContainsString('<td class="px-2 py-3 text-center">{{ $category->id }}</td>', $livewire);
-        $this->assertStringContainsString('colspan="7"', $livewire);
+        $this->assertStringContainsString('메뉴 카테고리 관리', $managerModal);
+        $this->assertStringContainsString('역할 관리', $managerModal);
+        $this->assertMatchesRegularExpression('/허용된 역할 없음.*역할 관리/s', $managerModal);
+        $this->assertStringNotContainsString('<span class="sr-only">Edit</span>', $managerModal);
+        $this->assertStringContainsString('class="mt-3 flex flex-wrap gap-1.5"', $managerModal);
+        $this->assertStringNotContainsString('정렬 순서', $managerModal);
+        $this->assertStringNotContainsString('{{ $category->id }}</td>', $managerModal);
+        $this->assertStringContainsString('wire:click="openRolesModal({{ $category->id }})"', $managerModal);
 
         $show = file_get_contents(__DIR__.'/../../resources/views/admin/menu-categories/show.blade.php');
 
@@ -488,7 +489,6 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             'resources/views/admin/permissions/index.blade.php',
             'resources/views/admin/menus/index.blade.php',
             'resources/views/admin/menu-categories/index.blade.php',
-            'resources/views/livewire/admin/menu-categories/menu-category-list.blade.php',
             'resources/views/admin/ui/components.blade.php',
         ] as $relativePath) {
             $source = file_get_contents(__DIR__.'/../../'.$relativePath);

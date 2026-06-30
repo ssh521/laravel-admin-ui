@@ -70,15 +70,7 @@
                 </div>
             </div>
 
-            <x-laravel-admin::admin.draggable-modal
-                id="user-search-modal"
-                title="사용자 검색"
-                width="800"
-                height="550">
-                <livewire:admin.users.user-search-modal
-                    :modal-id="'user-search-modal'"
-                />
-            </x-laravel-admin::admin.draggable-modal>
+            <livewire:admin.modal-stack />
         </div>
     </div>
 
@@ -91,9 +83,19 @@
                 formUserEmail: '',
 
                 openUserSearchModal() {
-                    Livewire.dispatch('admin-user-management:user-search-modal:prefill', { userId: this.formUserId || '', userName: this.formUserName || '', userEmail: this.formUserEmail || '' });
-
-                    this.$dispatch('open-modal', { modalId: 'user-search-modal' });
+                    Livewire.dispatch('admin:modal-stack:push', {
+                        id: 'user-search-' + Date.now(),
+                        component: 'admin.users.user-search-modal',
+                        params: {
+                            userId: this.formUserId || '',
+                            userName: this.formUserName || '',
+                            userEmail: this.formUserEmail || ''
+                        },
+                        title: '사용자 검색',
+                        size: 'lg',
+                        width: 800,
+                        height: 550
+                    });
                 },
 
                 init() {
@@ -107,8 +109,6 @@
                     this.formUserName = data.userName;
                     this.formUserEmail = data.userEmail;
                     this.selectedUser = data;
-
-                    this.$dispatch('close-modal', { modalId: 'user-search-modal' });
                 },
 
                 clearForm() {

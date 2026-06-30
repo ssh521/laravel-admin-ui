@@ -129,8 +129,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 | `admin.banner` | banner surface |
 | `admin.section-border` | legacy section border |
 | `admin.site-logo` | admin logo area |
-| `admin.modal-trigger` | modal open trigger |
-| `admin.draggable-modal` | draggable modal wrapper |
+| `admin.modal-stack` | Livewire dynamic modal stack mounted once per modal-capable page |
 
 ## DaisyUI Coverage
 

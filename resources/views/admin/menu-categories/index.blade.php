@@ -193,15 +193,13 @@
                                         </td>
                                         <td class="whitespace-nowrap px-3 py-3 text-center text-sm font-medium">
                                             @can('update', $category)
-                                                <x-laravel-admin::admin.modal-trigger
-                                                    text="권한 수정"
-                                                    modal-id="roles-modal"
-                                                    type="link"
-                                                    variant="primary"
-                                                    modal-type="single"
-                                                    class="cursor-pointer"
-                                                    data-category-id="{{ $category->id }}"
-                                                    data-category-name="{{ $category->name }}" />
+                                                <button
+                                                    type="button"
+                                                    class="cursor-pointer font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-300 dark:hover:text-indigo-200"
+                                                    onclick="openMenuCategoryRolesModal({{ $category->id }}, @js($category->name))"
+                                                >
+                                                    권한 수정
+                                                </button>
                                             @else
                                                 <span class="text-gray-400 dark:text-gray-500">-</span>
                                             @endcan
@@ -245,47 +243,7 @@
         </div>
     </div>
 
-    <x-laravel-admin::admin.draggable-modal id="roles-modal" title="권한 관리" :width="720" :height="560">
-        <div class="p-6">
-            <div class="mb-5">
-                <h3 class="text-base font-semibold leading-7 text-gray-900 dark:text-white" id="modal-category-name">
-                    카테고리 권한 관리
-                </h3>
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    메뉴 카테고리에 허용할 역할을 선택합니다.
-                </p>
-            </div>
-
-            <form id="roles-form" class="space-y-5">
-                @csrf
-                <div id="roles-container" class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <!-- 역할 목록이 여기에 동적으로 로드됩니다 -->
-                </div>
-
-                <div class="flex items-center justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
-                    <x-laravel-admin::admin.action-button type="button"
-                        variant="secondary"
-                        @click="$dispatch('close-modal', { modalId: 'roles-modal', action: 'close' })"
-                    >
-                        {{ __('취소') }}
-                    </x-laravel-admin::admin.action-button>
-                    <x-laravel-admin::admin.action-button id="roles-submit-btn" type="submit">
-                        {{ __('저장') }}
-                    </x-laravel-admin::admin.action-button>
-                </div>
-            </form>
-        </div>
-    </x-laravel-admin::admin.draggable-modal>
-
-    <x-laravel-admin::admin.draggable-modal
-        id="menu-order-modal"
-        title="메뉴 순서 변경"
-        width="560"
-        height="640"
-        :close-on-backdrop-click="false"
-    >
-        <livewire:admin.menus.menu-order-modal />
-    </x-laravel-admin::admin.draggable-modal>
+    <livewire:admin.modal-stack />
 
     <script>
         let currentCategoryId = null;
@@ -465,19 +423,17 @@
             }));
         }
 
-        document.addEventListener('open-modal', function(event) {
-            if (event.detail.modalId === 'roles-modal') {
-                const trigger = event.target?.closest ? event.target.closest('[data-category-id]') : null;
-                if (trigger) {
-                    const categoryId = trigger.getAttribute('data-category-id');
-                    const categoryName = trigger.getAttribute('data-category-name');
-
-                    currentCategoryId = categoryId;
-                    document.getElementById('modal-category-name').textContent = `[${categoryName}] 권한 관리`;
-                    loadCategoryRoles(categoryId);
-                }
-            }
-        });
+        function openMenuCategoryRolesModal(categoryId, categoryName) {
+            Livewire.dispatch('admin:modal-stack:push', {
+                id: 'menu-category-roles-' + categoryId + '-' + Date.now(),
+                component: 'admin.menu-categories.roles-modal',
+                params: { menuCategoryId: parseInt(categoryId) },
+                title: '[' + categoryName + '] 권한 관리',
+                size: 'lg',
+                width: 720,
+                height: 560
+            });
+        }
 
         document.addEventListener('click', function(event) {
             const trigger = event.target?.closest ? event.target.closest('[data-menu-order-category-id]') : null;
@@ -496,149 +452,15 @@
                 return;
             }
 
-            window.dispatchEvent(new CustomEvent('open-modal', {
-                detail: { modalId: 'menu-order-modal' }
-            }));
-
-            Livewire.dispatch('admin-menus:menu-order-modal:open', {
-                data: {
-                    categoryId: parseInt(categoryId),
-                    categoryName: categoryName
-                }
-            });
-        });
-
-        const getRolesModalUrlBase = '{{ route('admin.menu-categories.get-roles-modal', ['menuCategory' => '__ID__']) }}';
-
-        function loadCategoryRoles(categoryId) {
-            fetch(getRolesModalUrlBase.replace('__ID__', categoryId), {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => {
-                if (!response.ok) throw new Error(response.status);
-                const ct = response.headers.get('content-type');
-                if (!ct || !ct.includes('application/json')) throw new Error('Unexpected response type');
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    renderRoles(data.availableRoles, data.selectedRoles);
-                } else {
-                    showNotification('권한 데이터를 불러오는 중 오류가 발생했습니다.', 'error');
-                }
-            })
-            .catch(error => {
-                showNotification('권한 데이터를 불러오는 중 네트워크 오류가 발생했습니다.', 'error');
-            });
-        }
-
-        function renderRoles(availableRoles, selectedRoles) {
-            const container = document.getElementById('roles-container');
-            const submitBtn = document.getElementById('roles-submit-btn');
-            container.replaceChildren();
-
-            if (availableRoles.length === 0) {
-                const emptyLabel = document.createElement('p');
-                emptyLabel.className = 'text-sm text-gray-500 dark:text-gray-400';
-                emptyLabel.textContent = @json(__('사용 가능한 역할이 없습니다.'));
-                container.appendChild(emptyLabel);
-                submitBtn.disabled = true;
-                return;
-            }
-            submitBtn.disabled = false;
-
-            const selectedRoleIds = selectedRoles.map(selectedRole => String(selectedRole.id ?? selectedRole));
-
-            availableRoles.forEach(role => {
-                const isSelected = selectedRoleIds.includes(String(role.id));
-                const roleElement = document.createElement('label');
-                roleElement.className = 'flex min-h-12 cursor-pointer items-center gap-3 rounded-md border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800';
-                roleElement.setAttribute('for', `role-${role.id}`);
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = `role-${role.id}`;
-                checkbox.name = 'roles[]';
-                checkbox.value = role.id;
-                checkbox.checked = isSelected;
-                checkbox.className = 'size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900';
-
-                const roleName = document.createElement('span');
-                roleName.className = 'min-w-0 truncate';
-                roleName.textContent = role.name;
-
-                roleElement.append(checkbox, roleName);
-                container.appendChild(roleElement);
-            });
-        }
-
-        document.getElementById('roles-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            if (!currentCategoryId) {
-                showNotification('카테고리 정보가 없습니다.', 'error');
-                return;
-            }
-
-            const selectedRoles = Array.from(this.querySelectorAll('input[name="roles[]"]:checked'))
-                .map(input => input.value);
-
-            const updateRolesUrlBase = '{{ route('admin.menu-categories.update-roles-api', ['menuCategory' => '__ID__']) }}';
-
-            fetch(updateRolesUrlBase.replace('__ID__', currentCategoryId), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ roles: selectedRoles })
-            })
-            .then(response => {
-                if (!response.ok) throw new Error(response.status);
-                const ct = response.headers.get('content-type');
-                if (!ct || !ct.includes('application/json')) throw new Error('Unexpected response type');
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    showNotification(data.message || '권한이 성공적으로 저장되었습니다.', 'success');
-                    const rolesCell = document.querySelector(`[data-roles-cell="${currentCategoryId}"]`);
-                    if (rolesCell && data.roles !== undefined) {
-                        rolesCell.replaceChildren();
-
-                        if (data.roles.length > 0) {
-                            const rolesWrapper = document.createElement('div');
-                            rolesWrapper.className = 'flex flex-wrap gap-1.5';
-
-                            data.roles.forEach(role => {
-                                const badge = document.createElement('span');
-                                badge.className = 'inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-500/10 ring-inset dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700';
-                                badge.textContent = role.name;
-                                rolesWrapper.appendChild(badge);
-                            });
-
-                            rolesCell.appendChild(rolesWrapper);
-                        } else {
-                            const emptyLabel = document.createElement('span');
-                            emptyLabel.className = 'text-gray-500 dark:text-gray-400';
-                            emptyLabel.textContent = '없음';
-                            rolesCell.appendChild(emptyLabel);
-                        }
-                    }
-                    window.dispatchEvent(new CustomEvent('close-modal', {
-                        detail: { modalId: 'roles-modal' }
-                    }));
-                } else {
-                    showNotification(data.message || '권한 저장 중 오류가 발생했습니다.', 'error');
-                }
-            })
-            .catch(error => {
-                showNotification('권한 저장 중 네트워크 오류가 발생했습니다.', 'error');
+            Livewire.dispatch('admin:modal-stack:push', {
+                id: 'menu-order-' + categoryId + '-' + Date.now(),
+                component: 'admin.menus.menu-order-modal',
+                params: { categoryId: parseInt(categoryId), categoryName: categoryName },
+                title: '메뉴 순서 변경',
+                size: 'md',
+                width: 560,
+                height: 640,
+                closeOnBackdrop: false
             });
         });
     </script>

@@ -153,6 +153,49 @@ php artisan view:clear
 컴포넌트 목록과 사용 기준은 [docs/components.md](docs/components.md)를 기준으로 관리합니다.
 새 style 개발 계약과 AI 개발 체크리스트는 [docs/style-development-contract.md](docs/style-development-contract.md)를 기준으로 합니다.
 
+## Livewire ModalStack
+
+관리자 모달 표준은 `laravel-admin`의 `admin.modal-stack`입니다. 모달 안에 Livewire 컴포넌트를 동적으로 띄우고, 닫을 때 stack entry를 제거해 내부 컴포넌트가 DOM에서 함께 제거되도록 합니다.
+
+```blade
+<livewire:admin.modal-stack />
+```
+
+부모 Livewire 컴포넌트에서는 원하는 child component를 stack에 추가합니다.
+
+```php
+$this->dispatch('admin:modal-stack:push', [
+    'id' => 'user-edit-'.$user->id.'-'.uniqid(),
+    'component' => 'admin.users.user-edit-modal',
+    'params' => ['userId' => $user->id],
+    'title' => '사용자 수정',
+    'size' => 'md',
+    'width' => 576,
+    'height' => 560,
+]);
+```
+
+`admin:modal-stack:open`은 기존 stack을 교체하고, `admin:modal-stack:push`는 nested modal을 추가합니다. 닫기는 `admin:modal-stack:close`, `admin:modal-stack:close-top`, `admin:modal-stack:close-all`을 사용합니다.
+
+ModalStack 항목은 `id`, `component`, `params`, `key`, `title`, `size`, `version`, `width`, `height`, `minWidth`, `minHeight`, `draggable`, `resizable`, `closeOnBackdrop` 정보를 가집니다. `key`는 component name, modal id, params hash, version 조합으로 생성됩니다. 따라서 A 사용자 모달을 닫고 B 사용자 모달을 열면 B는 새 Livewire 인스턴스로 mount되고 A의 입력값이나 validation error를 공유하지 않습니다.
+
+자식 모달은 저장 후 이벤트를 dispatch하고 필요하면 자신의 stack entry를 닫습니다.
+
+```php
+$this->dispatch('user-saved', userId: $this->userId);
+$this->dispatch('admin:modal-stack:close', id: $this->modalStackId);
+```
+
+부모 목록은 `#[On]`으로 저장 이벤트를 수신해 목록을 다시 렌더링합니다. 동적 child component 전체에 `wire:ignore`를 걸지 말고, Alpine drag/resize가 필요한 경우 ModalStack shell wrapper에만 `wire:ignore.self`를 사용합니다.
+
+금지된 레거시 계약:
+
+- `draggable-modal`
+- `modal-trigger`
+- `modal-manager.js`
+- `open-modal` / `close-modal`
+- fetched HTML modal injection
+
 ## 퍼블리시 경로
 
 자산은 패키지 분리 전과 같은 호스트 앱 경로로 퍼블리시됩니다.
@@ -161,7 +204,6 @@ php artisan view:clear
 resources/vendor/laravel-admin/admin.css
 resources/vendor/laravel-admin/admin.js
 resources/vendor/laravel-admin/dtree.js
-resources/vendor/laravel-admin/modal-manager.js
 resources/vendor/laravel-admin/modal-utils.js
 config/laravel-admin-ui.php
 resources/views/vendor/laravel-admin

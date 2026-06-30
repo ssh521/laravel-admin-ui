@@ -162,15 +162,13 @@
                                         </td>
                                         <td class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 md:table-cell dark:text-gray-300">
                                             @if($menu->category)
-                                                <x-laravel-admin::admin.modal-trigger
-                                                    text="{{ $menu->category->name }}"
-                                                    modal-id="menu-order-modal"
-                                                    variant="primary"
-                                                    type="link"
-                                                    data-category-id="{{ $menu->category->id }}"
-                                                    data-category-name="{{ $menu->category->name }}"
-                                                    modal-type="single"
-                                                />
+                                                <button
+                                                    type="button"
+                                                    class="cursor-pointer font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-300 dark:hover:text-indigo-200"
+                                                    onclick="openMenuOrderModal({{ $menu->category->id }}, @js($menu->category->name))"
+                                                >
+                                                    {{ $menu->category->name }}
+                                                </button>
                                             @else
                                                 <span class="text-gray-400 dark:text-gray-500">-</span>
                                             @endif
@@ -238,25 +236,7 @@
         </div>
     </div>
 
-    <x-laravel-admin::admin.draggable-modal
-        id="category-selection-modal"
-        title="메뉴 카테고리 변경"
-        width="500"
-        height="700"
-        :close-on-backdrop-click="false"
-    >
-        <livewire:admin.menus.change-category-modal />
-    </x-laravel-admin::admin.draggable-modal>
-
-    <x-laravel-admin::admin.draggable-modal
-        id="menu-order-modal"
-        title="메뉴 순서 변경"
-        width="560"
-        height="640"
-        :close-on-backdrop-click="false"
-    >
-        <livewire:admin.menus.menu-order-modal />
-    </x-laravel-admin::admin.draggable-modal>
+    <livewire:admin.modal-stack />
 
     <script>
         function openCategorySelectionModal() {
@@ -266,33 +246,32 @@
                 return;
             }
 
-            Livewire.dispatch('admin-menus:change-category-modal:set-selected', { ids: selectedIds });
+            Livewire.dispatch('admin:modal-stack:push', {
+                id: 'change-category-' + Date.now(),
+                component: 'admin.menus.change-category-modal',
+                params: { selectedMenuIds: selectedIds },
+                title: '메뉴 카테고리 변경',
+                size: 'md',
+                width: 500,
+                height: 700,
+                closeOnBackdrop: false
+            });
+        }
 
-            window.dispatchEvent(new CustomEvent('open-modal', {
-                detail: { modalId: 'category-selection-modal' }
-            }));
+        function openMenuOrderModal(categoryId, categoryName) {
+            Livewire.dispatch('admin:modal-stack:push', {
+                id: 'menu-order-' + categoryId + '-' + Date.now(),
+                component: 'admin.menus.menu-order-modal',
+                params: { categoryId: parseInt(categoryId), categoryName: categoryName },
+                title: '메뉴 순서 변경',
+                size: 'md',
+                width: 560,
+                height: 640,
+                closeOnBackdrop: false
+            });
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('[data-category-id]').forEach(button => {
-                button.addEventListener('click', function() {
-                    const categoryId = this.getAttribute('data-category-id');
-                    const categoryName = this.getAttribute('data-category-name');
-                    if (categoryId && categoryName) {
-                        window.dispatchEvent(new CustomEvent('open-modal', {
-                            detail: { modalId: 'menu-order-modal' }
-                        }));
-
-                        Livewire.dispatch('admin-menus:menu-order-modal:open', {
-                            data: {
-                                categoryId: parseInt(categoryId),
-                                categoryName: categoryName
-                            }
-                        });
-                    }
-                });
-            });
-
             Livewire.on('menu-order-modal:refresh-page', () => {
                 setTimeout(() => {
                     window.location.reload();

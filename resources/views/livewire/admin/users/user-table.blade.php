@@ -94,7 +94,7 @@
                                                 type="button"
                                                 variant="link"
                                                 size="sm"
-                                                wire:click="showUserDetailModal({{ $user->id }})"
+                                                wire:click="showUserModal({{ $user->id }})"
                                                 class="h-auto px-0 py-0"
                                             >
                                                 {{ $user->name }}
@@ -140,6 +140,9 @@
                                 </x-laravel-admin::admin.action-button>
                             @endcan
                             @can('update', $user)
+                                <x-laravel-admin::admin.action-button variant="link" size="sm" type="button" wire:click="edit({{ $user->id }})" icon="pen-to-square" class="ml-1 h-auto px-2 py-1">
+                                    {{ __('모달수정') }}
+                                </x-laravel-admin::admin.action-button>
                                 <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.users.edit', $user)" icon="pen-to-square" class="ml-1 h-auto px-2 py-1">
                                     {{ __('수정') }}
                                 </x-laravel-admin::admin.action-button>
@@ -169,5 +172,5 @@
         </div>
     @endif
 
-    <livewire:admin.users.user-detail-modal />
+    <livewire:admin.modal-stack />
 </x-laravel-admin::admin.page-section>

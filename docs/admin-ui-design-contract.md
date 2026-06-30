@@ -143,21 +143,69 @@ Detail screens should:
 - Show only list navigation in the top action area.
 - Show only the primary continuation action, usually edit, in the footer.
 
-## Modal Contract
+## ModalStack Contract
 
-Modal content should reuse the same page design language:
+`admin.modal-stack` is the only admin modal contract. Legacy Alpine wrappers, trigger dispatchers, and HTML injection modals are not part of the current contract.
 
-- Bordered card surfaces.
-- Description-list detail content.
-- Bordered selectable rows for checkboxes.
-- Footer actions separated by a top border.
-- A clear route to the full show or edit page when available.
+Ownership:
 
-Implementation rules:
+- `laravel-admin-ui` owns the ModalStack shell view, drag/resize JavaScript, z-index presentation, and documentation contract.
+- `laravel-admin` owns the `admin.modal-stack` Livewire class and domain child components.
+- Feature packages should expose modal content as mountable Livewire child components and open them through the stack events.
 
-- Preserve existing `id`, `wire:*`, `x-*`, `data-*`, and JavaScript event hooks unless intentionally changing behavior.
+Modal entry shape:
+
+| Field | Required | Purpose |
+| --- | --- | --- |
+| `id` | yes | Stable stack entry id used for close/remove. |
+| `component` | yes | Livewire component alias, for example `admin.users.user-edit-modal`. |
+| `params` | yes | Mount parameters for the child component. `modalStackId` is injected when missing. |
+| `key` | generated | Unique Livewire key. Generated from component name, modal id, params hash, and version. |
+| `title` | yes | Shell title. |
+| `size` | yes | Semantic width hint: `sm`, `md`, `lg`, `xl`, `2xl`, or `full`. |
+| `version` | generated | Monotonic stack version used to force fresh child identity. |
+| `width`, `height` | optional | Initial shell dimensions in pixels. |
+| `minWidth`, `minHeight` | optional | Resize limits. |
+| `draggable`, `resizable` | optional | Enable shell drag and resize. Defaults to enabled. |
+| `closeOnBackdrop` | optional | Whether backdrop click closes the top modal. Defaults to enabled. |
+
+Open and close API:
+
+- `admin:modal-stack:open` replaces the current stack with one modal.
+- `admin:modal-stack:push` appends a modal and supports nested modals.
+- `admin:modal-stack:close` removes a specific `id`; without an id it closes the top modal.
+- `admin:modal-stack:close-top` closes only the last modal.
+- `admin:modal-stack:close-all` clears the stack.
+
+Lifecycle rules:
+
+- Closing a modal must remove its stack entry so the child Livewire component is removed from the DOM.
+- Reopening a modal must create a new child Livewire instance with a new generated key.
+- The same component may be opened multiple times with different params; state and validation errors must not cross between entries.
+- Do not rely on changing parent props to refresh an already mounted child component.
+- Do not rely on `mount()` being called again unless the stack entry was removed and a new key was generated.
+
+UI and interaction rules:
+
+- Modal content should reuse the same page design language: bordered card surfaces, description lists for detail content, bordered selectable rows for checkboxes, and footer actions separated by a top border.
 - Prefer wider modal dimensions when content contains badges, grids, or selectable rows.
 - Keep quick-edit forms short; move complex editing to the full edit page.
+- ModalStack owns drag, resize, z-index ordering, ESC close, backdrop close, and top-modal-only close behavior.
+- The last modal in the stack must render with the highest z-index.
+- ESC, backdrop click, and shell close buttons should affect only the top modal unless an explicit modal id is supplied.
+
+Forbidden patterns:
+
+- Do not use `x-show` alone to hide dynamic Livewire modal content.
+- Do not put `wire:ignore` on the whole nested Livewire component.
+- Do not reintroduce `draggable-modal`, `modal-trigger`, `modal-manager.js`, `open-modal`, or `close-modal`.
+- Do not inject fetched HTML into a modal shell for admin workflows that need Livewire state.
+
+Event refresh rules:
+
+- Child modal components should dispatch a saved event such as `user-saved` or a package-scoped equivalent.
+- Parent list components should listen with `#[On]` and rebuild their query on render.
+- Child components may close their own stack entry by dispatching `admin:modal-stack:close` with `id: $this->modalStackId`.
 
 ## Button Contract
 
