@@ -7,7 +7,8 @@
 <div class="dtree">
     <div class="p-2">
         {{-- Root: 사이트명 --}}
-        <div class="dTreeNode flex items-center">
+        <div class="dTreeNode flex items-center cursor-pointer select-none"
+            @click="if (! $event.target.closest('a')) window.location.href = @js(route('admin.index'))">
             <img src="{{ $dtreeImg('base.gif') }}" alt="" class="dtree-img flex-shrink-0" />
             <a href="{{ route('admin.index') }}" class="node {{ request()->routeIs('admin.index') ? 'nodeSel' : '' }} ml-0.5" title="{{ config('app.name') }}">
                 {{ config('app.name') }}
@@ -54,7 +55,8 @@
                             @php
                                 $isLastMenu = $menuIndex === $menus->count() - 1;
                             @endphp
-                            <div class="dTreeNode flex items-center">
+                            <div class="dTreeNode flex items-center cursor-pointer select-none"
+                                @click="if (! $event.target.closest('a')) { const link = $el.querySelector('a.node'); if (link?.target === '_blank') { window.open(link.href, '_blank', 'noopener'); } else if (link) { window.location.href = link.href; } }">
                                 <span class="dtree-indent flex items-center flex-shrink-0 ml-[0.1rem]">
                                     <img src="{{ $dtreeImg('empty.gif') }}" alt="" class="dtree-img" />
                                     <img src="{{ $dtreeImg($isLastMenu ? 'joinbottom.gif' : 'join.gif') }}" alt="" class="dtree-img" />

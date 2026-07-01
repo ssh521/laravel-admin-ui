@@ -610,6 +610,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('dtree-folder-icon', $leftMenu);
         $this->assertStringContainsString('dtree-folder-icon-open', $leftMenu);
         $this->assertStringContainsString('dtree-text ml-1', $leftMenu);
+        $this->assertStringContainsString("window.location.href = @js(route('admin.index'))", $leftMenu);
+        $this->assertStringContainsString("const link = \$el.querySelector('a.node')", $leftMenu);
+        $this->assertStringContainsString("window.open(link.href, '_blank', 'noopener')", $leftMenu);
         $this->assertStringContainsString('class="node ml-1', $leftMenu);
         $this->assertStringContainsString("\$menu->icon ?: 'file-lines'", $leftMenu);
         $this->assertStringContainsString("\$dtreeImg('empty.gif')", $leftMenu);
