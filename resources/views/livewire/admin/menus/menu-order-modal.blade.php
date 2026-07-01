@@ -67,18 +67,20 @@
                     </div>
                 </div>
                 <div class="flex-shrink-0 ml-2">
-                    <button
+                    <x-laravel-admin::admin.action-button
                         type="button"
+                        variant="link"
+                        size="sm"
                         @click.stop="
                             $dispatch('admin:modal-stack:close', { id: '{{ $modalStackId }}' });
                             setTimeout(() => {
                                 window.location.href = '{{ route('admin.menus.edit', ['menu' => $menu['id']]) }}';
                             }, 100);
                         "
-                        class="cursor-pointer px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-md transition-colors"
+                        class="h-auto px-2 py-1"
                         title="메뉴 수정">
                         수정
-                    </button>
+                    </x-laravel-admin::admin.action-button>
                 </div>
             </div>
         </div>
@@ -94,18 +96,18 @@
     @endif
 
     {{-- 모달 푸터 버튼들 --}}
-    <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <button
-            id="menu-order-save-button"
+    <div class="mt-6 flex justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
+        <x-laravel-admin::admin.action-button
             type="button"
-            class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300 disabled:opacity-60 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:disabled:bg-indigo-900">
-            순서 저장하기
-        </button>
-        <x-laravel-admin::admin.secondary-button
-            type="button"
+            variant="secondary"
             @click="$dispatch('admin:modal-stack:close', { id: '{{ $modalStackId }}' })">
             닫기
-        </x-laravel-admin::admin.secondary-button>
+        </x-laravel-admin::admin.action-button>
+        <x-laravel-admin::admin.action-button
+            id="menu-order-save-button"
+            type="button">
+            순서 저장하기
+        </x-laravel-admin::admin.action-button>
     </div>
 
     <script>

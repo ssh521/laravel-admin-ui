@@ -60,11 +60,13 @@ Rules:
 
 Every resource page should use the same structural rhythm:
 
-- Prefer `x-laravel-admin::admin.page-section` for page canvas, title, description, and actions.
+- List pages should use the full-width `admin/admin-users` canvas rhythm: `w-full bg-white px-2 py-2` with an inner `min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8`, or an equivalent shared component that renders that structure.
 - The admin layout main area must own the admin shell background so long list pages do not reveal the body background while scrolling.
 - Forms and detail cards should align on `mx-auto max-w-4xl`.
 - Page title should be concise, with one short helper sentence below it.
 - Primary actions should sit at the top-right on desktop and below the title on mobile.
+- Admin header navigation should follow the `admin/popups` pattern. Dashboard and list pages use `관리자 홈 - {리소스 관리}`. Create, detail, and edit pages use `관리자 홈 - {리소스 목록} - 등록|상세|수정`.
+- Use short action crumbs such as `등록`, `상세`, and `수정`; do not append long record titles to the admin-header breadcrumb.
 - Do not use legacy dashed panels, hard-coded gray hex colors, or inline focus scripts for new screens.
 
 ## Resource Pattern
@@ -129,6 +131,8 @@ Footer rules:
 - Avoid extra top margin on footer rows immediately after section dividers.
 - Reuse a shared form partial for create/edit when fields overlap, while keeping page titles, routes, HTTP methods, and edit-only external actions in the page wrapper.
 - Form page titles should include the resource, information scope, and action, such as `회원 정보 등록` or `회원 정보 수정`.
+- Edit page wrappers should follow the `admin/admin-users/edit` baseline: keep the top header informational, avoid extra top-right navigation such as `상세보기` unless the workflow explicitly requires it, and place delete/cancel/update actions in the footer row.
+- Use `수정하기` for the primary submit button on edit pages that update an existing record.
 
 ## Detail Contract
 
@@ -140,7 +144,7 @@ Detail screens should:
 - Use one column on mobile and two columns when there is enough width.
 - Render statuses, roles, and categories as badges.
 - Put repeated actions in the card footer.
-- Show only list navigation in the top action area.
+- Show only list navigation in the top action area, using the visible label `목록보기`.
 - Show only the primary continuation action, usually edit, in the footer.
 
 ## ModalStack Contract
@@ -173,6 +177,7 @@ Open and close API:
 
 - `admin:modal-stack:open` replaces the current stack with one modal.
 - `admin:modal-stack:push` appends a modal and supports nested modals.
+- Event payloads may be sent as a single array/object or as named Livewire arguments. The ModalStack Livewire class must preserve `width`, `height`, `minWidth`, `minHeight`, `draggable`, `resizable`, and `closeOnBackdrop` from named event payloads instead of falling back to defaults.
 - `admin:modal-stack:close` removes a specific `id`; without an id it closes the top modal.
 - `admin:modal-stack:close-top` closes only the last modal.
 - `admin:modal-stack:close-all` clears the stack.
@@ -189,6 +194,7 @@ UI and interaction rules:
 
 - Modal content should reuse the same page design language: bordered card surfaces, description lists for detail content, bordered selectable rows for checkboxes, and footer actions separated by a top border.
 - Prefer wider modal dimensions when content contains badges, grids, or selectable rows.
+- Detail-only inspection modals should stay compact. User detail modals use a 680px width and 480px initial height unless the content grows beyond that pattern.
 - Keep quick-edit forms short; move complex editing to the full edit page.
 - ModalStack owns drag, resize, z-index ordering, ESC close, backdrop close, and top-modal-only close behavior.
 - The last modal in the stack must render with the highest z-index.

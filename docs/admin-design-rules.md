@@ -41,6 +41,7 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Use `w-full` without a max-width cap for resource list pages that contain tables or wide filter bars.
 - Keep the admin layout main area on the admin shell background. Transparent gutters around long list pages let the body background show through at the bottom of tables.
 - Keep the inner form/detail content aligned on `mx-auto max-w-4xl`.
+- Keep the admin-header breadcrumb aligned with the `admin/popups` baseline: dashboard and list pages use `관리자 홈 - {리소스 관리}`, while create/detail/edit pages use `관리자 홈 - {리소스 목록} - 등록|상세|수정`. Do not append long record titles.
 - Avoid nested decorative cards. Use cards only when they frame a concrete data object or form group.
 - Keep spacing generous but operational: `px-4 py-6 sm:px-6 lg:px-8` is the default page padding.
 
@@ -99,6 +100,8 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Put destructive actions on the left side of the shared footer row and submit/cancel actions on the right.
 - Do not add extra top margin to form footer rows after a section divider. Use `col-span-full flex items-center justify-end gap-x-3` for create footers and `mx-auto flex w-full max-w-4xl flex-col gap-3 px-2 sm:flex-row sm:items-center sm:justify-between` for edit external action rows.
 - Use purpose-specific create/edit titles in the form header, such as `회원 정보 등록` and `회원 정보 수정`, instead of a generic shared title such as `회원 정보`.
+- Keep edit page headers informational like `admin/admin-users/edit`; avoid extra top-right detail/navigation actions unless the resource workflow explicitly needs them.
+- Use `수정하기` as the primary submit label on ordinary edit pages.
 - Preserve locked states with disabled controls plus muted color and helper text.
 
 ## Detail Views
@@ -118,6 +121,7 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Preserve all JavaScript and Livewire hooks when restyling modals. Keep existing `id`, `class`, `data-*`, and `wire:*` attributes unless the behavior is intentionally changed.
 - Use modals for quick inspection and short editing flows. Provide a clear route to the full show or edit page when deeper work is available.
 - For draggable modals, choose a width and height that fits the content without forcing cramped grids. Roles and menu category management modals should be wider than legacy 500px layouts when they contain badges or checkbox grids.
+- Keep detail-only inspection modals compact. Use explicit `width`, `height`, and minimum size payloads so Livewire does not fall back to ModalStack defaults; user detail modals use `width: 680`, `height: 480`, and `minHeight: 420`.
 - Keep modal footers right-aligned and visually separated with a top border.
 - Use bordered selectable rows for checkbox lists in modals, matching the page form checkbox style.
 

@@ -26,20 +26,21 @@
         @endforeach
     </div>
 
-    <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <x-laravel-admin::admin.secondary-button
+    <div class="mt-6 flex justify-end gap-3 border-t border-gray-200 pt-4 dark:border-gray-700">
+        <x-laravel-admin::admin.action-button
             type="button"
+            variant="secondary"
             wire:click="$dispatch('admin:modal-stack:close', { id: '{{ $modalStackId }}' })">
             취소
-        </x-laravel-admin::admin.secondary-button>
+        </x-laravel-admin::admin.action-button>
         @if (count($selectedMenuIds) === 0)
-            <x-laravel-admin::admin.primary-button type="button" wire:click="save" disabled>
+            <x-laravel-admin::admin.action-button type="button" wire:click="save" disabled>
                 변경
-            </x-laravel-admin::admin.primary-button>
+            </x-laravel-admin::admin.action-button>
         @else
-            <x-laravel-admin::admin.primary-button type="button" wire:click="save">
+            <x-laravel-admin::admin.action-button type="button" wire:click="save">
                 변경
-            </x-laravel-admin::admin.primary-button>
+            </x-laravel-admin::admin.action-button>
         @endif
     </div>
 </div>

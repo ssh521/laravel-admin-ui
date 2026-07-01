@@ -220,6 +220,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('권한 목록', $pageSection);
         $this->assertStringContainsString('dark:bg-gray-900', $pageSection);
         $this->assertStringContainsString('focus:border-indigo-500', $input);
+        $this->assertStringContainsString('w-full', $input);
         $this->assertStringContainsString('<select', $select);
         $this->assertStringContainsString('<textarea', $textarea);
         $this->assertStringContainsString('활성화', $checkboxRow);

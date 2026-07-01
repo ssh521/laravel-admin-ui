@@ -5,7 +5,10 @@
                 <a href="{{ route('admin.index') }}">관리자 홈</a>
                 @can('viewAny', Ssh521\LaravelAdmin\Models\User::class)
                     - <a href="{{ route('admin.users.index') }}">회원 목록</a>
+                @else
+                    - {{ __('회원 목록') }}
                 @endcan
+                - 상세
             </x-slot>
             <x-slot name="description">
                 {{ __('사용자 정보') }}

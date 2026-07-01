@@ -3,6 +3,7 @@
         <x-laravel-admin::admin.admin-header>
             <x-slot name="navigation">
                 <a href="{{ route('admin.index') }}">{{ __('관리자 홈') }}</a>
+                - <a href="{{ route('admin.users.index') }}">{{ __('회원 관리') }}</a>
             </x-slot>
             <x-slot name="description">
                 {{ __('회원 목록') }}
@@ -112,7 +113,7 @@
                                                     type="button"
                                                     variant="link"
                                                     size="sm"
-                                                    x-on:click="Livewire.dispatch('admin:modal-stack:push', { id: 'user-show-{{ $user->id }}-' + Date.now(), component: 'admin.users.user-show-modal', params: { userId: {{ $user->id }} }, title: '사용자 상세 정보', size: 'lg' })"
+                                                    x-on:click="Livewire.dispatch('admin:modal-stack:push', { id: 'user-show-{{ $user->id }}-' + Date.now(), component: 'admin.users.user-show-modal', params: { userId: {{ $user->id }} }, title: '사용자 상세 정보', size: 'lg', width: 680, height: 480, minHeight: 420 })"
                                                     class="h-auto px-0 py-0"
                                                 >
                                                     {{ $user->name }}

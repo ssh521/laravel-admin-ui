@@ -3,6 +3,8 @@
         <x-laravel-admin::admin.admin-header>
             <x-slot name="navigation">
                 <a href="{{ route('admin.index') }}">{{ __('관리자 홈') }}</a>
+                - <a href="{{ route('admin.roles.index') }}">{{ __('역할 목록') }}</a>
+                - {{ __('수정') }}
             </x-slot>
             <x-slot name="description">
                 {{ __('역할 수정') }}
