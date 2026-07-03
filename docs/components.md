@@ -60,7 +60,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 | `admin.date-range` | 시작일/종료일 필터 |
 | `admin.sort-control` | 정렬 필드와 방향 select |
 | `admin.column-toggle` | 테이블 컬럼 표시/숨김 menu |
-| `admin.table-shell` | responsive table overflow wrapper |
+| `admin.table-shell` | responsive table overflow wrapper with desktop/tablet minimum height for row action-menu clearance |
 | `admin.table-empty-row` | `<tbody>` 내부 empty row |
 | `admin.empty-state` | 표 밖의 빈 상태 안내 |
 | `admin.pagination` | simple previous/next paginator wrapper for explicit simple-pagination cases; ordinary resource lists should use Laravel paginator `links()` to match `admin/users` |

@@ -105,7 +105,7 @@
             </x-laravel-admin::admin.filter-bar>
 
             <div class="mt-6 flow-root" x-data="menuCategoryDragSort()" x-init="initNativeDrag()">
-                <div class="-mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="-mx-4 overflow-x-auto sm:min-h-64 sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">

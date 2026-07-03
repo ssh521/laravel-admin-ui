@@ -165,7 +165,7 @@ class YaverstyleClassResolver implements StyleClassResolver
             'form.textarea' => 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:disabled:bg-gray-800',
             'filter-bar' => 'mt-6 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center dark:border-gray-700 dark:bg-gray-800/70',
             'table-shell.outer' => 'flow-root',
-            'table-shell.scroller' => '-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8',
+            'table-shell.scroller' => '-mx-4 -my-2 overflow-x-auto sm:min-h-64 sm:-mx-6 lg:-mx-8',
             'table-shell.inner' => 'inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8',
             default => '',
         };

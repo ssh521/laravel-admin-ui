@@ -217,6 +217,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('<form', $filterBar);
         $this->assertStringContainsString('dark:bg-gray-800/70', $filterBar);
         $this->assertStringContainsString('overflow-x-auto', $tableShell);
+        $this->assertStringContainsString('sm:min-h-64', $tableShell);
         $this->assertStringContainsString('권한 목록', $pageSection);
         $this->assertStringContainsString('dark:bg-gray-900', $pageSection);
         $this->assertStringContainsString('focus:border-indigo-500', $input);
@@ -491,8 +492,10 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('Do not expose technical identifiers or generated ordering values', $contract);
         $this->assertStringContainsString('For ordinary sortable list pages, make sortable column titles direct links', $contract);
         $this->assertStringContainsString('Render table row commands through `x-laravel-admin::admin.action-menu`', $contract);
+        $this->assertStringContainsString('minimum desktop/tablet table-scroller height', $contract);
         $this->assertStringContainsString('compact vertical rhythm with `py-3`', $rules);
         $this->assertStringContainsString('Table rows with multiple record commands should use `admin.action-menu`', $rules);
+        $this->assertStringContainsString('minimum table-scroller height', $rules);
         $this->assertStringContainsString('Do not expose technical identifiers or generated ordering values', $rules);
         $this->assertStringContainsString('For ordinary sortable list pages, use clickable column titles', $rules);
 
@@ -511,6 +514,16 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             $this->assertStringNotContainsString('py-3.5', $source, "{$relativePath} should use compact table header padding.");
             $this->assertStringNotContainsString('px-3 py-4', $source, "{$relativePath} should use compact table body padding.");
             $this->assertStringNotContainsString('whitespace-nowrap py-4', $source, "{$relativePath} should use compact table body padding.");
+        }
+
+        foreach ([
+            'resources/views/admin/admin-users/index.blade.php',
+            'resources/views/admin/menus/index.blade.php',
+            'resources/views/admin/menu-categories/index.blade.php',
+        ] as $relativePath) {
+            $source = file_get_contents(__DIR__.'/../../'.$relativePath);
+
+            $this->assertStringContainsString('overflow-x-auto sm:min-h-64', $source, "{$relativePath} should keep desktop row action menus away from the table edge.");
         }
     }
 
