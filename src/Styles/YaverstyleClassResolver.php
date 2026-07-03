@@ -131,7 +131,7 @@ class YaverstyleClassResolver implements StyleClassResolver
             'user-cell.body' => 'min-w-0',
             'user-cell.name' => 'truncate text-sm font-medium text-gray-900 dark:text-white',
             'user-cell.email' => 'truncate text-sm text-gray-500 dark:text-gray-400',
-            'action-menu.trigger' => 'inline-flex size-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200',
+            'action-menu.trigger' => 'inline-flex size-10 cursor-pointer items-center justify-center text-gray-900 transition hover:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400 dark:text-gray-100 dark:hover:text-gray-300 [&_*]:cursor-pointer',
             'table-empty-row.cell' => 'px-6 py-12 text-center text-sm text-gray-500 dark:text-gray-400',
             'loading-overlay.wrapper' => 'relative',
             'loading-overlay.overlay' => 'absolute inset-0 z-20 flex items-center justify-center rounded-lg bg-white/70 backdrop-blur-sm dark:bg-gray-900/70',

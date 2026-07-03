@@ -207,17 +207,19 @@
                                         </td>
                                         <td class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 lg:table-cell dark:text-gray-300">{{ $category->created_at->format('Y-m-d H:i') }}</td>
                                         <td class="whitespace-nowrap py-3 pr-4 pl-3 text-right text-sm font-medium sm:pr-0">
-                                            <div class="flex justify-end gap-3">
-                                                @can('view', $category)
-                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menu-categories.show', $category)" icon="eye" class="h-auto px-0 py-0">
-                                                        {{ __('상세보기') }}
-                                                    </x-laravel-admin::admin.action-button>
-                                                @endcan
-                                                @can('update', $category)
-                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menu-categories.edit', $category)" icon="pen-to-square" class="h-auto px-0 py-0">
-                                                        {{ __('수정') }}
-                                                    </x-laravel-admin::admin.action-button>
-                                                @endcan
+                                            <div class="flex justify-end">
+                                                <x-laravel-admin::admin.action-menu>
+                                                    @can('view', $category)
+                                                        <x-laravel-admin::admin.dropdown-link :href="route('admin.menu-categories.show', $category)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                            {{ __('상세보기') }}
+                                                        </x-laravel-admin::admin.dropdown-link>
+                                                    @endcan
+                                                    @can('update', $category)
+                                                        <x-laravel-admin::admin.dropdown-link :href="route('admin.menu-categories.edit', $category)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                            {{ __('수정') }}
+                                                        </x-laravel-admin::admin.dropdown-link>
+                                                    @endcan
+                                                </x-laravel-admin::admin.action-menu>
                                             </div>
                                         </td>
                                     </tr>

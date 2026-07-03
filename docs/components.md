@@ -38,13 +38,13 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 
 | Component | Purpose |
 | --- | --- |
-| `admin.action-button` | primary, secondary, danger, search, link action; use for `등록하기`, `목록보기`/`취소`, `저장하기`/`수정하기`, `삭제하기`, 검색 submit, and compact row actions; must keep pointer cursor on the whole hit area |
+| `admin.action-button` | primary, secondary, danger, search, and standalone link actions; use for `등록하기`, `목록보기`/`취소`, `저장하기`/`수정하기`, `삭제하기`, and 검색 submit; must keep pointer cursor on the whole hit area |
 | `admin.primary-button` | legacy primary submit button |
 | `admin.secondary-button` | legacy secondary button |
 | `admin.danger-button` | legacy destructive button |
 | `admin.dropdown` | compact command menu container |
 | `admin.dropdown-link` | dropdown 내부 링크 item |
-| `admin.action-menu` | row action dropdown trigger + content |
+| `admin.action-menu` | compact table row action dropdown with adaptive up/down placement, unboxed horizontal ellipsis trigger, padded rounded panel, left-aligned items, blue hover/focus states, and a separator before secondary modal/Livewire commands |
 | `admin.confirm-dialog` | 삭제/위험 작업 확인 dialog |
 | `admin.copy-button` | 값 표시와 clipboard 복사 action |
 | `admin.export-button` | CSV/Excel/PDF 등 내보내기 dropdown |

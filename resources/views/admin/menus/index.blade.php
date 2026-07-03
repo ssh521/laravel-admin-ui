@@ -200,17 +200,19 @@
                                             </x-laravel-admin::admin.badge>
                                         </td>
                                         <td class="whitespace-nowrap py-3 pr-4 pl-3 text-right text-sm font-medium sm:pr-0">
-                                            <div class="flex justify-end gap-3">
-                                                @can('view', $menu)
-                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menus.show', $menu)" icon="eye" class="h-auto px-0 py-0">
-                                                        {{ __('상세보기') }}
-                                                    </x-laravel-admin::admin.action-button>
-                                                @endcan
-                                                @can('update', $menu)
-                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.menus.edit', $menu)" icon="pen-to-square" class="h-auto px-0 py-0">
-                                                        {{ __('수정') }}
-                                                    </x-laravel-admin::admin.action-button>
-                                                @endcan
+                                            <div class="flex justify-end">
+                                                <x-laravel-admin::admin.action-menu>
+                                                    @can('view', $menu)
+                                                        <x-laravel-admin::admin.dropdown-link :href="route('admin.menus.show', $menu)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                            {{ __('상세보기') }}
+                                                        </x-laravel-admin::admin.dropdown-link>
+                                                    @endcan
+                                                    @can('update', $menu)
+                                                        <x-laravel-admin::admin.dropdown-link :href="route('admin.menus.edit', $menu)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                            {{ __('수정') }}
+                                                        </x-laravel-admin::admin.dropdown-link>
+                                                    @endcan
+                                                </x-laravel-admin::admin.action-menu>
                                             </div>
                                         </td>
                                     </tr>

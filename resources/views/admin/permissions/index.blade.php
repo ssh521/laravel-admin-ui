@@ -133,16 +133,20 @@
                                                 {{ $permission->description ?: '설명 없음' }}
                                             </td>
                                             <td class="py-3 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                                @can('view', $permission)
-                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.permissions.show', $permission)" icon="eye" class="h-auto px-2 py-1">
-                                                        {{ __('보기') }}
-                                                    </x-laravel-admin::admin.action-button>
-                                                @endcan
-                                                @can('update', $permission)
-                                                    <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.permissions.edit', $permission)" icon="pen-to-square" class="ml-1 h-auto px-2 py-1">
-                                                        {{ __('수정') }}
-                                                    </x-laravel-admin::admin.action-button>
-                                                @endcan
+                                                <div class="flex justify-end">
+                                                    <x-laravel-admin::admin.action-menu>
+                                                        @can('view', $permission)
+                                                            <x-laravel-admin::admin.dropdown-link :href="route('admin.permissions.show', $permission)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                                {{ __('보기') }}
+                                                            </x-laravel-admin::admin.dropdown-link>
+                                                        @endcan
+                                                        @can('update', $permission)
+                                                            <x-laravel-admin::admin.dropdown-link :href="route('admin.permissions.edit', $permission)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                                {{ __('수정') }}
+                                                            </x-laravel-admin::admin.dropdown-link>
+                                                        @endcan
+                                                    </x-laravel-admin::admin.action-menu>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty

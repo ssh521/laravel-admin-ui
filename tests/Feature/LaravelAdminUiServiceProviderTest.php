@@ -283,6 +283,17 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('bg-green-500', $statusDot);
         $this->assertStringContainsString('admin@example.com', $userCell);
         $this->assertStringContainsString('작업 메뉴', $actionMenu);
+        $this->assertStringContainsString('<circle cx="7" cy="12" r="1.35"', $actionMenu);
+        $this->assertStringContainsString('size-10', $actionMenu);
+        $this->assertStringContainsString('cursor-pointer', $actionMenu);
+        $this->assertStringContainsString('[&amp;_*]:cursor-pointer', $actionMenu);
+        $this->assertStringContainsString('size-7', $actionMenu);
+        $this->assertStringContainsString('w-36', $actionMenu);
+        $this->assertStringNotContainsString('rounded-xl bg-gray-50', $actionMenu);
+        $this->assertStringContainsString('laravel-admin-action-menu-content overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 shadow-xl', $actionMenu);
+        $this->assertStringContainsString('updatePlacement()', $actionMenu);
+        $this->assertStringContainsString("dropUp ? 'bottom-full mb-3 mt-0' : 'top-full mt-3 mb-0'", $actionMenu);
+        $this->assertStringNotContainsString('absolute z-50 rounded-md shadow-lg', $actionMenu);
         $this->assertStringContainsString('수정', $actionMenu);
         $this->assertStringContainsString('colspan="3"', $tableEmptyRow);
         $this->assertStringContainsString('데이터 없음', $tableEmptyRow);
@@ -479,7 +490,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('Center the first visible identity column header', $contract);
         $this->assertStringContainsString('Do not expose technical identifiers or generated ordering values', $contract);
         $this->assertStringContainsString('For ordinary sortable list pages, make sortable column titles direct links', $contract);
+        $this->assertStringContainsString('Render table row commands through `x-laravel-admin::admin.action-menu`', $contract);
         $this->assertStringContainsString('compact vertical rhythm with `py-3`', $rules);
+        $this->assertStringContainsString('Table rows with multiple record commands should use `admin.action-menu`', $rules);
         $this->assertStringContainsString('Do not expose technical identifiers or generated ordering values', $rules);
         $this->assertStringContainsString('For ordinary sortable list pages, use clickable column titles', $rules);
 
@@ -498,6 +511,35 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             $this->assertStringNotContainsString('py-3.5', $source, "{$relativePath} should use compact table header padding.");
             $this->assertStringNotContainsString('px-3 py-4', $source, "{$relativePath} should use compact table body padding.");
             $this->assertStringNotContainsString('whitespace-nowrap py-4', $source, "{$relativePath} should use compact table body padding.");
+        }
+    }
+
+    public function test_packaged_table_row_actions_use_action_menus(): void
+    {
+        foreach ([
+            'resources/views/admin/admin-users/index.blade.php',
+            'resources/views/admin/users/index.blade.php',
+            'resources/views/livewire/admin/users/user-table.blade.php',
+            'resources/views/admin/permissions/index.blade.php',
+            'resources/views/admin/menus/index.blade.php',
+            'resources/views/admin/menu-categories/index.blade.php',
+        ] as $relativePath) {
+            $source = file_get_contents(__DIR__.'/../../'.$relativePath);
+
+            $this->assertStringContainsString('<x-laravel-admin::admin.action-menu>', $source, "{$relativePath} should use the shared row action menu.");
+            $this->assertStringContainsString('class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100"', $source, "{$relativePath} should render large dropdown-link action menu items.");
+            $this->assertStringNotContainsString('class="block w-full rounded-lg px-6 py-1', $source, "{$relativePath} should reset native button styling for action menu buttons.");
+            $this->assertStringNotContainsString('icon="eye" class="h-auto px-2 py-1"', $source, "{$relativePath} should not expose compact inline view buttons.");
+            $this->assertStringNotContainsString('icon="pen-to-square" class="ml-1 h-auto px-2 py-1"', $source, "{$relativePath} should not expose compact inline edit buttons.");
+        }
+
+        foreach ([
+            'resources/views/admin/users/index.blade.php',
+            'resources/views/livewire/admin/users/user-table.blade.php',
+        ] as $relativePath) {
+            $source = file_get_contents(__DIR__.'/../../'.$relativePath);
+
+            $this->assertStringContainsString('aria-hidden="true" class="my-1 border-t border-gray-200 dark:border-gray-700"', $source, "{$relativePath} should separate modal edit from link actions.");
         }
     }
 
@@ -554,6 +596,26 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('.laravel-admin-action-button *', $css);
         $this->assertStringContainsString('cursor: pointer;', $css);
         $this->assertStringContainsString('laravel-admin-search-button', $button);
+        $this->assertStringContainsString('.laravel-admin-action-menu-content > *:hover', $css);
+        $this->assertStringContainsString('background-color: #2f7df6 !important;', $css);
+        $this->assertStringContainsString('.laravel-admin-action-menu-content > *:hover *', $css);
+        $this->assertStringNotContainsString('.laravel-admin-action-menu-content > :first-child', $css);
+        $this->assertStringContainsString('.laravel-admin-action-menu-content > * *', $css);
+        $this->assertStringContainsString('display: flex !important;', $css);
+        $this->assertStringContainsString('align-items: center;', $css);
+        $this->assertStringContainsString('justify-content: flex-start;', $css);
+        $this->assertStringContainsString('appearance: none;', $css);
+        $this->assertStringContainsString('background-color: transparent;', $css);
+        $this->assertStringContainsString('box-sizing: border-box;', $css);
+        $this->assertStringContainsString('font-size: 1rem !important;', $css);
+        $this->assertStringContainsString('font-weight: 500;', $css);
+        $this->assertStringContainsString('line-height: 1.5rem !important;', $css);
+        $this->assertStringContainsString('min-height: 2rem;', $css);
+        $this->assertStringContainsString('padding: 0.25rem 1.5rem !important;', $css);
+        $this->assertStringContainsString('.laravel-admin-action-menu-content > [aria-hidden="true"]', $css);
+        $this->assertStringContainsString('text-align: left !important;', $css);
+        $this->assertStringContainsString('border-radius: 0.5rem;', $css);
+        $this->assertStringNotContainsString('border-radius: 0.875rem;', $css);
         $this->assertStringContainsString('.dark .laravel-admin-search-button', $css);
         $this->assertStringContainsString('color: #111827 !important;', $css);
     }

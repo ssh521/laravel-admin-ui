@@ -14,6 +14,8 @@
         'comment-dots' => 'M4.5 5.25h15A1.5 1.5 0 0 1 21 6.75v8.25a1.5 1.5 0 0 1-1.5 1.5H9l-4.5 3v-3H4.5A1.5 1.5 0 0 1 3 15V6.75a1.5 1.5 0 0 1 1.5-1.5ZM8.25 11.25h.01M12 11.25h.01M15.75 11.25h.01',
         'comments' => 'M4.5 5.25h12A1.5 1.5 0 0 1 18 6.75v6.75A1.5 1.5 0 0 1 16.5 15H9l-4.5 3v-3A1.5 1.5 0 0 1 3 13.5V6.75a1.5 1.5 0 0 1 1.5-1.5ZM9 15.75h6l4.5 3v-3A1.5 1.5 0 0 0 21 14.25V9',
         'eye' => 'M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178ZM15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z',
+        'ellipsis' => 'M4.75 12h.012v.012H4.75V12ZM12 12h.012v.012H12V12ZM19.25 12h.012v.012h-.012V12Z',
+        'ellipsis-vertical' => 'M12 6.75h.008v.008H12V6.75ZM12 12h.008v.008H12V12ZM12 17.25h.008v.008H12v-.008Z',
         'file-lines' => 'M19.5 14.25v-7.5L14.25 1.5H6A1.5 1.5 0 0 0 4.5 3v18A1.5 1.5 0 0 0 6 22.5h12A1.5 1.5 0 0 0 19.5 21v-3.75M14.25 1.5v5.25H19.5M8.25 12h7.5M8.25 15h7.5M8.25 18h4.5',
         'folder' => 'M3 7.5A1.5 1.5 0 0 1 4.5 6h5.25l2.25 2.25h7.5A1.5 1.5 0 0 1 21 9.75V18a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18V7.5Z',
         'folder-open' => 'M3 7.5A1.5 1.5 0 0 1 4.5 6h5.25l2.25 2.25h7.5A1.5 1.5 0 0 1 21 9.75v1.5M3 7.5v10.125A2.625 2.625 0 0 0 5.625 20.25h11.409a2.625 2.625 0 0 0 2.56-2.036l1.14-4.95A1.5 1.5 0 0 0 19.272 11.25H7.128a1.5 1.5 0 0 0-1.462 1.164L3.36 22.5',
@@ -82,6 +84,20 @@
     }
 @endphp
 
+@if (in_array($iconName, ['ellipsis', 'ellipsis-vertical'], true))
+    <svg {{ $attributes->merge(['class' => 'inline-block size-4 shrink-0']) }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        @if ($iconName === 'ellipsis')
+            <circle cx="7" cy="12" r="1.35" />
+            <circle cx="12" cy="12" r="1.35" />
+            <circle cx="17" cy="12" r="1.35" />
+        @else
+            <circle cx="12" cy="5" r="1.35" />
+            <circle cx="12" cy="12" r="1.35" />
+            <circle cx="12" cy="19" r="1.35" />
+        @endif
+    </svg>
+@else
 <svg {{ $attributes->merge(['class' => 'inline-block size-4 shrink-0']) }} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="{{ $path }}" />
 </svg>
+@endif

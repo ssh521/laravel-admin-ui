@@ -103,6 +103,8 @@ List screens should:
 - Render statuses as badges.
 - Hide secondary columns on small screens and repeat critical info inside the first column.
 - Keep name/title modal triggers separate from explicit `상세보기` links.
+- Render table row commands through `x-laravel-admin::admin.action-menu` when the row has multiple commands such as `보기`/`상세보기` and `수정`. The trigger should be an unboxed horizontal ellipsis hit area, and the menu should use an adaptive dropdown that opens down by default and up near scroll boundaries.
+- Action-menu panels should keep a compact command-menu feel: about `w-36`, a white rounded panel with `p-2`, left-aligned full-width items, `rounded-lg` hover surfaces, and blue hover/focus states with white text. Use `x-laravel-admin::admin.dropdown-link` for normal link commands such as `보기`/`상세보기` and `수정`; use a reset button for modal/Livewire commands and place secondary modal commands below the normal link commands after a thin separator line. Do not keep several compact text buttons inline inside the table cell.
 
 ## Form Contract
 
@@ -217,10 +219,10 @@ Event refresh rules:
 
 Use consistent action hierarchy:
 
-- Use `x-laravel-admin::admin.action-button` for primary, secondary, destructive, search, and link-style row actions.
+- Use `x-laravel-admin::admin.action-button` for primary, secondary, destructive, search, and standalone link actions.
 - Use `variant="primary"`, `variant="secondary"`, `variant="danger"`, `variant="search"`, and `variant="link"` instead of hard-coded style classes in feature package views.
 - Use `variant="search"` for list filter submit buttons; keep the search button shrink-wrapped on desktop with `shrink-0 whitespace-nowrap` when it sits next to a flexible input.
-- Use `variant="link"` for table/card row actions such as `보기`, `상세보기`, and `수정` when they are rendered as compact text actions.
+- Use `x-laravel-admin::admin.action-menu` for table row actions such as `보기`, `상세보기`, and `수정`; reserve `variant="link"` for standalone inline links or card/detail actions where an overflow menu is not the expected interaction.
 - Action buttons must expose a pointer cursor on the button/link and its icon/text children. Keep the shared `laravel-admin-action-button` hook in every style implementation and mirror any required cursor CSS into the published admin CSS/build output used by the host app.
 - Dynamic state controls such as sort mode toggles may keep local `:class`/`x-bind:class` color logic when the visual state itself is the behavior.
 - Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
