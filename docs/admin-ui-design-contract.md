@@ -103,7 +103,7 @@ List screens should:
 - Render statuses as badges.
 - Hide secondary columns on small screens and repeat critical info inside the first column.
 - Keep name/title modal triggers separate from explicit `상세보기` links.
-- Render table row commands through `x-laravel-admin::admin.action-menu` when the row has multiple commands such as `보기`/`상세보기` and `수정`. The trigger should be an unboxed horizontal ellipsis hit area, and the menu should use an adaptive dropdown that opens down by default and up near scroll boundaries.
+- Render table row commands through `x-laravel-admin::admin.action-menu` when the row has multiple commands such as `보기`/`상세보기` and `수정`. The trigger should be an unboxed horizontal ellipsis hit area, and the menu should use an adaptive dropdown that opens down by default but flips upward when the row is near the bottom edge of the viewport or nearest scroll container. Do not force the table body to grow a new scrollbar just to reveal a row action menu; the menu placement should adapt to the available space around the trigger.
 - Action-menu panels should keep a compact command-menu feel: about `w-36`, a white rounded panel with `p-2`, left-aligned full-width items, `rounded-lg` hover surfaces, and blue hover/focus states with white text. Use `x-laravel-admin::admin.dropdown-link` for normal link commands such as `보기`/`상세보기` and `수정`; use a reset button for modal/Livewire commands and place secondary modal commands below the normal link commands after a thin separator line. Do not keep several compact text buttons inline inside the table cell.
 
 ## Form Contract
