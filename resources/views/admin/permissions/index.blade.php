@@ -100,23 +100,23 @@
                                             <button type="button" x-show="sortMode === 'click'"
                                                     @click="sortBy('name')"
                                                     class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
-                                                <span>{{ __('Permission Name') }}</span>
+                                                <span>{{ __('권한명') }}</span>
                                                 <x-laravel-admin::admin.icon name="arrow-up" x-show="sortField === 'name' && sortDirection === 'asc'" class="text-xs" />
                                                 <x-laravel-admin::admin.icon name="arrow-down" x-show="sortField === 'name' && sortDirection === 'desc'" class="text-xs" />
                                                 <x-laravel-admin::admin.icon name="sort" x-show="sortField !== 'name'" class="text-xs text-gray-400" />
                                             </button>
-                                            <span x-show="sortMode === 'drag'">{{ __('Permission Name') }}</span>
+                                            <span x-show="sortMode === 'drag'">{{ __('권한명') }}</span>
                                         </th>
                                         <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
                                             <button type="button" x-show="sortMode === 'click'"
                                                     @click="sortBy('description')"
                                                     class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
-                                                <span>{{ __('Permission Description') }}</span>
+                                                <span>{{ __('설명') }}</span>
                                                 <x-laravel-admin::admin.icon name="arrow-up" x-show="sortField === 'description' && sortDirection === 'asc'" class="text-xs" />
                                                 <x-laravel-admin::admin.icon name="arrow-down" x-show="sortField === 'description' && sortDirection === 'desc'" class="text-xs" />
                                                 <x-laravel-admin::admin.icon name="sort" x-show="sortField !== 'description'" class="text-xs text-gray-400" />
                                             </button>
-                                            <span x-show="sortMode === 'drag'">{{ __('Permission Description') }}</span>
+                                            <span x-show="sortMode === 'drag'">{{ __('설명') }}</span>
                                         </th>
                                         <th scope="col" class="relative py-3 pr-4 pl-3 sm:pr-0">
                                             <span class="sr-only">Actions</span>
