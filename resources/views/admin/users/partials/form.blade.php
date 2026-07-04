@@ -4,6 +4,7 @@
     $submitLabel = $submitLabel ?? __('저장하기');
     $inputClass = 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white';
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
+    $requiredClass = 'text-red-600 dark:text-red-400';
 @endphp
 
 <div class="mx-auto grid max-w-4xl grid-cols-1 gap-x-8 text-gray-900 md:grid-cols-12 dark:text-gray-100">
@@ -21,17 +22,17 @@
     <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div class="sm:col-span-3">
-                <label for="name" class="{{ $labelClass }}">{{ __('이름') }}</label>
+                <label for="name" class="{{ $labelClass }}">{{ __('이름') }} <span class="{{ $requiredClass }}" aria-hidden="true">*</span></label>
                 <div class="mt-2">
-                    <input id="name" name="name" type="text" value="{{ old('name', $user?->name) }}" autocomplete="name" placeholder="Enter user name" @required(! $user) class="{{ $inputClass }}">
+                    <input id="name" name="name" type="text" value="{{ old('name', $user?->name) }}" autocomplete="name" placeholder="Enter user name" required class="{{ $inputClass }}">
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
 
             <div class="sm:col-span-4">
-                <label for="email" class="{{ $labelClass }}">{{ __('E-mail') }}</label>
+                <label for="email" class="{{ $labelClass }}">{{ __('E-mail') }} <span class="{{ $requiredClass }}" aria-hidden="true">*</span></label>
                 <div class="mt-2">
-                    <input id="email" name="email" type="email" value="{{ old('email', $user?->email) }}" autocomplete="email" placeholder="Enter email address" @required(! $user) class="{{ $inputClass }}">
+                    <input id="email" name="email" type="email" value="{{ old('email', $user?->email) }}" autocomplete="email" placeholder="Enter email address" required class="{{ $inputClass }}">
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('email')" />
             </div>
@@ -52,7 +53,12 @@
     <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div class="sm:col-span-3">
-                <label for="password" class="{{ $labelClass }}">{{ __('비밀번호') }}</label>
+                <label for="password" class="{{ $labelClass }}">
+                    {{ __('비밀번호') }}
+                    @unless($user)
+                        <span class="{{ $requiredClass }}" aria-hidden="true">*</span>
+                    @endunless
+                </label>
                 <div class="mt-2">
                     <input id="password" name="password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Enter new password' : 'Enter password' }}" @required(! $user) class="{{ $inputClass }}">
                 </div>
@@ -60,7 +66,12 @@
             </div>
 
             <div class="sm:col-span-3">
-                <label for="confirm-password" class="{{ $labelClass }}">{{ __('비밀번호 확인') }}</label>
+                <label for="confirm-password" class="{{ $labelClass }}">
+                    {{ __('비밀번호 확인') }}
+                    @unless($user)
+                        <span class="{{ $requiredClass }}" aria-hidden="true">*</span>
+                    @endunless
+                </label>
                 <div class="mt-2">
                     <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Confirm new password' : 'Confirm password' }}" @required(! $user) class="{{ $inputClass }}">
                 </div>

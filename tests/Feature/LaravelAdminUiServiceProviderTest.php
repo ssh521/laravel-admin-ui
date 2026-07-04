@@ -305,7 +305,8 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringNotContainsString('rounded-xl bg-gray-50', $actionMenu);
         $this->assertStringContainsString('laravel-admin-action-menu-content overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 shadow-xl', $actionMenu);
         $this->assertStringContainsString('updatePlacement()', $actionMenu);
-        $this->assertStringContainsString("dropUp ? 'bottom-full mb-3 mt-0' : 'top-full mt-3 mb-0'", $actionMenu);
+        $this->assertStringContainsString('fixed z-[70]', $actionMenu);
+        $this->assertStringContainsString('panelStyle', $actionMenu);
         $this->assertStringContainsString('z-[70]', $actionMenu);
         $this->assertStringNotContainsString('absolute z-50 rounded-md shadow-lg', $actionMenu);
         $this->assertStringContainsString('수정', $actionMenu);

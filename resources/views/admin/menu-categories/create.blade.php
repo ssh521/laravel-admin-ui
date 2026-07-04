@@ -15,7 +15,7 @@
             <div class="mx-auto max-w-4xl">
                 <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('메뉴 카테고리 정보 등록') }}</h1>
                 <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                    {{ __('메뉴 카테고리의 이름, 정렬 순서, 활성 상태를 설정합니다.') }}
+                    {{ __('메뉴 카테고리의 이름과 활성 상태를 설정합니다.') }}
                 </p>
             </div>
 

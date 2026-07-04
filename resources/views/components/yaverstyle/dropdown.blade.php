@@ -19,12 +19,12 @@
         default => 'w-48',
     };
 
-    $panelClasses = trim(implode(' ', [
-        $adaptive ? 'absolute z-[70]' : $theme->classes('dropdown.panel'),
+    $panelClasses = trim(implode(' ', array_filter([
+        $adaptive ? 'fixed z-[70]' : $theme->classes('dropdown.panel'),
         $width,
-        $alignmentClasses,
+        $adaptive ? null : $alignmentClasses,
         $dropdownClasses,
-    ]));
+    ])));
 
     $contentClasses = $contentClasses ?: $theme->classes('dropdown.content');
 @endphp
@@ -34,7 +34,9 @@
     x-data="{
         open: false,
         adaptive: @js((bool) $adaptive),
+        align: @js($align),
         dropUp: false,
+        panelStyle: '',
         toggle() {
             this.open = ! this.open;
 
@@ -43,13 +45,15 @@
             }
         },
         updatePlacement() {
-            if (! this.adaptive || ! this.$refs.trigger || ! this.$refs.panel) {
+            if (! this.open || ! this.adaptive || ! this.$refs.trigger || ! this.$refs.panel) {
                 return;
             }
 
             const gap = 12;
+            const viewportPadding = 8;
             const trigger = this.$refs.trigger.getBoundingClientRect();
             const panelHeight = this.$refs.panel.offsetHeight || 160;
+            const panelWidth = this.$refs.panel.offsetWidth || 144;
             let boundaryTop = 0;
             let boundaryBottom = document.documentElement.clientHeight;
             let parent = this.$root.parentElement;
@@ -72,18 +76,33 @@
             const spaceAbove = trigger.top - boundaryTop;
 
             this.dropUp = spaceBelow < panelHeight + gap && spaceAbove > spaceBelow;
+
+            const top = this.dropUp
+                ? Math.max(viewportPadding, trigger.top - panelHeight - gap)
+                : Math.min(document.documentElement.clientHeight - viewportPadding - panelHeight, trigger.bottom + gap);
+            const preferredLeft = this.align === 'left'
+                ? trigger.left
+                : trigger.right - panelWidth;
+            const left = Math.min(
+                Math.max(viewportPadding, preferredLeft),
+                document.documentElement.clientWidth - viewportPadding - panelWidth
+            );
+
+            this.panelStyle = `top: ${top}px; left: ${left}px;`;
         },
     }"
     @click.away="open = false"
     @close.stop="open = false"
-    @resize.window="updatePlacement()"
-    @scroll.window="updatePlacement()"
+    @admin:dropdown-close-all.window="open = false"
+    @resize.window="open && updatePlacement()"
+    @scroll.window="open && updatePlacement()"
 >
     <div x-ref="trigger" @click="toggle()">
         {{ $trigger }}
     </div>
 
     <div x-ref="panel"
+            x-cloak
             x-show="open"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="transform opacity-0 scale-95"
@@ -92,7 +111,8 @@
             x-transition:leave-start="transform opacity-100 scale-100"
             x-transition:leave-end="transform opacity-0 scale-95"
             class="{{ $panelClasses }}"
-            :class="adaptive ? (dropUp ? 'bottom-full mb-3 mt-0' : 'top-full mt-3 mb-0') : null"
+            :class="adaptive ? (dropUp ? 'origin-bottom-right' : 'origin-top-right') : null"
+            :style="adaptive ? panelStyle : null"
             style="display: none;"
             @click="open = false">
         <div class="{{ $contentClasses }}">

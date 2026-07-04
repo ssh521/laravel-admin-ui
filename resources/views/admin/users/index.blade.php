@@ -161,7 +161,7 @@
                                     <x-laravel-admin::admin.action-menu>
                                         @can('view', $user)
                                             <x-laravel-admin::admin.dropdown-link :href="route('admin.users.show', $user)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
-                                                {{ __('상세보기') }}
+                                                {{ __('보기') }}
                                             </x-laravel-admin::admin.dropdown-link>
                                         @endcan
                                         @can('update', $user)

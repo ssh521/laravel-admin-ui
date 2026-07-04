@@ -3,6 +3,7 @@
     $showActions = $showActions ?? true;
     $submitLabel = $submitLabel ?? __('저장하기');
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
+    $requiredClass = 'text-red-600 dark:text-red-400';
 @endphp
 
 <div class="mx-auto grid max-w-4xl grid-cols-1 gap-x-8 text-gray-900 md:grid-cols-12 dark:text-gray-100">
@@ -12,27 +13,19 @@
         <div class="flex flex-col">
             <h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">{{ __('기본 정보') }}</h2>
             <p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-400">
-                {{ $menuCategory ? __('메뉴를 묶는 카테고리 이름과 표시 순서를 관리합니다.') : __('메뉴를 묶는 카테고리 이름과 표시 순서를 입력합니다.') }}
+                {{ $menuCategory ? __('메뉴를 묶는 카테고리 이름과 활성 상태를 관리합니다.') : __('메뉴를 묶는 카테고리 이름과 활성 상태를 입력합니다.') }}
             </p>
         </div>
     </div>
 
     <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
-            <div class="sm:col-span-4">
-                <label for="name" class="{{ $labelClass }}">{{ __('카테고리명') }}</label>
+            <div class="sm:col-span-5">
+                <label for="name" class="{{ $labelClass }}">{{ __('카테고리명') }} <span class="{{ $requiredClass }}" aria-hidden="true">*</span></label>
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $menuCategory?->name) }}" autocomplete="name" placeholder="Enter category name" required class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
-            </div>
-
-            <div class="sm:col-span-2">
-                <label for="sort_order" class="{{ $labelClass }}">{{ __('정렬 순서') }}</label>
-                <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="sort_order" name="sort_order" type="number" value="{{ old('sort_order', $menuCategory->sort_order ?? 0) }}" min="0" class="w-full" />
-                </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('sort_order')" />
             </div>
 
             <div class="sm:col-span-5">

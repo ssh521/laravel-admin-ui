@@ -221,7 +221,7 @@
                                                 <x-laravel-admin::admin.action-menu>
                                                     @can('view', $category)
                                                         <x-laravel-admin::admin.dropdown-link :href="route('admin.menu-categories.show', $category)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
-                                                            {{ __('상세보기') }}
+                                                            {{ __('보기') }}
                                                         </x-laravel-admin::admin.dropdown-link>
                                                     @endcan
                                                     @can('update', $category)
@@ -436,6 +436,269 @@
             }));
         }
 
+        function showMenuOrderNotification(message, type = 'success') {
+            if (typeof showNotification === 'function') {
+                showNotification(message, type);
+                return;
+            }
+
+            const notification = document.createElement('div');
+            const variantClass = {
+                success: 'bg-green-500 text-white',
+                info: 'bg-blue-500 text-white',
+                error: 'bg-red-500 text-white'
+            }[type] || 'bg-red-500 text-white';
+
+            notification.className = `fixed top-4 right-4 z-[9999] rounded-md px-4 py-3 text-sm font-medium shadow-lg ${variantClass}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        window.showMenuOrderNotification = showMenuOrderNotification;
+
+        function setMenuOrderSaving(isSaving) {
+            const status = document.getElementById('menu-order-save-status');
+            const menuContainer = document.getElementById('menu-list-sortable');
+            const saveButton = document.getElementById('menu-order-save-button');
+
+            if (status) {
+                status.classList.toggle('hidden', !isSaving);
+                status.classList.toggle('flex', isSaving);
+            }
+
+            if (menuContainer) {
+                menuContainer.classList.toggle('pointer-events-none', isSaving);
+                menuContainer.classList.toggle('opacity-70', isSaving);
+            }
+
+            if (saveButton) {
+                saveButton.disabled = isSaving;
+            }
+        }
+
+        function setMenuOrderDirty(isDirty) {
+            const status = document.getElementById('menu-order-dirty-status');
+            const saveButton = document.getElementById('menu-order-save-button');
+
+            window.menuOrderDirty = isDirty;
+
+            if (status) {
+                status.classList.toggle('hidden', !isDirty);
+            }
+
+            if (saveButton) {
+                saveButton.disabled = false;
+            }
+        }
+
+        function captureMenuOrder(menuContainer) {
+            return Array.from(menuContainer.querySelectorAll('[data-menu-id]')).map(item => item.dataset.menuId);
+        }
+
+        function buildMenuOrderPayload(menuContainer) {
+            return Array.from(menuContainer.querySelectorAll('[data-menu-id]')).map((item, index) => ({
+                id: parseInt(item.dataset.menuId),
+                sort_order: index
+            }));
+        }
+
+        function hasMenuOrderChanged(menuContainer) {
+            if (!menuContainer) {
+                return false;
+            }
+
+            const savedOrder = menuContainer.dataset.savedOrder || '[]';
+
+            return JSON.stringify(captureMenuOrder(menuContainer)) !== savedOrder;
+        }
+
+        function restoreMenuOrder(menuContainer, order) {
+            if (!menuContainer || order.length === 0) {
+                return;
+            }
+
+            order.forEach(menuId => {
+                const item = menuContainer.querySelector(`[data-menu-id="${menuId}"]`);
+
+                if (item) {
+                    menuContainer.appendChild(item);
+                }
+            });
+        }
+
+        function refreshMenuDraggableItems(menuContainer) {
+            if (!menuContainer) {
+                return;
+            }
+
+            menuContainer.querySelectorAll('[data-menu-id]').forEach(item => {
+                item.draggable = true;
+            });
+        }
+
+        function dispatchMenuOrderUpdate(categoryId, newOrder) {
+            if (window.Livewire && typeof window.Livewire.dispatch === 'function') {
+                window.Livewire.dispatch('admin-menus:menu-order-modal:update-order', {
+                    data: {
+                        categoryId: categoryId,
+                        newOrder: newOrder
+                    }
+                });
+
+                return;
+            }
+
+            throw new Error('Livewire dispatch is not available');
+        }
+
+        window.pendingMenuOrderChange = null;
+        window.menuOrderDirty = false;
+
+        function initMenuNativeDrag() {
+            const menuContainer = document.getElementById('menu-list-sortable');
+
+            if (!menuContainer || menuContainer.dataset.nativeSortInitialized === 'true') {
+                return;
+            }
+
+            const categoryId = Number(menuContainer.dataset.categoryId);
+
+            if (!categoryId) {
+                return;
+            }
+
+            menuContainer.dataset.nativeSortInitialized = 'true';
+            menuContainer.dataset.savedOrder = JSON.stringify(captureMenuOrder(menuContainer));
+            let draggedItem = null;
+
+            refreshMenuDraggableItems(menuContainer);
+            setMenuOrderDirty(false);
+
+            menuContainer.addEventListener('dragstart', event => {
+                const item = event.target.closest('[data-menu-id]');
+
+                if (!item || event.target.closest('button')) {
+                    event.preventDefault();
+                    return;
+                }
+
+                draggedItem = item;
+                item.classList.add('sortable-ghost');
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', item.dataset.menuId);
+            });
+
+            menuContainer.addEventListener('dragover', event => {
+                const item = event.target.closest('[data-menu-id]');
+
+                if (!draggedItem || !item || draggedItem === item) {
+                    return;
+                }
+
+                event.preventDefault();
+                const rect = item.getBoundingClientRect();
+                const shouldInsertAfter = event.clientY > rect.top + rect.height / 2;
+                menuContainer.insertBefore(draggedItem, shouldInsertAfter ? item.nextSibling : item);
+                setMenuOrderDirty(hasMenuOrderChanged(menuContainer));
+            });
+
+            menuContainer.addEventListener('drop', event => {
+                event.preventDefault();
+
+                if (!draggedItem) {
+                    return;
+                }
+
+                draggedItem.classList.remove('sortable-ghost');
+                draggedItem = null;
+                setMenuOrderDirty(hasMenuOrderChanged(menuContainer));
+            });
+
+            menuContainer.addEventListener('dragend', () => {
+                if (draggedItem) {
+                    draggedItem.classList.remove('sortable-ghost');
+                }
+
+                draggedItem = null;
+                setMenuOrderDirty(hasMenuOrderChanged(menuContainer));
+                refreshMenuDraggableItems(menuContainer);
+            });
+
+            const saveButton = document.getElementById('menu-order-save-button');
+
+            if (saveButton && saveButton.dataset.listenerRegistered !== 'true') {
+                saveButton.dataset.listenerRegistered = 'true';
+                saveButton.addEventListener('click', () => {
+                    const hasChanges = hasMenuOrderChanged(menuContainer);
+
+                    if (!hasChanges) {
+                        setMenuOrderDirty(false);
+                        showMenuOrderNotification('변경된 순서가 없습니다.', 'info');
+                        return;
+                    }
+
+                    const savedOrder = menuContainer.dataset.savedOrder
+                        ? JSON.parse(menuContainer.dataset.savedOrder)
+                        : captureMenuOrder(menuContainer);
+
+                    setMenuOrderSaving(true);
+                    window.pendingMenuOrderChange = { originalOrder: savedOrder };
+
+                    try {
+                        dispatchMenuOrderUpdate(categoryId, buildMenuOrderPayload(menuContainer));
+                    } catch (error) {
+                        restoreMenuOrder(menuContainer, savedOrder);
+                        showMenuOrderNotification('메뉴 순서 저장 중 오류가 발생했습니다.', 'error');
+                        window.pendingMenuOrderChange = null;
+                        setMenuOrderSaving(false);
+                        setMenuOrderDirty(false);
+                        refreshMenuDraggableItems(menuContainer);
+                    }
+                });
+            }
+        }
+
+        window.initMenuNativeDrag = initMenuNativeDrag;
+
+        function registerMenuOrderNotificationListener() {
+            if (!window.Livewire || window.menuOrderNotificationListenerRegistered) {
+                return;
+            }
+
+            window.menuOrderNotificationListenerRegistered = true;
+
+            Livewire.on('admin-menus:menu-order-modal:notification', (data) => {
+                const payload = Array.isArray(data) ? (data[0] || {}) : (data || {});
+                const menuContainer = document.getElementById('menu-list-sortable');
+                const pendingChange = window.pendingMenuOrderChange;
+                const type = payload.type || 'success';
+
+                if (menuContainer) {
+                    if (type === 'success') {
+                        menuContainer.dataset.savedOrder = JSON.stringify(captureMenuOrder(menuContainer));
+                        setMenuOrderDirty(false);
+                    } else if (pendingChange) {
+                        restoreMenuOrder(menuContainer, pendingChange.originalOrder);
+                        setMenuOrderDirty(false);
+                    }
+                }
+
+                showMenuOrderNotification(payload.message || '메뉴 순서가 저장되었습니다.', type);
+                window.pendingMenuOrderChange = null;
+                setMenuOrderSaving(false);
+                refreshMenuDraggableItems(menuContainer);
+                refreshLeftMenu();
+            });
+        }
+
+        document.addEventListener('livewire:init', registerMenuOrderNotificationListener);
+
+        if (window.Livewire) {
+            registerMenuOrderNotificationListener();
+        }
+
         function openMenuCategoryRolesModal(categoryId, categoryName) {
             Livewire.dispatch('admin:modal-stack:push', {
                 id: 'menu-category-roles-' + categoryId + '-' + Date.now(),
@@ -475,6 +738,12 @@
                 height: 640,
                 closeOnBackdrop: false
             });
+
+            setTimeout(() => {
+                if (typeof window.initMenuNativeDrag === 'function') {
+                    window.initMenuNativeDrag();
+                }
+            }, 250);
         });
     </script>
 </x-laravel-admin::admin.layouts.admin>

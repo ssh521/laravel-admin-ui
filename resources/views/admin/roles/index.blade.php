@@ -97,7 +97,7 @@
 
                                     @can('view', $role)
                                         <x-laravel-admin::admin.action-button variant="link" size="sm" :href="route('admin.roles.show', $role)" icon="eye" class="shrink-0">
-                                            상세보기
+                                            보기
                                         </x-laravel-admin::admin.action-button>
                                     @endcan
                                 </div>

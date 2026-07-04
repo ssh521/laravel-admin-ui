@@ -4,6 +4,7 @@
     $showActions = $showActions ?? true;
     $submitLabel = $submitLabel ?? __('저장하기');
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
+    $requiredClass = 'text-red-600 dark:text-red-400';
 @endphp
 
 <div class="mx-auto grid max-w-4xl grid-cols-1 gap-x-8 text-gray-900 md:grid-cols-12 dark:text-gray-100">
@@ -21,9 +22,9 @@
     <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div class="sm:col-span-3">
-                <label for="name" class="{{ $labelClass }}">{{ __('Role Name') }}</label>
+                <label for="name" class="{{ $labelClass }}">{{ __('Role Name') }} <span class="{{ $requiredClass }}" aria-hidden="true">*</span></label>
                 <div class="mt-2">
-                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $role?->name) }}" autocomplete="name" placeholder="{{ __('Enter role name') }}" class="w-full" />
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $role?->name) }}" autocomplete="name" placeholder="{{ __('Enter role name') }}" class="w-full" required />
                 </div>
                 @if ($errors->has('name'))
                     <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="[$role ? '역할명을 입력해 주세요!' : 'Please enter a role name!']" />
