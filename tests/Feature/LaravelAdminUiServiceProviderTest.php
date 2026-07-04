@@ -440,7 +440,11 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             $this->assertStringContainsString('md:justify-center', $source);
             $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white"', $source);
             $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 md:table-cell dark:text-gray-300"', $source);
-            $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm sm:table-cell"', $source);
+            if ($relativePath === 'resources/views/admin/users/index.blade.php') {
+                $this->assertStringContainsString('class="whitespace-nowrap px-3 py-3 text-center text-sm"', $source);
+            } else {
+                $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm sm:table-cell"', $source);
+            }
             $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-500 lg:table-cell dark:text-gray-400"', $source);
             $this->assertStringContainsString('class="whitespace-nowrap py-3 pr-4 pl-3 text-right text-sm font-medium sm:pr-0"', $source);
         }
@@ -622,6 +626,16 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             $this->assertStringContainsString('class="w-full shrink-0 whitespace-nowrap sm:w-auto"', $index, "{$screen} search button should not wrap or collapse.");
             $this->assertStringNotContainsString('dark:bg-white dark:text-gray-900', $index, "{$screen} index should not inline the old dark search button colors.");
         }
+    }
+
+    public function test_user_index_shows_email_verification_as_separate_column(): void
+    {
+        $index = file_get_contents(__DIR__.'/../../resources/views/admin/users/index.blade.php');
+
+        $this->assertStringContainsString("{{ __('메일 인증') }}", $index);
+        $this->assertStringContainsString('class="px-3 py-3 text-center text-sm font-semibold whitespace-nowrap text-gray-900 dark:text-white"', $index);
+        $this->assertStringContainsString('class="whitespace-nowrap px-3 py-3 text-center text-sm"', $index);
+        $this->assertStringNotContainsString('mt-1.5 sm:hidden', $index);
     }
 
     public function test_admin_action_buttons_do_not_use_hard_coded_action_styles(): void

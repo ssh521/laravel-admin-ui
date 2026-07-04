@@ -95,7 +95,7 @@
                                 @endif
                             </a>
                         </th>
-                        <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">{{ __('이메일 인증') }}</th>
+                        <th scope="col" class="px-3 py-3 text-center text-sm font-semibold whitespace-nowrap text-gray-900 dark:text-white">{{ __('메일 인증') }}</th>
                         <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
                             <a href="{{ route('admin.users.index', array_merge(request()->query(), ['sortField' => 'created_at', 'sortDirection' => $getNextSortDirection('created_at')])) }}" class="{{ $sortLinkClass }}">
                                 <span>{{ __('가입일') }}</span>
@@ -136,13 +136,6 @@
                                         <div class="mt-0.5 truncate text-gray-500 md:hidden dark:text-gray-400">{{ $user->email }}</div>
                                     </div>
                                 </div>
-                                <div class="mt-1.5 sm:hidden">
-                                    @if($user->email_verified_at)
-                                        <x-laravel-admin::admin.badge variant="success">{{ __('인증됨') }}</x-laravel-admin::admin.badge>
-                                    @else
-                                        <x-laravel-admin::admin.badge variant="warning">{{ __('미인증') }}</x-laravel-admin::admin.badge>
-                                    @endif
-                                </div>
                             </td>
                             <td class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 md:table-cell dark:text-gray-300">
                                 @can('view', $user)
@@ -153,7 +146,7 @@
                                     {{ $user->email }}
                                 @endcan
                             </td>
-                            <td class="hidden whitespace-nowrap px-3 py-3 text-center text-sm sm:table-cell">
+                            <td class="whitespace-nowrap px-3 py-3 text-center text-sm">
                                 @if($user->email_verified_at)
                                     <x-laravel-admin::admin.badge variant="success">{{ __('인증됨') }}</x-laravel-admin::admin.badge>
                                 @else
