@@ -1,13 +1,13 @@
 <div class="lg:hidden">
     <!-- 오버레이: 메뉴가 열릴 때만 화면 전체를 덮음 -->
-    <div x-show="isMobileMenuOpen" x-transition:enter="transition-opacity duration-300"
+    <div x-cloak x-show="isMobileMenuOpen" x-transition:enter="transition-opacity duration-300"
         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
         x-transition:leave="transition-opacity duration-300" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black bg-opacity-60 z-40"
+        x-transition:leave-end="opacity-0" class="fixed inset-0 z-40 bg-gray-950/35 backdrop-blur-[1px] dark:bg-black/45"
         @click="isMobileMenuOpen = false"></div>
 
     <!-- 좌측 메뉴: YouTube 스타일, 트랜지션 포함 -->
-    <aside x-show="isMobileMenuOpen"
+    <aside x-cloak x-show="isMobileMenuOpen"
         x-transition:enter="transition-transform duration-300"
         x-transition:enter-start="-translate-x-64"
         x-transition:enter-end="translate-x-0"
@@ -15,7 +15,7 @@
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="-translate-x-64"
         @transitionend="isMobileMenuOpen && typeof window.restoreAllDtreeNodes === 'function' && window.restoreAllDtreeNodes()"
-        class="fixed top-0 left-0 h-screen w-64
+        class="fixed top-0 left-0 h-[100dvh] w-64
             shadow-lg border-r border-gray-200 dark:border-gray-700
            z-50 bg-gray-50 dark:bg-gray-900 transform" style="display: none;">
 
@@ -37,7 +37,7 @@
         </div>
 
         <!-- 메뉴 본문: 아이콘+텍스트, 섹션 구분, 스크롤 -->
-        <nav class="admin-sidebar-surface overflow-y-auto h-[calc(100vh-64px)] py-0 px-0"
+        <nav class="admin-sidebar-surface overflow-y-auto h-[calc(100dvh-64px)] px-0 pt-0 pb-[calc(env(safe-area-inset-bottom)+24px)]"
              @click.self="isMobileMenuOpen = false">
             <div @click="$event.target.closest('a') && (isMobileMenuOpen = false)">
                 @livewire('admin.left-menu')

@@ -57,8 +57,8 @@
         <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
             <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                 <tr>
-                    <th scope="col" class="py-3 pr-3 pl-4 text-center text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
-                        <button type="button" wire:click="sortBy('name')" class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
+                    <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
+                        <button type="button" wire:click="sortBy('name')" class="inline-flex cursor-pointer items-center justify-start gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 md:justify-center dark:text-white dark:hover:text-indigo-300">
                             <span>{{ __('이름') }}</span>
                             {!! $renderSortIcon('name') !!}
                         </button>

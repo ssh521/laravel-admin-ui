@@ -11,7 +11,7 @@
         (function() {
             const theme = window.localStorage?.getItem('theme') || null;
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const isDark = theme === 'dark' || theme === 'system' && prefersDark || (!theme && prefersDark);
+            const isDark = theme === 'dark' || theme === 'system' && prefersDark;
 
             document.documentElement.classList.toggle('dark', isDark);
         })();

@@ -54,7 +54,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 
 | Component | Purpose |
 | --- | --- |
-| `admin.filter-bar` | 목록 검색/필터 control wrapper; pair with `admin.action-button variant="search"` for submit |
+| `admin.filter-bar` | 목록 검색/필터 control wrapper; collapses behind a compact toggle on mobile and stays visible on tablet/desktop; pair with `admin.action-button variant="search"` for submit |
 | `admin.search-input` | 검색 icon, input, clear link |
 | `admin.filter-select` | 목록 필터용 label/select |
 | `admin.date-range` | 시작일/종료일 필터 |
@@ -85,7 +85,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 
 | Component | Purpose |
 | --- | --- |
-| `admin.badge` | neutral/primary/success/warning/danger status label |
+| `admin.badge` | neutral/primary/success/warning/danger/info status or taxonomy label |
 | `admin.status-dot` | 작은 점 + label 상태 표시 |
 | `admin.stat` | dashboard metric card |
 | `admin.description-list` | detail page `dl/dt/dd` list |
@@ -113,7 +113,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 
 | Component | Purpose |
 | --- | --- |
-| `admin.layouts.admin` | admin layout component |
+| `admin.layouts.admin` | admin layout component; owns first-paint light background, slot background, dark-mode bootstrapping, and mobile menu overlay cloak behavior |
 | `admin.admin-header` | legacy admin header |
 | `admin.icon` | shared inline SVG icon map |
 | `admin.input-error` | validation error line |

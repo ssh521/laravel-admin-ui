@@ -63,6 +63,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
 
         $button = Blade::render('<x-laravel-admin::admin.action-button variant="danger">삭제</x-laravel-admin::admin.action-button>');
         $badge = Blade::render('<x-laravel-admin::admin.badge variant="success">활성</x-laravel-admin::admin.badge>');
+        $infoBadge = Blade::render('<x-laravel-admin::admin.badge variant="info">관리자</x-laravel-admin::admin.badge>');
         $input = Blade::render('<x-laravel-admin::admin.form-input name="name" />');
         $primaryButton = Blade::render('<x-laravel-admin::admin.primary-button>저장</x-laravel-admin::admin.primary-button>');
         $card = Blade::render('<x-laravel-admin::admin.card title="카드">본문</x-laravel-admin::admin.card>');
@@ -77,6 +78,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('btn', $button);
         $this->assertStringContainsString('btn-error', $button);
         $this->assertStringContainsString('badge-success', $badge);
+        $this->assertStringContainsString('badge-info', $infoBadge);
         $this->assertStringContainsString('input input-bordered', $input);
         $this->assertStringContainsString('btn-primary', $primaryButton);
         $this->assertStringContainsString('card', $card);
@@ -116,6 +118,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $danger = Blade::render('<x-laravel-admin::admin.action-button variant="danger">삭제하기</x-laravel-admin::admin.action-button>');
         $search = Blade::render('<x-laravel-admin::admin.action-button variant="search">검색</x-laravel-admin::admin.action-button>');
         $badge = Blade::render('<x-laravel-admin::admin.badge variant="success">활성</x-laravel-admin::admin.badge>');
+        $infoBadge = Blade::render('<x-laravel-admin::admin.badge variant="info">관리자</x-laravel-admin::admin.badge>');
         $emptyState = Blade::render('<x-laravel-admin::admin.empty-state title="비어 있음" description="표시할 항목이 없습니다." icon="folder-open" />');
         $filterBar = Blade::render('<x-laravel-admin::admin.filter-bar action="/admin"><input name="search"></x-laravel-admin::admin.filter-bar>');
         $tableShell = Blade::render('<x-laravel-admin::admin.table-shell><table><tbody><tr><td>row</td></tr></tbody></table></x-laravel-admin::admin.table-shell>');
@@ -212,9 +215,18 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('laravel-admin-search-button', $search);
         $this->assertStringContainsString('bg-green-50', $badge);
         $this->assertStringContainsString('dark:bg-green-500/10', $badge);
+        $this->assertStringContainsString('bg-blue-50', $infoBadge);
+        $this->assertStringContainsString('text-blue-700', $infoBadge);
+        $this->assertStringContainsString('dark:bg-blue-500/10', $infoBadge);
         $this->assertStringContainsString('border-dashed', $emptyState);
         $this->assertStringContainsString('표시할 항목이 없습니다.', $emptyState);
         $this->assertStringContainsString('<form', $filterBar);
+        $this->assertStringContainsString('filtersOpen', $filterBar);
+        $this->assertStringContainsString('검색\/필터', $filterBar);
+        $this->assertStringContainsString('sm:hidden', $filterBar);
+        $this->assertStringContainsString('mt-3 hidden flex-col', $filterBar);
+        $this->assertStringContainsString('sm:mt-6 sm:flex sm:flex-row', $filterBar);
+        $this->assertStringContainsString("x-bind:class=\"{ '!flex': filtersOpen }\"", $filterBar);
         $this->assertStringContainsString('dark:bg-gray-800/70', $filterBar);
         $this->assertStringContainsString('overflow-x-auto', $tableShell);
         $this->assertStringContainsString('sm:min-h-64', $tableShell);
@@ -294,6 +306,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('laravel-admin-action-menu-content overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 shadow-xl', $actionMenu);
         $this->assertStringContainsString('updatePlacement()', $actionMenu);
         $this->assertStringContainsString("dropUp ? 'bottom-full mb-3 mt-0' : 'top-full mt-3 mb-0'", $actionMenu);
+        $this->assertStringContainsString('z-[70]', $actionMenu);
         $this->assertStringNotContainsString('absolute z-50 rounded-md shadow-lg', $actionMenu);
         $this->assertStringContainsString('수정', $actionMenu);
         $this->assertStringContainsString('colspan="3"', $tableEmptyRow);
@@ -339,6 +352,12 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString("Alpine.data('modalStackModal'", file_get_contents(__DIR__.'/../../resources/js/admin.js'));
         $this->assertStringContainsString('@livewire($modal[\'component\'], $modal[\'params\'], key($modal[\'key\']))', $view);
         $this->assertStringContainsString('wire:ignore.self', $view);
+        $this->assertStringContainsString('x-on:mousedown.stop', $view);
+        $this->assertStringContainsString('x-on:touchstart.stop', $view);
+        $this->assertStringContainsString('wire:click="closeModal(\'{{ $modal[\'id\'] }}\')"', $view);
+        $this->assertStringContainsString('rounded-full', $view);
+        $this->assertStringContainsString('focus:ring-2 focus:ring-blue-500', $view);
+        $this->assertStringContainsString('<x-laravel-admin::admin.icon name="xmark" class="size-4" />', $view);
     }
 
     public function test_menu_category_drag_sort_restores_cancelled_or_failed_reorders(): void
@@ -377,6 +396,12 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $index = file_get_contents(__DIR__.'/../../resources/views/admin/admin-users/index.blade.php');
 
         $this->assertStringContainsString('<x-laravel-admin::admin.filter-bar', $index);
+        $this->assertStringContainsString('x-data="{ filtersOpen: false }"', $index);
+        $this->assertStringContainsString(':mobile-toggle="false"', $index);
+        $this->assertStringContainsString('variant="secondary"', $index);
+        $this->assertStringContainsString('class="sm:hidden"', $index);
+        $this->assertStringContainsString('x-bind:aria-expanded="filtersOpen.toString()"', $index);
+        $this->assertStringContainsString('@click="filtersOpen = ! filtersOpen"', $index);
         $this->assertStringContainsString('<x-laravel-admin::admin.action-button type="submit" variant="search"', $index);
         $this->assertStringContainsString('class="w-full shrink-0 sm:w-40"', $index);
         $this->assertStringContainsString('class="w-full shrink-0 whitespace-nowrap sm:w-auto"', $index);
@@ -385,10 +410,13 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString("['sortField' => 'name', 'sortDirection' => \$getNextSortDirection('name')]", $index);
         $this->assertStringContainsString('name="{{ $currentSortDirection === \'asc\' ? \'arrow-up\' : \'arrow-down\' }}"', $index);
         $this->assertStringContainsString('<thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">', $index);
-        $this->assertStringContainsString('class="py-3 pr-3 pl-4 text-center text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white"', $index);
+        $this->assertStringContainsString('class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white"', $index);
+        $this->assertStringContainsString('justify-start gap-1 !text-gray-900', $index);
+        $this->assertStringContainsString('md:justify-center', $index);
         $this->assertStringContainsString('class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full', $index);
         $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm text-gray-500 md:table-cell dark:text-gray-400"', $index);
         $this->assertStringContainsString('class="flex flex-wrap justify-center gap-1.5"', $index);
+        $this->assertStringContainsString('<x-laravel-admin::admin.badge variant="info">{{ $role }}</x-laravel-admin::admin.badge>', $index);
         $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm whitespace-nowrap sm:table-cell"', $index);
         $this->assertStringContainsString('class="py-3 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0"', $index);
         $this->assertStringNotContainsString('dark:bg-white dark:text-gray-900', $index);
@@ -407,6 +435,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             $this->assertStringContainsString('name', $source);
             $this->assertStringContainsString('email', $source);
             $this->assertStringContainsString('created_at', $source);
+            $this->assertStringContainsString('py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white', $source);
+            $this->assertStringContainsString('justify-start gap-1', $source);
+            $this->assertStringContainsString('md:justify-center', $source);
             $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white"', $source);
             $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 md:table-cell dark:text-gray-300"', $source);
             $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm sm:table-cell"', $source);
@@ -488,14 +519,22 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $rules = file_get_contents(__DIR__.'/../../docs/admin-design-rules.md');
 
         $this->assertStringContainsString('Render table headers as a quiet header band', $contract);
-        $this->assertStringContainsString('Center the first visible identity column header', $contract);
+        $this->assertStringContainsString('Align the first visible identity column header with the identity cell content on mobile', $contract);
         $this->assertStringContainsString('Do not expose technical identifiers or generated ordering values', $contract);
         $this->assertStringContainsString('For ordinary sortable list pages, make sortable column titles direct links', $contract);
         $this->assertStringContainsString('Render table row commands through `x-laravel-admin::admin.action-menu`', $contract);
         $this->assertStringContainsString('minimum desktop/tablet table-scroller height', $contract);
+        $this->assertStringContainsString('collapse `filter-bar` by default', $contract);
+        $this->assertStringContainsString('immediate light background before child slots finish rendering', $contract);
+        $this->assertStringContainsString('variant="info"', $contract);
+        $this->assertStringContainsString('default admin theme state is light', $contract);
+        $this->assertStringContainsString('mobile left menu backdrop must use `x-cloak`', $contract);
         $this->assertStringContainsString('compact vertical rhythm with `py-3`', $rules);
         $this->assertStringContainsString('Table rows with multiple record commands should use `admin.action-menu`', $rules);
         $this->assertStringContainsString('minimum table-scroller height', $rules);
+        $this->assertStringContainsString('collapse the filter bar by default', $rules);
+        $this->assertStringContainsString('Default to light mode when no saved `theme` exists', $rules);
+        $this->assertStringContainsString('Use `x-cloak` on Alpine-controlled full-screen overlays', $rules);
         $this->assertStringContainsString('Do not expose technical identifiers or generated ordering values', $rules);
         $this->assertStringContainsString('For ordinary sortable list pages, use clickable column titles', $rules);
 
@@ -569,6 +608,10 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             $index = file_get_contents(__DIR__."/../../resources/views/admin/{$screen}/index.blade.php");
 
             $this->assertStringContainsString('<x-laravel-admin::admin.filter-bar', $index, "{$screen} index should use the shared filter bar.");
+            $this->assertStringContainsString('x-data="{ filtersOpen: false }"', $index, "{$screen} index should share one mobile filter toggle state.");
+            $this->assertStringContainsString(':mobile-toggle="false"', $index, "{$screen} index should place the mobile filter toggle in the top action row.");
+            $this->assertStringContainsString('x-bind:aria-expanded="filtersOpen.toString()"', $index, "{$screen} index should expose mobile filter toggle state.");
+            $this->assertStringContainsString('@click="filtersOpen = ! filtersOpen"', $index, "{$screen} index should toggle the mobile filter bar from the action row.");
             $this->assertStringContainsString('<x-laravel-admin::admin.action-button type="submit" variant="search"', $index, "{$screen} index should use the shared search action button.");
             $this->assertStringContainsString('class="w-full shrink-0 whitespace-nowrap sm:w-auto"', $index, "{$screen} search button should not wrap or collapse.");
             $this->assertStringNotContainsString('dark:bg-white dark:text-gray-900', $index, "{$screen} index should not inline the old dark search button colors.");
@@ -639,21 +682,33 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $header = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/header-nav.blade.php');
         $legacyHeader = file_get_contents(__DIR__.'/../../resources/views/components/yaverstyle/admin-header.blade.php');
         $login = file_get_contents(__DIR__.'/../../resources/views/admin/auth/login.blade.php');
+        $forbidden = file_get_contents(__DIR__.'/../../resources/views/errors/403.blade.php');
+        $darkModeToggle = file_get_contents(__DIR__.'/../../resources/views/components/yaverstyle/dark-mode-toggle.blade.php');
 
         $this->assertStringContainsString('this.isMobileMenuOpen = false', $layout);
         $this->assertStringContainsString('adminSidebarWidth', $layout);
         $this->assertStringContainsString('startSidebarResize', $layout);
         $this->assertStringContainsString('role="separator"', $layout);
         $this->assertStringContainsString('admin-sidebar-surface', $layout);
-        $this->assertStringContainsString('font-sans antialiased h-full min-h-screen', $layout);
+        $this->assertStringContainsString('h-full min-h-screen bg-white font-sans antialiased md:bg-[#E7E7D6] dark:bg-gray-900', $layout);
         $this->assertStringContainsString('min-h-screen flex pt-16 bg-white md:bg-[#E7E7D6] dark:bg-gray-900', $layout);
         $this->assertStringContainsString('min-w-0 flex-1 flex flex-col md:mt-2 mx-0 md:mx-4 lg:mx-6', $layout);
+        $this->assertStringContainsString('mb-2 border-[0px] border-gray-200 bg-white p-[0px] dark:border-gray-700 dark:bg-gray-900', $layout);
+        $this->assertStringContainsString('id="page-content" class="border-[0px] border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"', $layout);
         $this->assertStringContainsString('border-gray-400 dark:border-gray-800 shadow-lg', $header);
         $this->assertStringNotContainsString('sidebarBackground', $layout);
         $this->assertStringNotContainsString("e.key === 'Escape' && open", $layout);
         $this->assertStringNotContainsString("route('home')", $legacyHeader);
         $this->assertStringNotContainsString('favicon.ico', $layout);
         $this->assertStringNotContainsString('favicon.ico', $login);
+        $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $layout);
+        $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $login);
+        $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $forbidden);
+        $this->assertStringContainsString("theme === 'dark' || (theme === 'system' && prefersDark)", $darkModeToggle);
+        $this->assertStringNotContainsString('!theme && prefersDark', $layout);
+        $this->assertStringNotContainsString('!theme && prefersDark', $login);
+        $this->assertStringNotContainsString('!theme && prefersDark', $forbidden);
+        $this->assertStringNotContainsString('!theme && prefersDark', $darkModeToggle);
 
         $this->assertStringContainsString("Route::has('profile.show')", $header);
         $this->assertStringContainsString("Route::has('logout')", $header);
@@ -679,6 +734,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
     public function test_left_menu_uses_styleable_controls_for_primary_tree_icons(): void
     {
         $leftMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu.blade.php');
+        $mobileMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu-mobile.blade.php');
         $css = file_get_contents(__DIR__.'/../../resources/css/admin.css');
 
         $this->assertStringContainsString('name="chevron-right"', $leftMenu);
@@ -686,6 +742,13 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('dtree-folder-icon', $leftMenu);
         $this->assertStringContainsString('dtree-folder-icon-open', $leftMenu);
         $this->assertStringContainsString('dtree-text ml-1', $leftMenu);
+        $this->assertStringContainsString('h-[100dvh]', $mobileMenu);
+        $this->assertStringContainsString('h-[calc(100dvh-64px)]', $mobileMenu);
+        $this->assertStringContainsString('pb-[calc(env(safe-area-inset-bottom)+24px)]', $mobileMenu);
+        $this->assertStringContainsString('<div x-cloak x-show="isMobileMenuOpen"', $mobileMenu);
+        $this->assertStringContainsString('<aside x-cloak x-show="isMobileMenuOpen"', $mobileMenu);
+        $this->assertStringContainsString('bg-gray-950/35 backdrop-blur-[1px] dark:bg-black/45', $mobileMenu);
+        $this->assertStringNotContainsString('bg-black bg-opacity-60', $mobileMenu);
         $this->assertStringContainsString("window.location.href = @js(route('admin.index'))", $leftMenu);
         $this->assertStringContainsString("const link = \$el.querySelector('a.node')", $leftMenu);
         $this->assertStringContainsString("window.open(link.href, '_blank', 'noopener')", $leftMenu);

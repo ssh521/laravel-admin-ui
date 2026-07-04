@@ -52,7 +52,7 @@
     @endphp
 
     <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
-        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900" x-data="{ filtersOpen: false }">
             <div class="sm:flex sm:items-start sm:justify-between">
                 <div class="sm:flex-auto">
                     <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('메뉴 카테고리 목록') }}</h1>
@@ -70,12 +70,22 @@
                             {{ __('등록하기') }}
                         </x-laravel-admin::admin.action-button>
                     @endcan
+                    <x-laravel-admin::admin.action-button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        class="sm:hidden"
+                        x-bind:aria-expanded="filtersOpen.toString()"
+                        @click="filtersOpen = ! filtersOpen"
+                    >
+                        <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
+                    </x-laravel-admin::admin.action-button>
                 </div>
             </div>
 
             <x-laravel-admin::admin.session-messages />
 
-            <x-laravel-admin::admin.filter-bar action="{{ route('admin.menu-categories.index') }}">
+            <x-laravel-admin::admin.filter-bar action="{{ route('admin.menu-categories.index') }}" :mobile-toggle="false">
                 @if(request('sort'))
                     <input type="hidden" name="sort" value="{{ request('sort') }}">
                 @endif

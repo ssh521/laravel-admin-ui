@@ -62,6 +62,7 @@ Every resource page should use the same structural rhythm:
 
 - List pages should use the full-width `admin/admin-users` canvas rhythm: `w-full bg-white px-2 py-2` with an inner `min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8`, or an equivalent shared component that renders that structure.
 - The admin layout main area must own the admin shell background so long list pages do not reveal the body background while scrolling.
+- The admin layout, body, main slot wrapper, and `#page-content` should provide an immediate light background before child slots finish rendering, so page loads do not flash through a dark or transparent surface.
 - Forms and detail cards should align on `mx-auto max-w-4xl`.
 - Page title should be concise, with one short helper sentence below it.
 - Primary actions should sit at the top-right on desktop and below the title on mobile.
@@ -89,6 +90,8 @@ Use a card grid when each item contains variable-length nested data such as badg
 List screens should:
 
 - Keep search and filters in `x-laravel-admin::admin.filter-bar` above the list.
+- On mobile, collapse `filter-bar` by default behind a compact `검색/필터` toggle so the first list rows appear without extra scrolling. Keep the full filter bar visible by default on tablet and desktop.
+- When a mobile list page has a primary action such as `등록하기`, the compact `검색/필터` toggle may share the same action row with that primary action, while the filter form remains collapsed below the header.
 - Keep search controls on one line on desktop and stacked on small screens.
 - Put fixed-width filter selects before the flexible search input; selects and action buttons should not stretch on desktop.
 - Do not show a self-referential list navigation button on the list page itself.
@@ -96,11 +99,12 @@ List screens should:
 - Do not expose technical identifiers or generated ordering values such as database IDs, key IDs, or sort order as primary list/detail display fields unless an admin workflow explicitly needs the raw value.
 - Render table headers as a quiet header band: `border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80`.
 - Use compact table rhythm: `py-3` on header cells and body cells. Reduce avatars/icons inside dense rows to `h-9 w-9` or `size-9` when needed.
-- Center the first visible identity column header when the table starts with the primary name/title column. If utility columns such as order handles, checkboxes, or row numbers appear before it, keep those utility headers visually minimal and center the first real identity header instead.
+- Align the first visible identity column header with the identity cell content on mobile, normally `text-left`/`justify-start` for avatar + name cells, then center it from `md` upward when the desktop table uses centered comparable columns. If utility columns such as order handles, checkboxes, or row numbers appear before it, keep those utility headers visually minimal and align the first real identity header instead.
 - For ordinary sortable list pages, make sortable column titles direct links that preserve the current query string and toggle sort direction. Reserve drag-sort and click/drag mode switches for resource-ordering pages such as `admin/permissions`.
 - For paginator controls on resource list pages, match the `admin/users` baseline: render Laravel's paginator links inside `@if($items->hasPages()) <div class="mt-6 text-sm">...</div> @endif`, using `links()` with `appends(request()->query())` or `withQueryString()` so filters remain intact. Do not replace numbered list pagination with a custom previous/next-only component unless the resource explicitly uses simple pagination.
 - Use avatars only for person/user records where recognition helps.
 - Render statuses as badges.
+- Render taxonomy-like values such as roles with `admin.badge variant="info"` when they should be visually distinct from neutral placeholder text.
 - Hide secondary columns on small screens and repeat critical info inside the first column.
 - Keep name/title modal triggers separate from explicit `상세보기` links.
 - Render table row commands through `x-laravel-admin::admin.action-menu` when the row has multiple commands such as `보기`/`상세보기` and `수정`. The trigger should be an unboxed horizontal ellipsis hit area, and the menu should use an adaptive dropdown that opens down by default but flips upward when the row is near the bottom edge of the viewport or nearest scroll container. Do not force the table body to grow a new scrollbar just to reveal a row action menu; the menu placement should adapt to the available space around the trigger.
@@ -249,6 +253,8 @@ When a package must write raw classes directly, every package screen should incl
 - Primary text: `dark:text-white`.
 - Secondary text: `dark:text-gray-300` or `dark:text-gray-400`.
 - Badges should use low-opacity dark backgrounds with readable text.
+- The default admin theme state is light. Only apply dark mode before first paint when `localStorage.theme` is explicitly `dark`, or when it is `system` and the OS preference is dark. Do not treat a missing `theme` value as implicit dark mode.
+- Alpine-controlled full-screen overlays such as the mobile left menu backdrop must use `x-cloak` with the shared `[x-cloak] { display: none; }` rule to avoid a black overlay flash before Alpine initializes.
 
 ## Compatibility Rules
 

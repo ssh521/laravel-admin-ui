@@ -37,6 +37,7 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Use a concise page title with a short helper description below it.
 - Put primary actions in the top-right on desktop and below the title on mobile.
 - Use `bg-white dark:bg-gray-900` for the main page surface.
+- Put the same light/dark background on the admin body, main slot wrapper, and `#page-content` so slots do not reveal a dark or transparent surface while rendering.
 - Use `mx-auto w-full max-w-5xl` for resource create, edit, and show page canvases.
 - Use `w-full` without a max-width cap for resource list pages that contain tables or wide filter bars.
 - Keep the admin layout main area on the admin shell background. Transparent gutters around long list pages let the body background show through at the bottom of tables.
@@ -62,14 +63,17 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
   - card items with border, white/dark background, subtle shadow, and hover state
 - Put the primary identity field first.
 - Do not expose technical identifiers or generated ordering values such as database IDs, key IDs, or sort order as primary list/detail display fields unless an admin workflow explicitly needs the raw value.
-- Center the first visible identity column header. Utility columns such as order handles, checkboxes, or row numbers may appear before it, but they should not compete visually with the identity column.
+- Align the first visible identity column header with the identity cell on mobile, normally left for avatar + name cells, then center it from `md` upward when the desktop table uses centered comparable columns. Utility columns such as order handles, checkboxes, or row numbers may appear before it, but they should not compete visually with the identity column.
 - For ordinary sortable list pages, use clickable column titles that preserve the current query string and toggle direction. Keep drag-sort and click/drag sort mode switches only for resource-ordering pages such as `admin/permissions`.
 - Use avatars only when they add recognition value, such as user records. Do not add decorative avatars to abstract records like roles.
 - Hide secondary columns on small screens and repeat critical secondary info inside the first column when needed.
 - Render statuses and roles as small badges, not plain comma-separated text.
+- Use `variant="info"` for role/category taxonomy badges when they need to stand apart from neutral empty-state text.
 - Use icon+text actions for view and edit.
 - If a name opens a quick modal, keep that behavior on the name and make the explicit `상세보기` action navigate to the show page.
 - Keep search and filters in a compact bordered filter bar above the list.
+- On mobile, collapse the filter bar by default behind a compact `검색/필터` toggle so the first list rows are visible without extra scrolling. Keep the full filter bar visible on tablet and desktop.
+- If a mobile list page has a primary action such as `등록하기`, place the compact `검색/필터` toggle in the same top action row when space allows, then expand the filter form below the header.
 - Search controls should be one line on desktop and stack cleanly on small screens, for example `flex flex-col sm:flex-row`.
 - Place fixed-width filter selects before the search input; let only the search input expand, and keep the submit button shrink-wrapped on desktop.
 - Do not render a `목록보기` button on an index/list page that already represents that resource list. Keep only meaningful actions such as `등록하기`, search, reset, sort, or resource-specific management actions.
@@ -146,6 +150,8 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
   - `dark:border-gray-700` for borders
   - `dark:text-white`, `dark:text-gray-300`, and `dark:text-gray-400` for text hierarchy
 - Badge colors should use low-opacity dark backgrounds with readable text.
+- Default to light mode when no saved `theme` exists. Apply dark mode before first paint only for explicit `dark`, or `system` with an OS dark preference.
+- Use `x-cloak` on Alpine-controlled full-screen overlays such as the mobile left menu backdrop and panel so they cannot flash over the page before Alpine initializes.
 
 ## Migration Checklist
 

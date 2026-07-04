@@ -21,7 +21,7 @@
                 }
 
                 const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const isDark = theme === 'dark' || theme === 'system' && prefersDark || (!theme && prefersDark);
+                const isDark = theme === 'dark' || theme === 'system' && prefersDark;
 
                 document.documentElement.classList.toggle('dark', isDark);
             };
@@ -42,7 +42,7 @@
     <!-- Styles -->
     @livewireStyles
 </head>
-<body class="font-sans antialiased h-full min-h-screen">
+<body class="h-full min-h-screen bg-white font-sans antialiased md:bg-[#E7E7D6] dark:bg-gray-900">
     <x-laravel-admin::admin.banner />
 
     <div x-data="{
@@ -194,8 +194,8 @@
 
 
                 <!-- Page Content -->
-                <main class="border-[0px] p-[0px] border-gray-200 dark:border-gray-700 mb-2">
-                    <div id="page-content" class="border-[0px] border-gray-200 dark:border-gray-700">
+                <main class="mb-2 border-[0px] border-gray-200 bg-white p-[0px] dark:border-gray-700 dark:bg-gray-900">
+                    <div id="page-content" class="border-[0px] border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
                         {{ $slot }}
                     </div>
                 </main>

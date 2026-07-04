@@ -68,7 +68,7 @@
                             <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('역할') }}</dt>
                             <dd class="mt-1 flex flex-wrap gap-1.5 text-sm leading-6 sm:mt-2">
                                 @forelse ($adminUser->getRoleNames() as $role)
-                                    <x-laravel-admin::admin.badge>{{ $role }}</x-laravel-admin::admin.badge>
+                                    <x-laravel-admin::admin.badge variant="info">{{ $role }}</x-laravel-admin::admin.badge>
                                 @empty
                                     <span class="text-gray-500 dark:text-gray-400">{{ __('No roles assigned') }}</span>
                                 @endforelse

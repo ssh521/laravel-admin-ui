@@ -15,7 +15,7 @@
     </x-slot>
 
     <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
-        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900" x-data="{ filtersOpen: false }">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <div class="sm:flex-auto">
                     <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('역할 목록') }}</h1>
@@ -42,12 +42,22 @@
                     >
                         {{ __('메뉴 카테고리 관리') }}
                     </x-laravel-admin::admin.action-button>
+                    <x-laravel-admin::admin.action-button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        class="sm:hidden"
+                        x-bind:aria-expanded="filtersOpen.toString()"
+                        @click="filtersOpen = ! filtersOpen"
+                    >
+                        <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
+                    </x-laravel-admin::admin.action-button>
                 </div>
             </div>
 
             <x-laravel-admin::admin.session-messages />
 
-            <x-laravel-admin::admin.filter-bar action="{{ route('admin.roles.index') }}">
+            <x-laravel-admin::admin.filter-bar action="{{ route('admin.roles.index') }}" :mobile-toggle="false">
                 <label for="role-search" class="sr-only">역할 검색</label>
                 <div class="relative min-w-0 flex-1">
                     <x-laravel-admin::admin.form-input id="role-search" name="search" value="{{ request('search') }}" class="w-full h-10 pr-9" placeholder="역할 이름 검색" />

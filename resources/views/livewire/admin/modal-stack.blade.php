@@ -41,11 +41,13 @@
 
                     <button
                         type="button"
-                        class="inline-flex size-8 cursor-pointer items-center justify-center rounded-md text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                        class="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-200 hover:text-gray-950 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-offset-gray-800"
+                        x-on:mousedown.stop
+                        x-on:touchstart.stop
                         wire:click="closeModal('{{ $modal['id'] }}')"
                         aria-label="닫기"
                     >
-                        <span aria-hidden="true">&times;</span>
+                        <x-laravel-admin::admin.icon name="xmark" class="size-4" />
                     </button>
                 </header>
 

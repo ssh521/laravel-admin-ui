@@ -20,7 +20,7 @@
     };
 
     $panelClasses = trim(implode(' ', [
-        $adaptive ? 'absolute z-50' : $theme->classes('dropdown.panel'),
+        $adaptive ? 'absolute z-[70]' : $theme->classes('dropdown.panel'),
         $width,
         $alignmentClasses,
         $dropdownClasses,

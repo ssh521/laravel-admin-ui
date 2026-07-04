@@ -20,12 +20,13 @@
         $currentSortField = request('sortField', 'created_at');
         $currentSortDirection = request('sortDirection', 'desc') === 'asc' ? 'asc' : 'desc';
         $getNextSortDirection = fn (string $field): string => $currentSortField === $field && $currentSortDirection === 'asc' ? 'desc' : 'asc';
-        $sortLinkClass = 'inline-flex items-center justify-center gap-1 !text-gray-900 hover:!text-indigo-600 hover:no-underline dark:!text-white dark:hover:!text-indigo-400';
+        $sortLinkClass = 'inline-flex items-center justify-start gap-1 !text-gray-900 hover:!text-indigo-600 hover:no-underline md:justify-center dark:!text-white dark:hover:!text-indigo-400';
     @endphp
 
     <x-laravel-admin::admin.page-section
         title="{{ __('회원 목록') }}"
         description="{{ $pageDescription }}"
+        x-data="{ filtersOpen: false }"
     >
         <x-slot name="actions">
             @can('create', Ssh521\LaravelAdmin\Models\User::class)
@@ -33,11 +34,21 @@
                     {{ __('등록하기') }}
                 </x-laravel-admin::admin.action-button>
             @endcan
+            <x-laravel-admin::admin.action-button
+                type="button"
+                variant="secondary"
+                size="sm"
+                class="sm:hidden"
+                x-bind:aria-expanded="filtersOpen.toString()"
+                @click="filtersOpen = ! filtersOpen"
+            >
+                <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
+            </x-laravel-admin::admin.action-button>
         </x-slot>
 
         <x-laravel-admin::admin.session-messages />
 
-        <x-laravel-admin::admin.filter-bar action="{{ route('admin.users.index') }}">
+        <x-laravel-admin::admin.filter-bar action="{{ route('admin.users.index') }}" :mobile-toggle="false">
             @if(request('sortField'))
                 <input type="hidden" name="sortField" value="{{ request('sortField') }}">
             @endif
@@ -64,7 +75,7 @@
             <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                 <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                     <tr>
-                        <th scope="col" class="py-3 pr-3 pl-4 text-center text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
+                        <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
                             <a href="{{ route('admin.users.index', array_merge(request()->query(), ['sortField' => 'name', 'sortDirection' => $getNextSortDirection('name')])) }}" class="{{ $sortLinkClass }}">
                                 <span>{{ __('이름') }}</span>
                                 @if($currentSortField === 'name')

@@ -114,7 +114,7 @@ When adding a new public component:
 
 ```text
 button:   btn, btn-primary, btn-outline, btn-error, btn-ghost
-badge:    badge, badge-primary, badge-success, badge-warning, badge-error
+badge:    badge, badge-primary, badge-success, badge-warning, badge-error, badge-info
 input:    input input-bordered
 select:   select select-bordered
 textarea: textarea textarea-bordered

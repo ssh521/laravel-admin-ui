@@ -18,6 +18,7 @@
     <x-laravel-admin::admin.page-section
         title="{{ __('권한 목록') }}"
         description="{{ __('관리자 권한 이름, 설명, 정렬 순서를 관리합니다.') }}"
+        x-data="{ filtersOpen: false }"
     >
             <x-slot name="actions">
                 @can('create', arguments: Ssh521\LaravelAdmin\Models\Permission::class)
@@ -25,6 +26,16 @@
                         {{ __('등록하기') }}
                     </x-laravel-admin::admin.action-button>
                 @endcan
+                <x-laravel-admin::admin.action-button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    class="sm:hidden"
+                    x-bind:aria-expanded="filtersOpen.toString()"
+                    @click="filtersOpen = ! filtersOpen"
+                >
+                    <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
+                </x-laravel-admin::admin.action-button>
             </x-slot>
 
             @if(request('search'))
@@ -33,7 +44,7 @@
 
             <x-laravel-admin::admin.session-messages />
 
-            <x-laravel-admin::admin.filter-bar action="{{ route('admin.permissions.index') }}">
+            <x-laravel-admin::admin.filter-bar action="{{ route('admin.permissions.index') }}" :mobile-toggle="false">
                 @if(request('sort'))
                     <input type="hidden" name="sort" value="{{ request('sort') }}">
                 @endif
