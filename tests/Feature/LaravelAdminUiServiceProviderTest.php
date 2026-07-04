@@ -464,6 +464,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white"', $source);
         $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 md:table-cell dark:text-gray-300"', $source);
         $this->assertStringContainsString('class="hidden max-w-xs px-3 py-3 text-center text-sm text-gray-600 lg:table-cell dark:text-gray-300"', $source);
+        $this->assertStringContainsString('class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white"', $source);
         $this->assertStringContainsString('class="whitespace-nowrap px-3 py-3 text-center text-sm"', $source);
         $this->assertStringContainsString('class="whitespace-nowrap py-3 pr-4 pl-3 text-right text-sm font-medium sm:pr-0"', $source);
     }
@@ -493,6 +494,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString("['sort' => 'is_active', 'direction' => \$getNextDirection('is_active')]", $index);
         $this->assertStringContainsString("['sort' => 'created_at', 'direction' => \$getNextDirection('created_at')]", $index);
         $this->assertStringContainsString("{{ __('권한 수정') }}", $index);
+        $this->assertStringContainsString('class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white"', $index);
         $this->assertStringContainsString('onclick="openMenuCategoryRolesModal({{ $category->id }}, @js($category->name))"', $index);
         $this->assertMatchesRegularExpression("/\\{\\{ __\\('허용 역할'\\) \\}\\}.*\\{\\{ __\\('권한 수정'\\) \\}\\}/s", $index);
         $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm xl:table-cell"', $index);
