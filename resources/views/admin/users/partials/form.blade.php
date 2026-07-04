@@ -7,7 +7,7 @@
 @endphp
 
 <div class="mx-auto grid max-w-4xl grid-cols-1 gap-x-8 text-gray-900 md:grid-cols-12 dark:text-gray-100">
-    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+    <div class="col-span-full h-6 sm:h-10"></div>
 
     <div class="md:col-span-4">
         <div class="flex flex-col">
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="md:col-span-8">
+    <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div class="sm:col-span-3">
                 <label for="name" class="{{ $labelClass }}">{{ __('이름') }}</label>
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+    <div class="mt-8 mb-6 border-b border-gray-900/10 md:col-span-12 sm:my-10 dark:border-white/10"></div>
 
     <div class="md:col-span-4">
         <div class="flex flex-col">
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div class="md:col-span-8">
+    <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div class="sm:col-span-3">
                 <label for="password" class="{{ $labelClass }}">{{ __('비밀번호') }}</label>
@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+    <div class="mt-8 mb-6 border-b border-gray-900/10 md:col-span-12 sm:my-10 dark:border-white/10"></div>
 
     <div class="md:col-span-4">
         <div class="flex flex-col">
@@ -80,7 +80,7 @@
         </div>
     </div>
 
-    <div class="md:col-span-8">
+    <div class="mt-6 md:col-span-8 md:mt-0">
         <label for="email_verified" class="flex min-h-12 cursor-pointer items-start gap-3 rounded-md border border-gray-200 bg-white p-4 shadow-sm hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800">
             <input id="email_verified" name="email_verified" type="checkbox" value="1" @checked(old('email_verified', $user?->email_verified_at ? '1' : null) == '1') class="mt-0.5 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
             <span>
@@ -98,7 +98,7 @@
         </label>
     </div>
 
-    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+    <div class="mt-8 mb-6 border-b border-gray-900/10 md:col-span-12 sm:my-10 dark:border-white/10"></div>
 
     @if($showActions)
         <div class="col-span-full flex items-center justify-end gap-x-3">

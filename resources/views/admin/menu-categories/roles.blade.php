@@ -40,7 +40,7 @@
                 @csrf
 
                 <div class="mx-auto grid max-w-4xl grid-cols-1 gap-x-8 text-gray-900 md:grid-cols-12 dark:text-gray-100">
-                    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+                    <div class="col-span-full h-6 sm:h-10"></div>
 
                     <div class="md:col-span-4">
                         <div class="flex flex-col">
@@ -51,7 +51,7 @@
                         </div>
                     </div>
 
-                    <div class="min-w-0 md:col-span-8">
+                    <div class="mt-6 min-w-0 md:col-span-8 md:mt-0">
                         <fieldset>
                             <legend class="sr-only">{{ __('허용 역할 선택') }}</legend>
                             <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -64,7 +64,7 @@
                         </fieldset>
                     </div>
 
-                    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+                    <div class="mt-8 mb-6 border-b border-gray-900/10 md:col-span-12 sm:my-10 dark:border-white/10"></div>
 
                     <div class="col-span-full flex items-center justify-end gap-x-3">
                         <x-laravel-admin::admin.action-button variant="secondary" :href="route('admin.menu-categories.show', $menuCategory)">

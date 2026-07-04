@@ -140,6 +140,10 @@ Footer rules:
 - Form page titles should include the resource, information scope, and action, such as `회원 정보 등록` or `회원 정보 수정`.
 - Edit page wrappers should follow the `admin/admin-users/edit` baseline: keep the top header informational, avoid extra top-right navigation such as `상세보기` unless the workflow explicitly requires it, and place delete/cancel/update actions in the footer row.
 - Use `수정하기` for the primary submit button on edit pages that update an existing record.
+- In form partials, do not render a visible divider before the first section. Use a small responsive spacer instead, such as `h-6 sm:h-10`.
+- On mobile, add separation between a section heading/description and its field body, such as `mt-6 md:mt-0`, because the desktop two-column layout no longer visually separates them.
+- Between form sections, keep desktop rhythm with `sm:my-10`, but use a tighter mobile divider rhythm such as `mt-8 mb-6` so the page does not feel vertically bloated.
+- Package admin screens that implement their own local form partials should follow this same mobile rhythm instead of keeping older `my-10` divider-only spacing.
 
 ## Detail Contract
 
@@ -149,6 +153,9 @@ Detail screens should:
 - Include a summary header for identity.
 - Use semantic `dl`, `dt`, and `dd` markup.
 - Use one column on mobile and two columns when there is enough width.
+- For records with more than a few fields, group the card body into named sections such as `기본 정보`, `권한 및 상태`, and `기록` instead of rendering one flat list. Section headings should be light scan anchors inside the same card, not nested cards.
+- Detail section bodies should keep semantic `dl` groups and use subtle top borders for the group content. Avoid stacking separate card surfaces inside the main detail card.
+- Package detail screens should adopt the same sectioned detail pattern when they use the shared admin UI shell, even if the markup is local to the package.
 - Render statuses, roles, and categories as badges.
 - Put repeated actions in the card footer.
 - Show only list navigation in the top action area, using the visible label `목록보기`.

@@ -6,7 +6,7 @@
 @endphp
 
 <div class="mx-auto grid max-w-4xl grid-cols-1 gap-x-8 text-gray-900 md:grid-cols-12 dark:text-gray-100">
-    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+    <div class="col-span-full h-6 sm:h-10"></div>
 
     <div class="md:col-span-4">
         <div class="flex flex-col">
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="md:col-span-8">
+    <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div class="sm:col-span-4">
                 <label for="name" class="{{ $labelClass }}">{{ __('메뉴명') }}</label>
@@ -55,7 +55,7 @@
         </div>
     </div>
 
-    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+    <div class="mt-8 mb-6 border-b border-gray-900/10 md:col-span-12 sm:my-10 dark:border-white/10"></div>
 
     <div class="md:col-span-4">
         <div class="flex flex-col">
@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <div class="md:col-span-8">
+    <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div class="sm:col-span-4">
                 <label for="route_name" class="{{ $labelClass }}">{{ __('Route Name') }}</label>
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+    <div class="mt-8 mb-6 border-b border-gray-900/10 md:col-span-12 sm:my-10 dark:border-white/10"></div>
 
     <div class="md:col-span-4">
         <div class="flex flex-col">
@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    <div class="md:col-span-8">
+    <div class="mt-6 md:col-span-8 md:mt-0">
         <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
             <div class="sm:col-span-2">
                 <label for="sort_order" class="{{ $labelClass }}">{{ __('정렬 순서') }}</label>
@@ -153,7 +153,7 @@
         </div>
     </div>
 
-    <div class="my-10 border-b border-gray-900/10 md:col-span-12 dark:border-white/10"></div>
+    <div class="mt-8 mb-6 border-b border-gray-900/10 md:col-span-12 sm:my-10 dark:border-white/10"></div>
 
     @if($showActions)
         <div class="col-span-full flex items-center justify-end gap-x-3">

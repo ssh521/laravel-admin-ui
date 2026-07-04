@@ -46,87 +46,105 @@
                 </div>
 
                 <div class="px-4 py-6 sm:px-6">
-                    <dl class="grid grid-cols-1 sm:grid-cols-2">
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('ID') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->id }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('메뉴명') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->name }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('카테고리') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->category ? $menu->category->name : '-' }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('상위 메뉴') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->parent ? $menu->parent->name : '-' }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Route Name') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->route_name ?: '-' }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Route Params') }}</dt>
-                            <dd class="mt-1 break-words text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->route_parameters ?: '-' }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Direct URL') }}</dt>
-                            <dd class="mt-1 break-words text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->url ?: '-' }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Target') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->target ?: '-' }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('정렬 순서') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->sort_order }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('상태') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 sm:mt-2">
-                                <x-laravel-admin::admin.badge variant="{{ $menu->is_active ? 'success' : 'danger' }}">
-                                    {{ $menu->is_active ? __('활성') : __('비활성') }}
-                                </x-laravel-admin::admin.badge>
-                            </dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('외부 링크') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 sm:mt-2">
-                                <x-laravel-admin::admin.badge variant="{{ $menu->is_external ? 'warning' : 'neutral' }}">
-                                    {{ $menu->is_external ? __('예') : __('아니오') }}
-                                </x-laravel-admin::admin.badge>
-                            </dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('등록일') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->created_at?->format('Y-m-d H:i:s') }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('수정일') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->updated_at?->format('Y-m-d H:i:s') }}</dd>
-                        </div>
-
-                        @if($menu->description)
-                            <div class="border-t border-gray-100 px-0 py-5 sm:col-span-2 dark:border-gray-800">
-                                <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('설명') }}</dt>
-                                <dd class="mt-1 whitespace-pre-line text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->description }}</dd>
+                    <div class="space-y-8">
+                        <section>
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기본 정보') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('메뉴의 이름과 계층 정보입니다.') }}</p>
                             </div>
-                        @endif
-                    </dl>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('메뉴명') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->name }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('카테고리') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->category ? $menu->category->name : '-' }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('상위 메뉴') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->parent ? $menu->parent->name : '-' }}</dd>
+                                </div>
+                            </dl>
+                        </section>
+
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('연결 정보') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('라우트명, 직접 URL, 링크 대상 창입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Route Name') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->route_name ?: '-' }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Target') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->target ?: '-' }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Route Params') }}</dt>
+                                    <dd class="mt-1 break-words text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->route_parameters ?: '-' }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Direct URL') }}</dt>
+                                    <dd class="mt-1 break-words text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->url ?: '-' }}</dd>
+                                </div>
+                            </dl>
+                        </section>
+
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('표시 설정') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('정렬, 상태, 외부 링크 여부와 설명입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('정렬 순서') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->sort_order }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('상태') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 sm:mt-2">
+                                        <x-laravel-admin::admin.badge variant="{{ $menu->is_active ? 'success' : 'danger' }}">
+                                            {{ $menu->is_active ? __('활성') : __('비활성') }}
+                                        </x-laravel-admin::admin.badge>
+                                    </dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('외부 링크') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 sm:mt-2">
+                                        <x-laravel-admin::admin.badge variant="{{ $menu->is_external ? 'warning' : 'neutral' }}">
+                                            {{ $menu->is_external ? __('예') : __('아니오') }}
+                                        </x-laravel-admin::admin.badge>
+                                    </dd>
+                                </div>
+                                @if($menu->description)
+                                    <div class="border-t border-gray-100 px-0 py-4 sm:col-span-2 sm:px-0 sm:py-5 dark:border-gray-800">
+                                        <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('설명') }}</dt>
+                                        <dd class="mt-1 whitespace-pre-line text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->description }}</dd>
+                                    </div>
+                                @endif
+                            </dl>
+                        </section>
+
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기록') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('메뉴 생성과 마지막 수정 시각입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('등록일') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->created_at?->format('Y-m-d H:i:s') }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('수정일') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menu->updated_at?->format('Y-m-d H:i:s') }}</dd>
+                                </div>
+                            </dl>
+                        </section>
+                    </div>
                 </div>
 
                 @if($menu->children->count() > 0)

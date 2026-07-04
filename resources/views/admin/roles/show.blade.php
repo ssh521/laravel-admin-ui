@@ -43,44 +43,64 @@
                 </div>
 
                 <div class="px-4 py-6 sm:px-6">
-                    <dl class="grid grid-cols-1 sm:grid-cols-2">
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Role Name') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->name }}</dd>
-                        </div>
+                    <div class="space-y-8">
+                        <section>
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기본 정보') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('역할 이름과 설명입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Role Name') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->name }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Description') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->description ?: __('설명이 없습니다.') }}</dd>
+                                </div>
+                            </dl>
+                        </section>
 
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Description') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->description ?: __('설명이 없습니다.') }}</dd>
-                        </div>
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('권한') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('이 역할에 할당된 권한입니다.') }}</p>
+                            </div>
+                            <dl class="border-t border-gray-100 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('할당된 권한') }}</dt>
+                                    <dd class="mt-2">
+                                        @if($role->permissions->count() > 0)
+                                            <div class="flex flex-wrap gap-1.5">
+                                                @foreach($role->permissions as $permission)
+                                                    <x-laravel-admin::admin.badge>{{ $permission->name }}</x-laravel-admin::admin.badge>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('이 역할에 할당된 권한이 없습니다.') }}</p>
+                                        @endif
+                                    </dd>
+                                </div>
+                            </dl>
+                        </section>
 
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Created At') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->created_at->format('Y-m-d H:i:s') }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 sm:px-0 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Updated At') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->updated_at->format('Y-m-d H:i:s') }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-2 sm:px-0 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('할당된 권한') }}</dt>
-                            <dd class="mt-2">
-                                @if($role->permissions->count() > 0)
-                                    <div class="flex flex-wrap gap-1.5">
-                                        @foreach($role->permissions as $permission)
-                                            <x-laravel-admin::admin.badge>
-                                                {{ $permission->name }}
-                                            </x-laravel-admin::admin.badge>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('이 역할에 할당된 권한이 없습니다.') }}</p>
-                                @endif
-                            </dd>
-                        </div>
-                    </dl>
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기록') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('역할 생성과 마지막 수정 시각입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Created At') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->created_at->format('Y-m-d H:i:s') }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('Updated At') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $role->updated_at->format('Y-m-d H:i:s') }}</dd>
+                                </div>
+                            </dl>
+                        </section>
+                    </div>
                 </div>
 
                 <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 dark:border-gray-700 dark:bg-gray-800/70">

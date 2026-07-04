@@ -107,6 +107,10 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Keep edit page headers informational like `admin/admin-users/edit`; avoid extra top-right detail/navigation actions unless the resource workflow explicitly needs them.
 - Use `수정하기` as the primary submit label on ordinary edit pages.
 - Preserve locked states with disabled controls plus muted color and helper text.
+- Remove the first visible section divider in form partials and replace it with a small responsive spacer. It prevents the page header and first form section from being separated by an unnecessary line.
+- On mobile, add field-body top spacing after each section title/description. The desktop grid separates header and body horizontally, but mobile needs vertical rhythm to avoid a dense block of text and controls.
+- Use tighter mobile divider spacing between form sections, then restore the wider desktop rhythm at `sm` and above.
+- Apply the same form rhythm to package-local admin forms that use the shared `laravel-admin-ui` shell. Do not leave sibling packages on the older visible-first-divider pattern.
 
 ## Detail Views
 
@@ -114,6 +118,9 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Use a summary header for the record identity before the `dl`.
 - Use semantic `dl`, `dt`, and `dd` markup for label/value pairs.
 - Use two columns on wider screens, one column on mobile.
+- When a detail page has enough fields that a flat list becomes hard to scan, split the body into named sections inside the same card. Use short section titles and muted helper text so mobile users can distinguish the information groups without adding nested cards.
+- Keep sectioned detail pages inside one bordered card. Use `h3` section labels, muted helper text, and semantic `dl` groups instead of nested cards or unrelated panels.
+- Apply the sectioned detail pattern to sibling package detail screens that use local Blade markup but share the same admin UI language.
 - Render status values and roles as badges.
 - Put repeated page actions in a footer action area when the detail card is the main focus.
 - On detail pages, keep the top-right action area focused on `목록보기` only.

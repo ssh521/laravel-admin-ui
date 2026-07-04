@@ -41,51 +41,72 @@
                 </div>
 
                 <div class="px-4 py-6 sm:px-6">
-                    <dl class="grid grid-cols-1 sm:grid-cols-2">
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('카테고리명') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->name }}</dd>
-                        </div>
+                    <div class="space-y-8">
+                        <section>
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기본 정보') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('메뉴를 묶는 카테고리 정보입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('카테고리명') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->name }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('상태') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 sm:mt-2">
+                                        <x-laravel-admin::admin.badge variant="{{ $menuCategory->is_active ? 'success' : 'danger' }}">
+                                            {{ $menuCategory->is_active ? __('활성') : __('비활성') }}
+                                        </x-laravel-admin::admin.badge>
+                                    </dd>
+                                </div>
+                            </dl>
+                        </section>
 
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('상태') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 sm:mt-2">
-                                <x-laravel-admin::admin.badge variant="{{ $menuCategory->is_active ? 'success' : 'danger' }}">
-                                    {{ $menuCategory->is_active ? __('활성') : __('비활성') }}
-                                </x-laravel-admin::admin.badge>
-                            </dd>
-                        </div>
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('권한 및 연결') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('접근 가능한 역할과 연결된 메뉴 수입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:col-span-2 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('허용 역할') }}</dt>
+                                    <dd class="mt-2">
+                                        @if($menuCategory->roles->count() > 0)
+                                            <div class="flex flex-wrap gap-1.5">
+                                                @foreach($menuCategory->roles as $role)
+                                                    <x-laravel-admin::admin.badge>{{ $role->name }}</x-laravel-admin::admin.badge>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('이 카테고리에 허용된 역할이 없습니다.') }}</span>
+                                        @endif
+                                    </dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:col-span-2 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('메뉴 개수') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->menus->count() }}</dd>
+                                </div>
+                            </dl>
+                        </section>
 
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-2 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('허용 역할') }}</dt>
-                            <dd class="mt-2">
-                                @if($menuCategory->roles->count() > 0)
-                                    <div class="flex flex-wrap gap-1.5">
-                                        @foreach($menuCategory->roles as $role)
-                                            <x-laravel-admin::admin.badge>{{ $role->name }}</x-laravel-admin::admin.badge>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('이 카테고리에 허용된 역할이 없습니다.') }}</span>
-                                @endif
-                            </dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('메뉴 개수') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->menus->count() }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('등록일') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->created_at?->format('Y-m-d H:i:s') }}</dd>
-                        </div>
-
-                        <div class="border-t border-gray-100 px-0 py-5 sm:col-span-1 dark:border-gray-800">
-                            <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('수정일') }}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->updated_at?->format('Y-m-d H:i:s') }}</dd>
-                        </div>
-                    </dl>
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기록') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('카테고리 생성과 마지막 수정 시각입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('등록일') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->created_at?->format('Y-m-d H:i:s') }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('수정일') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $menuCategory->updated_at?->format('Y-m-d H:i:s') }}</dd>
+                                </div>
+                            </dl>
+                        </section>
+                    </div>
                 </div>
 
                 <div class="border-t border-gray-200 px-4 py-6 sm:px-6 dark:border-gray-700">

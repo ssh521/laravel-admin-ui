@@ -48,35 +48,63 @@
                     </div>
                 </div>
 
-                <dl class="divide-y divide-gray-100 dark:divide-gray-800">
-                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-900 dark:text-white">{{ __('이름') }}</dt>
-                        <dd class="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-300">{{ $user->name }}</dd>
+                <div class="px-4 py-6 sm:px-6">
+                    <div class="space-y-8">
+                        <section>
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기본 정보') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('사용자 계정의 식별 정보입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('이름') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $user->name }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('E-mail') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $user->email }}</dd>
+                                </div>
+                            </dl>
+                        </section>
+
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('상태') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('이메일 인증 상태입니다.') }}</p>
+                            </div>
+                            <dl class="border-t border-gray-100 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('인증상태') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 sm:mt-2">
+                                        @if ($user->email_verified_at)
+                                            <x-laravel-admin::admin.badge variant="success">{{ __('Verified') }}</x-laravel-admin::admin.badge>
+                                            <span class="mt-2 block text-gray-500 dark:text-gray-400 sm:mt-0 sm:ml-2 sm:inline">{{ $user->email_verified_at->format('Y-m-d H:i:s') }}</span>
+                                        @else
+                                            <x-laravel-admin::admin.badge variant="warning">{{ __('Not Verified') }}</x-laravel-admin::admin.badge>
+                                        @endif
+                                    </dd>
+                                </div>
+                            </dl>
+                        </section>
+
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기록') }}</h3>
+                                <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('계정 생성과 마지막 수정 시각입니다.') }}</p>
+                            </div>
+                            <dl class="grid grid-cols-1 border-t border-gray-100 sm:grid-cols-2 dark:border-gray-800">
+                                <div class="px-0 py-4 sm:px-0 sm:py-5">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('등록일') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $user->created_at?->format('Y-m-d H:i:s') }}</dd>
+                                </div>
+                                <div class="border-t border-gray-100 px-0 py-4 sm:border-t-0 sm:px-0 sm:py-5 dark:border-gray-800">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900 dark:text-white">{{ __('수정일') }}</dt>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2 dark:text-gray-300">{{ $user->updated_at?->format('Y-m-d H:i:s') }}</dd>
+                                </div>
+                            </dl>
+                        </section>
                     </div>
-                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-900 dark:text-white">{{ __('E-mail') }}</dt>
-                        <dd class="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-300">{{ $user->email }}</dd>
-                    </div>
-                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-900 dark:text-white">{{ __('인증상태') }}</dt>
-                        <dd class="mt-1 text-sm sm:col-span-2 sm:mt-0">
-                            @if ($user->email_verified_at)
-                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset dark:bg-green-500/10 dark:text-green-300 dark:ring-green-500/30">{{ __('Verified') }}</span>
-                                <span class="ml-2 text-gray-500 dark:text-gray-400">{{ $user->email_verified_at->format('Y-m-d H:i:s') }}</span>
-                            @else
-                                <span class="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-amber-600/20 ring-inset dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/30">{{ __('Not Verified') }}</span>
-                            @endif
-                        </dd>
-                    </div>
-                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-900 dark:text-white">{{ __('등록일') }}</dt>
-                        <dd class="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-300">{{ $user->created_at?->format('Y-m-d H:i:s') }}</dd>
-                    </div>
-                    <div class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-900 dark:text-white">{{ __('수정일') }}</dt>
-                        <dd class="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-300">{{ $user->updated_at?->format('Y-m-d H:i:s') }}</dd>
-                    </div>
-                </dl>
+                </div>
 
                 <div class="flex justify-end border-t border-gray-200 px-4 py-4 sm:px-6 dark:border-gray-700">
                     <div class="flex flex-wrap justify-end gap-3">
