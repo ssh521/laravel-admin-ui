@@ -18,6 +18,7 @@
 
         $getNextDirection = fn($field) => ($currentSort === $field && $currentDirection === 'asc') ? 'desc' : 'asc';
         $sortLinkClass = 'inline-flex items-center justify-center gap-1 !text-gray-900 hover:!text-indigo-600 hover:no-underline dark:!text-white dark:hover:!text-indigo-400';
+        $identitySortLinkClass = 'inline-flex items-center justify-start gap-1 !text-gray-900 hover:!text-indigo-600 hover:no-underline md:justify-center dark:!text-white dark:hover:!text-indigo-400';
 
         $renderSortIcon = function ($field) use ($currentSort, $currentDirection) {
             if ($currentSort !== $field) {
@@ -111,8 +112,8 @@
                                     <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
                                         <span class="sr-only">Select</span>
                                     </th>
-                                    <th scope="col" class="px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
-                                        <a href="{{ route('admin.menus.index', array_merge(request()->query(), ['sort' => 'name', 'direction' => $getNextDirection('name')])) }}" class="{{ $sortLinkClass }}">
+                                    <th scope="col" class="px-3 py-3 text-left text-sm font-semibold text-gray-900 md:text-center dark:text-white">
+                                        <a href="{{ route('admin.menus.index', array_merge(request()->query(), ['sort' => 'name', 'direction' => $getNextDirection('name')])) }}" class="{{ $identitySortLinkClass }}">
                                             <span>{{ __('메뉴명') }}</span>
                                             {!! $renderSortIcon('name') !!}
                                         </a>

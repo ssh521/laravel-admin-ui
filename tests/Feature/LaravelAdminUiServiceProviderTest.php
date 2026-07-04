@@ -457,6 +457,10 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString("['sort' => 'route_name', 'direction' => \$getNextDirection('route_name')]", $source);
         $this->assertStringContainsString("['sort' => 'is_active', 'direction' => \$getNextDirection('is_active')]", $source);
         $this->assertStringContainsString('class="{{ $sortLinkClass }}"', $source);
+        $this->assertStringContainsString('identitySortLinkClass', $source);
+        $this->assertStringContainsString('px-3 py-3 text-left text-sm font-semibold text-gray-900 md:text-center dark:text-white', $source);
+        $this->assertStringContainsString('justify-start gap-1 !text-gray-900', $source);
+        $this->assertStringContainsString('md:justify-center', $source);
         $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white"', $source);
         $this->assertStringContainsString('class="hidden whitespace-nowrap px-3 py-3 text-center text-sm text-gray-600 md:table-cell dark:text-gray-300"', $source);
         $this->assertStringContainsString('class="hidden max-w-xs px-3 py-3 text-center text-sm text-gray-600 lg:table-cell dark:text-gray-300"', $source);
