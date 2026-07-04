@@ -135,7 +135,7 @@
                                             {!! $renderSortIcon('menus_count') !!}
                                         </a>
                                     </th>
-                                    <th scope="col" class="px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
+                                    <th scope="col" class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
                                         <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'is_active', 'direction' => $getNextDirection('is_active')])) }}" class="{{ $sortLinkClass }}">
                                             <span>{{ __('상태') }}</span>
                                             {!! $renderSortIcon('is_active') !!}
