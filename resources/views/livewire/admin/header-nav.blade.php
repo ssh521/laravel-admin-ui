@@ -77,8 +77,9 @@
 
     <!-- 우측: 드롭다운 메뉴 -->
     <div class="flex items-center gap-4">
-        @if (class_exists(\Ssh521\LaravelBroadcastNotification\LaravelBroadcastNotificationServiceProvider::class))
-            <x-laravel-broadcast-notification::admin.dropdown />
+        @if (class_exists(\Ssh521\LaravelBroadcastNotification\LaravelBroadcastNotificationServiceProvider::class)
+            && view()->exists('laravel-broadcast-notification::components.admin.dropdown'))
+            @include('laravel-broadcast-notification::components.admin.dropdown')
         @endif
 
         @php

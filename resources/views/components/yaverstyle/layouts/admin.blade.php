@@ -206,8 +206,9 @@
 
     <x-laravel-admin::admin.client-notification />
 
-    @if (class_exists(\Ssh521\LaravelBroadcastNotification\LaravelBroadcastNotificationServiceProvider::class))
-        <x-laravel-broadcast-notification::public.toast />
+    @if (class_exists(\Ssh521\LaravelBroadcastNotification\LaravelBroadcastNotificationServiceProvider::class)
+        && view()->exists('laravel-broadcast-notification::components.public.toast'))
+        @include('laravel-broadcast-notification::components.public.toast')
 
         @php
             $broadcastNotificationAsset = public_path('vendor/laravel-broadcast-notification/js/listener.js');
