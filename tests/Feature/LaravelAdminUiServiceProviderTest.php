@@ -536,7 +536,8 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('Render table row commands through `x-laravel-admin::admin.action-menu`', $contract);
         $this->assertStringContainsString('minimum desktop/tablet table-scroller height', $contract);
         $this->assertStringContainsString('collapse `filter-bar` by default', $contract);
-        $this->assertStringContainsString('immediate light background before child slots finish rendering', $contract);
+        $this->assertStringContainsString('main slot wrapper and `#page-content` should stay transparent', $contract);
+        $this->assertStringContainsString('admin shell background should use `dark:bg-gray-950`', $contract);
         $this->assertStringContainsString('variant="info"', $contract);
         $this->assertStringContainsString('default admin theme state is light', $contract);
         $this->assertStringContainsString('mobile left menu backdrop must use `x-cloak`', $contract);
@@ -711,11 +712,11 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('startSidebarResize', $layout);
         $this->assertStringContainsString('role="separator"', $layout);
         $this->assertStringContainsString('admin-sidebar-surface', $layout);
-        $this->assertStringContainsString('h-full min-h-screen bg-white font-sans antialiased md:bg-[#E7E7D6] dark:bg-gray-900', $layout);
-        $this->assertStringContainsString('min-h-screen flex pt-16 bg-white md:bg-[#E7E7D6] dark:bg-gray-900', $layout);
+        $this->assertStringContainsString('h-full min-h-screen bg-white font-sans antialiased md:bg-[#E7E7D6] dark:bg-gray-950', $layout);
+        $this->assertStringContainsString('min-h-screen flex pt-16 bg-white md:bg-[#E7E7D6] dark:bg-gray-950', $layout);
         $this->assertStringContainsString('min-w-0 flex-1 flex flex-col md:mt-2 mx-0 md:mx-4 lg:mx-6', $layout);
-        $this->assertStringContainsString('mb-2 border-[0px] border-gray-200 bg-white p-[0px] dark:border-gray-700 dark:bg-gray-900', $layout);
-        $this->assertStringContainsString('id="page-content" class="border-[0px] border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900"', $layout);
+        $this->assertStringContainsString('mb-2 border-[0px] border-gray-200 bg-white p-[0px] md:bg-transparent dark:border-gray-700 dark:bg-gray-950 dark:md:bg-transparent', $layout);
+        $this->assertStringContainsString('id="page-content" class="border-[0px] border-gray-200 bg-white md:bg-transparent dark:border-gray-700 dark:bg-gray-950 dark:md:bg-transparent"', $layout);
         $this->assertStringContainsString('border-gray-400 dark:border-gray-800 shadow-lg', $header);
         $this->assertStringNotContainsString('sidebarBackground', $layout);
         $this->assertStringNotContainsString("e.key === 'Escape' && open", $layout);

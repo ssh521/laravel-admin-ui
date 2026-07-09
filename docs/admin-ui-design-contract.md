@@ -62,7 +62,9 @@ Every resource page should use the same structural rhythm:
 
 - List pages should use the full-width `admin/admin-users` canvas rhythm: `w-full bg-white px-2 py-2` with an inner `min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8`, or an equivalent shared component that renders that structure.
 - The admin layout main area must own the admin shell background so long list pages do not reveal the body background while scrolling.
-- The admin layout, body, main slot wrapper, and `#page-content` should provide an immediate light background before child slots finish rendering, so page loads do not flash through a dark or transparent surface.
+- On desktop, the admin layout main slot wrapper and `#page-content` should stay transparent; child pages own their concrete white surfaces.
+- Form/detail page positioning wrappers may use `mx-auto w-full max-w-5xl`, but the concrete white surface belongs on the inner `mx-auto max-w-4xl` block or the main detail card.
+- In dark mode, the admin shell background should use `dark:bg-gray-950`, while concrete list/form/detail surfaces use `dark:bg-gray-900`.
 - Forms and detail cards should align on `mx-auto max-w-4xl`.
 - Page title should be concise, with one short helper sentence below it.
 - Primary actions should sit at the top-right on desktop and below the title on mobile.
@@ -145,6 +147,17 @@ Footer rules:
 - On mobile, add separation between a section heading/description and its field body, such as `mt-6 md:mt-0`, because the desktop two-column layout no longer visually separates them.
 - Between form sections, keep desktop rhythm with `sm:my-10`, but use a tighter mobile divider rhythm such as `mt-8 mb-6` so the page does not feel vertically bloated.
 - Package admin screens that implement their own local form partials should follow this same mobile rhythm instead of keeping older `my-10` divider-only spacing.
+
+Progressive form rules:
+
+- Large create/edit forms should keep the core fields visible first and move secondary fields into progressive sections.
+- Do not collapse all secondary fields into one generic `details` block. Use independent sections by meaning, such as contact, business/billing, address, status, memo, or resource-specific equivalents.
+- The section toggle row should be the section title and helper copy. Do not repeat the same heading and helper text again inside the expanded body.
+- Each progressive section should open independently when it has existing values, old input, or validation errors for one of its fields.
+- New create forms should keep progressive sections closed by default when they have no values.
+- Numeric fields whose only value is the default `0` should not force a progressive section open.
+- Toggle controls must use `button type="button"` and expose `aria-expanded`; icons should visually indicate expanded/collapsed state, such as a chevron rotation.
+- Expanded section bodies should contain the form controls directly in the same form rhythm. Avoid nested cards or extra decorative panels.
 
 ## Detail Contract
 
@@ -255,9 +268,10 @@ These components define the stable UI contract. Their implementation is selected
 
 When a package must write raw classes directly, every package screen should include dark mode variants:
 
-- Main background: `dark:bg-gray-900`.
+- Shell background: `dark:bg-gray-950`.
+- Concrete content surfaces: `dark:bg-gray-900`.
 - Secondary background: `dark:bg-gray-800`.
-- Borders: `dark:border-gray-700`.
+- Surface borders: `dark:border-gray-800`.
 - Primary text: `dark:text-white`.
 - Secondary text: `dark:text-gray-300` or `dark:text-gray-400`.
 - Badges should use low-opacity dark backgrounds with readable text.

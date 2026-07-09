@@ -42,7 +42,7 @@
     <!-- Styles -->
     @livewireStyles
 </head>
-<body class="h-full min-h-screen bg-white font-sans antialiased md:bg-[#E7E7D6] dark:bg-gray-900">
+<body class="h-full min-h-screen bg-white font-sans antialiased md:bg-[#E7E7D6] dark:bg-gray-950">
     <x-laravel-admin::admin.banner />
 
     <div x-data="{
@@ -148,10 +148,10 @@
         <livewire:admin.left-menu-mobile />
         <livewire:admin.header-nav />
 
-        <div class="min-h-screen flex pt-16 bg-white md:bg-[#E7E7D6] dark:bg-gray-900">
+        <div class="min-h-screen flex pt-16 bg-white md:bg-[#E7E7D6] dark:bg-gray-950">
 
             <!-- 왼쪽 사이드바 -->
-            <div x-show="isDesktop" class="admin-sidebar-surface hidden shrink-0 lg:block shadow-lg border-r border-gray-200 dark:border-gray-700"
+            <div x-show="isDesktop" class="admin-sidebar-surface hidden shrink-0 lg:block lg:min-h-[calc(100dvh-4rem)] shadow-lg border-r border-gray-200 dark:border-gray-700"
                 :style="`width: ${sidebarWidth}px;`">
                 <!-- 관리자 메뉴 네비게이션 -->
                 <nav class="h-full overflow-y-auto">
@@ -164,7 +164,7 @@
                 x-on:pointerdown.prevent="startSidebarResize($event)"
                 x-on:keydown.arrow-left.prevent="resizeSidebarTo(sidebarWidth - 16); saveSidebarWidth()"
                 x-on:keydown.arrow-right.prevent="resizeSidebarTo(sidebarWidth + 16); saveSidebarWidth()"
-                class="group relative hidden w-3 shrink-0 cursor-col-resize items-stretch justify-center bg-gray-100/70 transition hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-indigo-500 lg:flex dark:bg-gray-800/70 dark:hover:bg-indigo-950/40"
+                class="group relative hidden w-3 shrink-0 cursor-col-resize items-stretch justify-center bg-gray-100/70 transition hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-indigo-500 lg:flex lg:min-h-[calc(100dvh-4rem)] dark:bg-gray-800/70 dark:hover:bg-indigo-950/40"
                 role="separator"
                 aria-orientation="vertical"
                 aria-label="{{ __('왼쪽 메뉴 폭 조절') }}"
@@ -194,8 +194,8 @@
 
 
                 <!-- Page Content -->
-                <main class="mb-2 border-[0px] border-gray-200 bg-white p-[0px] dark:border-gray-700 dark:bg-gray-900">
-                    <div id="page-content" class="border-[0px] border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+                <main class="mb-2 border-[0px] border-gray-200 bg-white p-[0px] md:bg-transparent dark:border-gray-700 dark:bg-gray-950 dark:md:bg-transparent">
+                    <div id="page-content" class="border-[0px] border-gray-200 bg-white md:bg-transparent dark:border-gray-700 dark:bg-gray-950 dark:md:bg-transparent">
                         {{ $slot }}
                     </div>
                 </main>

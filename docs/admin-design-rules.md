@@ -36,12 +36,13 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 
 - Use a concise page title with a short helper description below it.
 - Put primary actions in the top-right on desktop and below the title on mobile.
-- Use `bg-white dark:bg-gray-900` for the main page surface.
-- Put the same light/dark background on the admin body, main slot wrapper, and `#page-content` so slots do not reveal a dark or transparent surface while rendering.
-- Use `mx-auto w-full max-w-5xl` for resource create, edit, and show page canvases.
+- Use `bg-white dark:bg-gray-900` on the concrete content surface, not on every wrapper.
+- Use `dark:bg-gray-950` for the dark admin shell background so `dark:bg-gray-900` content surfaces remain visible.
+- On desktop, keep the admin layout main slot wrapper and `#page-content` transparent so the shell background remains visible outside the content surface.
+- Use `mx-auto w-full max-w-5xl` for resource create, edit, and show page positioning wrappers, but do not give that wrapper a white background.
 - Use `w-full` without a max-width cap for resource list pages that contain tables or wide filter bars.
 - Keep the admin layout main area on the admin shell background. Transparent gutters around long list pages let the body background show through at the bottom of tables.
-- Keep the inner form/detail content aligned on `mx-auto max-w-4xl`.
+- Keep the inner form/detail content aligned on `mx-auto max-w-4xl`; create/edit/detail screens should put the white surface on this inner block or the main detail card.
 - Keep the admin-header breadcrumb aligned with the `admin/popups` baseline: dashboard and list pages use `관리자 홈 - {리소스 관리}`, while create/detail/edit pages use `관리자 홈 - {리소스 목록} - 등록|상세|수정`. Do not append long record titles.
 - Avoid nested decorative cards. Use cards only when they frame a concrete data object or form group.
 - Keep spacing generous but operational: `px-4 py-6 sm:px-6 lg:px-8` is the default page padding.
@@ -112,6 +113,8 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - On mobile, add field-body top spacing after each section title/description. The desktop grid separates header and body horizontally, but mobile needs vertical rhythm to avoid a dense block of text and controls.
 - Use tighter mobile divider spacing between form sections, then restore the wider desktop rhythm at `sm` and above.
 - Apply the same form rhythm to package-local admin forms that use the shared `laravel-admin-ui` shell. Do not leave sibling packages on the older visible-first-divider pattern.
+- For large forms, keep core fields visible and put secondary fields into independent progressive sections instead of one large generic details block. The toggle row should own the section title and helper text; do not repeat that title/helper inside the expanded content.
+- Progressive sections should open automatically when their own fields have existing values, old input, or validation errors. On create screens they should stay closed when empty, and default numeric zero values should not count as existing detail input.
 
 ## Detail Views
 
@@ -153,9 +156,10 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 
 - Every new surface should include dark variants.
 - Prefer:
-  - `dark:bg-gray-900` for page/card backgrounds
+  - `dark:bg-gray-950` for the admin shell background
+  - `dark:bg-gray-900` for concrete page/card/form surfaces
   - `dark:bg-gray-800` for secondary surfaces
-  - `dark:border-gray-700` for borders
+  - `dark:border-gray-800` for surface borders
   - `dark:text-white`, `dark:text-gray-300`, and `dark:text-gray-400` for text hierarchy
 - Badge colors should use low-opacity dark backgrounds with readable text.
 - Default to light mode when no saved `theme` exists. Apply dark mode before first paint only for explicit `dark`, or `system` with an OS dark preference.

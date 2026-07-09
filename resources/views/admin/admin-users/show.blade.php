@@ -12,8 +12,8 @@
         </x-laravel-admin::admin.admin-header>
     </x-slot>
 
-    <div class="mx-auto w-full max-w-5xl bg-white px-2 py-2 dark:bg-gray-900">
-        <div class="min-h-[450px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
+    <div class="mx-auto w-full max-w-5xl px-2 py-2">
+        <div class="mx-auto min-h-[450px] max-w-4xl bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900">
             <div class="mx-auto max-w-4xl">
                 <div class="sm:flex sm:items-start sm:justify-between">
                     <div class="sm:flex-auto">
@@ -30,8 +30,8 @@
                 </div>
             </div>
 
-            <div class="mx-auto mt-8 max-w-4xl overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                <div class="border-b border-gray-200 px-4 py-5 sm:px-6 dark:border-gray-700">
+            <div class="mx-auto mt-8 max-w-4xl overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div class="border-b border-gray-200 px-4 py-5 sm:px-6 dark:border-gray-800">
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div class="flex min-w-0 items-center gap-4">
                             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-base font-semibold text-indigo-700 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20">
@@ -75,7 +75,7 @@
                             </dl>
                         </section>
 
-                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-800">
                             <div class="mb-4">
                                 <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('권한 및 상태') }}</h3>
                                 <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('이메일 인증 여부와 관리자 역할을 확인합니다.') }}</p>
@@ -105,7 +105,7 @@
                             </dl>
                         </section>
 
-                        <section class="border-t border-gray-200 pt-6 dark:border-gray-700">
+                        <section class="border-t border-gray-200 pt-6 dark:border-gray-800">
                             <div class="mb-4">
                                 <h3 class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{{ __('기록') }}</h3>
                                 <p class="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-400">{{ __('계정 생성과 마지막 수정 시각입니다.') }}</p>
@@ -124,7 +124,7 @@
                     </div>
                 </div>
 
-                <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 dark:border-gray-700 dark:bg-gray-800/70">
+                <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 dark:border-gray-800 dark:bg-gray-800/70">
                     <div class="flex flex-wrap justify-end gap-2">
                         <x-laravel-admin::admin.action-button :href="route('admin.admin-users.edit', $adminUser->getKey())">
                             {{ __('수정하기') }}
