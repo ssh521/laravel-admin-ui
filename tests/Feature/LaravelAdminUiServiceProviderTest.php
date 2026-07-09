@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\ServiceProvider;
 use Ssh521\LaravelAdminUi\LaravelAdminUiServiceProvider;
 use Ssh521\LaravelAdminUi\Tests\TestCase;
@@ -20,6 +21,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertTrue(View::exists('laravel-admin::livewire.admin.header-nav'));
         $this->assertTrue(View::exists('laravel-admin::partials.assets'));
         $this->assertTrue(View::exists('laravel-admin::errors.403'));
+        $this->assertTrue(View::exists('laravel-admin::errors.419'));
 
         $html = Blade::render('<x-laravel-admin::admin.primary-button>Save</x-laravel-admin::admin.primary-button>');
 
@@ -36,6 +38,27 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             ->assertSee('403 Forbidden')
             ->assertSee('접근 권한이 없습니다.')
             ->assertSee('현재 계정으로는 이 페이지에 접근할 수 없습니다.');
+    }
+
+    public function test_it_renders_the_packaged_419_error_page(): void
+    {
+        Route::get('/expired', fn () => abort(419));
+
+        $this->get('/expired')
+            ->assertStatus(419)
+            ->assertSee('419 Page Expired')
+            ->assertSee('세션이 만료되었습니다.')
+            ->assertSee('세션 만료 또는 CSRF 토큰 만료');
+    }
+
+    public function test_it_renders_the_packaged_419_error_page_for_csrf_token_mismatch(): void
+    {
+        Route::get('/token-mismatch', fn () => throw new TokenMismatchException);
+
+        $this->get('/token-mismatch')
+            ->assertStatus(419)
+            ->assertSee('419 Page Expired')
+            ->assertSee('다시 로그인한 뒤 작업을 계속해 주세요.');
     }
 
     public function test_it_registers_ui_specific_publish_tags(): void
@@ -705,6 +728,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $legacyHeader = file_get_contents(__DIR__.'/../../resources/views/components/yaverstyle/admin-header.blade.php');
         $login = file_get_contents(__DIR__.'/../../resources/views/admin/auth/login.blade.php');
         $forbidden = file_get_contents(__DIR__.'/../../resources/views/errors/403.blade.php');
+        $expired = file_get_contents(__DIR__.'/../../resources/views/errors/419.blade.php');
         $darkModeToggle = file_get_contents(__DIR__.'/../../resources/views/components/yaverstyle/dark-mode-toggle.blade.php');
 
         $this->assertStringContainsString('this.isMobileMenuOpen = false', $layout);
@@ -723,13 +747,18 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringNotContainsString("route('home')", $legacyHeader);
         $this->assertStringNotContainsString('favicon.ico', $layout);
         $this->assertStringNotContainsString('favicon.ico', $login);
+        $this->assertStringContainsString('no-store, no-cache, must-revalidate, max-age=0', $login);
+        $this->assertStringContainsString('no-store, no-cache, must-revalidate, max-age=0', $expired);
+        $this->assertStringContainsString('event.persisted', $login);
         $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $layout);
         $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $login);
         $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $forbidden);
+        $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $expired);
         $this->assertStringContainsString("theme === 'dark' || (theme === 'system' && prefersDark)", $darkModeToggle);
         $this->assertStringNotContainsString('!theme && prefersDark', $layout);
         $this->assertStringNotContainsString('!theme && prefersDark', $login);
         $this->assertStringNotContainsString('!theme && prefersDark', $forbidden);
+        $this->assertStringNotContainsString('!theme && prefersDark', $expired);
         $this->assertStringNotContainsString('!theme && prefersDark', $darkModeToggle);
 
         $this->assertStringContainsString("Route::has('profile.show')", $header);

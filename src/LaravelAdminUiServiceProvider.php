@@ -3,6 +3,7 @@
 namespace Ssh521\LaravelAdminUi;
 
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -50,19 +51,25 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
                     return null;
                 }
 
-                if (! $e instanceof HttpExceptionInterface || $e->getStatusCode() !== 403) {
+                $status = match (true) {
+                    $e instanceof TokenMismatchException => 419,
+                    $e instanceof HttpExceptionInterface => $e->getStatusCode(),
+                    default => null,
+                };
+
+                if (! in_array($status, [403, 419], true)) {
                     return null;
                 }
 
-                if (file_exists(resource_path('views/errors/403.blade.php'))) {
+                if (file_exists(resource_path("views/errors/{$status}.blade.php"))) {
                     return null;
                 }
 
                 return response()->view(
-                    'laravel-admin::errors.403',
+                    "laravel-admin::errors.{$status}",
                     [],
-                    403,
-                    $e->getHeaders()
+                    $status,
+                    $e instanceof HttpExceptionInterface ? $e->getHeaders() : []
                 );
             });
         });

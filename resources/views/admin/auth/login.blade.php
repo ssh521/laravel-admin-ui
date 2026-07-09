@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
     <title>{{ __('Admin Login') }} - {{ config('app.name', 'Laravel') }}</title>
 
@@ -15,6 +18,12 @@
 
             document.documentElement.classList.toggle('dark', isDark);
         })();
+
+        window.addEventListener('pageshow', event => {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
     </script>
 
     @include('laravel-admin::partials.assets')
