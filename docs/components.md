@@ -44,7 +44,7 @@ Dispatcher는 선택된 style 구현을 먼저 찾고, 없으면 `yaverstyle`로
 | `admin.danger-button` | legacy destructive button |
 | `admin.dropdown` | compact command menu container |
 | `admin.dropdown-link` | dropdown 내부 링크 item |
-| `admin.action-menu` | compact table row action dropdown with adaptive up/down placement against the viewport or nearest scroll container, unboxed horizontal ellipsis trigger, padded rounded panel, left-aligned items, blue hover/focus states, and a separator before secondary modal/Livewire commands |
+| `admin.action-menu` | compact table row action dropdown with adaptive up/down placement, shared item presentation, `aria-expanded`, Escape close with trigger focus restoration, and a separator before secondary modal/Livewire commands |
 | `admin.confirm-dialog` | 삭제/위험 작업 확인 dialog |
 | `admin.copy-button` | 값 표시와 clipboard 복사 action |
 | `admin.export-button` | CSV/Excel/PDF 등 내보내기 dropdown |

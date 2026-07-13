@@ -220,12 +220,12 @@
                                             <div class="flex justify-end">
                                                 <x-laravel-admin::admin.action-menu>
                                                     @can('view', $category)
-                                                        <x-laravel-admin::admin.dropdown-link :href="route('admin.menu-categories.show', $category)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                        <x-laravel-admin::admin.dropdown-link :href="route('admin.menu-categories.show', $category)">
                                                             {{ __('보기') }}
                                                         </x-laravel-admin::admin.dropdown-link>
                                                     @endcan
                                                     @can('update', $category)
-                                                        <x-laravel-admin::admin.dropdown-link :href="route('admin.menu-categories.edit', $category)" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                        <x-laravel-admin::admin.dropdown-link :href="route('admin.menu-categories.edit', $category)">
                                                             {{ __('수정') }}
                                                         </x-laravel-admin::admin.dropdown-link>
                                                     @endcan

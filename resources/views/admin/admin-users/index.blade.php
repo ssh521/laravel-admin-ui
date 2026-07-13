@@ -36,6 +36,7 @@
                         size="sm"
                         class="sm:hidden"
                         x-bind:aria-expanded="filtersOpen.toString()"
+                        aria-controls="admin-user-filters"
                         @click="filtersOpen = ! filtersOpen"
                     >
                         <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
@@ -45,7 +46,7 @@
 
             <x-laravel-admin::admin.session-messages />
 
-            <x-laravel-admin::admin.filter-bar action="{{ route('admin.admin-users.index') }}" :mobile-toggle="false">
+            <x-laravel-admin::admin.filter-bar id="admin-user-filters" action="{{ route('admin.admin-users.index') }}" :mobile-toggle="false">
                 @if(request('sortField'))
                     <input type="hidden" name="sortField" value="{{ request('sortField') }}">
                 @endif
@@ -86,7 +87,7 @@
             <div class="mt-6 flow-root">
                 <div class="-mx-4 -my-2 overflow-x-auto sm:min-h-64 sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                        <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+                        <table class="w-full table-fixed divide-y divide-gray-300 sm:table-auto dark:divide-gray-700">
                             <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                                 <tr>
                                     <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
@@ -102,7 +103,7 @@
                                     </th>
                                     <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">{{ __('역할 목록') }}</th>
                                     <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">{{ __('Verified') }}</th>
-                                    <th scope="col" class="relative py-3 pr-4 pl-3 sm:pr-0">
+                                    <th scope="col" class="relative w-12 py-3 pr-2 pl-1 sm:pr-0 sm:pl-3">
                                         <span class="sr-only">{{ __('Actions') }}</span>
                                     </th>
                                 </tr>
@@ -110,7 +111,7 @@
                             <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-800 dark:bg-gray-900">
                                 @forelse ($adminUsers as $adminUser)
                                     <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/80">
-                                        <td class="py-3 pr-3 pl-4 text-sm sm:pl-0">
+                                        <td class="min-w-0 py-3 pr-2 pl-4 text-sm sm:pr-3 sm:pl-0">
                                             <div class="flex items-center">
                                                 <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-sm font-semibold text-indigo-700 ring-1 ring-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-500/20">
                                                     {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($adminUser->name, 0, 1)) }}
@@ -144,13 +145,13 @@
                                                 <x-laravel-admin::admin.badge variant="warning">{{ __('Not Verified') }}</x-laravel-admin::admin.badge>
                                             @endif
                                         </td>
-                                        <td class="py-3 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                                        <td class="w-12 py-3 pr-2 pl-1 text-right text-sm font-medium whitespace-nowrap sm:pr-0 sm:pl-3">
                                             <div class="flex justify-end">
                                                 <x-laravel-admin::admin.action-menu>
-                                                    <x-laravel-admin::admin.dropdown-link :href="route('admin.admin-users.show', $adminUser->getKey())" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                    <x-laravel-admin::admin.dropdown-link :href="route('admin.admin-users.show', $adminUser->getKey())">
                                                         {{ __('보기') }}
                                                     </x-laravel-admin::admin.dropdown-link>
-                                                    <x-laravel-admin::admin.dropdown-link :href="route('admin.admin-users.edit', $adminUser->getKey())" class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100">
+                                                    <x-laravel-admin::admin.dropdown-link :href="route('admin.admin-users.edit', $adminUser->getKey())">
                                                         {{ __('수정') }}
                                                     </x-laravel-admin::admin.dropdown-link>
                                                 </x-laravel-admin::admin.action-menu>
@@ -158,9 +159,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="4" class="px-3 py-16 text-center text-sm text-gray-500 dark:text-gray-400">{{ __('No admin users found.') }}</td>
-                                    </tr>
+                                    <x-laravel-admin::admin.table-empty-row colspan="4" :message="__('No admin users found.')" />
                                 @endforelse
                             </tbody>
                         </table>
@@ -168,9 +167,11 @@
                 </div>
             </div>
 
-            <div class="mt-6 text-sm">
-                {{ $adminUsers->withQueryString()->links() }}
-            </div>
+            @if($adminUsers->hasPages())
+                <div class="mt-6 text-sm">
+                    {{ $adminUsers->withQueryString()->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </x-laravel-admin::admin.layouts.admin>

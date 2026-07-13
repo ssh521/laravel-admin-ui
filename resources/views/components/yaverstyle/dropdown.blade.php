@@ -44,6 +44,13 @@
                 this.$nextTick(() => this.updatePlacement());
             }
         },
+        close(restoreFocus = false) {
+            this.open = false;
+
+            if (restoreFocus) {
+                this.$nextTick(() => this.$refs.trigger?.querySelector('button, a, [tabindex]')?.focus());
+            }
+        },
         updatePlacement() {
             if (! this.open || ! this.adaptive || ! this.$refs.trigger || ! this.$refs.panel) {
                 return;
@@ -91,9 +98,10 @@
             this.panelStyle = `top: ${top}px; left: ${left}px;`;
         },
     }"
-    @click.away="open = false"
-    @close.stop="open = false"
-    @admin:dropdown-close-all.window="open = false"
+    @click.away="close()"
+    @close.stop="close()"
+    @keydown.escape.stop.prevent="close(true)"
+    @admin:dropdown-close-all.window="close()"
     @resize.window="open && updatePlacement()"
     @scroll.window="open && updatePlacement()"
 >

@@ -72,6 +72,7 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Use `variant="info"` for role/category taxonomy badges when they need to stand apart from neutral empty-state text.
 - Use icon+text actions for view and edit.
 - If a name opens a quick modal, keep that behavior on the name and make the explicit `보기` action navigate to the show page.
+- On narrow screens, constrain the action column and let the identity column truncate so long email addresses cannot push the action-menu trigger off-screen.
 - Keep search and filters in a compact bordered filter bar above the list.
 - On mobile, collapse the filter bar by default behind a compact `검색/필터` toggle so the first list rows are visible without extra scrolling. Keep the full filter bar visible on tablet and desktop.
 - If a mobile list page has a primary action such as `등록하기`, place the compact `검색/필터` toggle in the same top action row when space allows, then expand the filter form below the header.
@@ -150,6 +151,7 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Override global admin link colors with Tailwind important text classes, for example `!text-white` or `!text-gray-700`, when a link is styled as a button.
 - Buttons, action-menu triggers, and link-style row actions should show the pointer cursor across the whole hit area, including nested SVG icons. If CSS is published into a host app, rebuild or republish the host admin CSS so the cursor rule is present in the loaded asset.
 - Table rows with multiple record commands should use `admin.action-menu`: an unboxed horizontal ellipsis trigger with adaptive up/down placement and full-width menu items for actions such as `보기` and `수정`, instead of several compact text buttons laid out inline. The dropdown should open downward by default, flip upward near the bottom edge of the viewport or nearest scroll container, and avoid creating a new table-body scrollbar merely to show the menu. Use `admin.dropdown-link` for normal link commands and a reset button for modal/Livewire commands; place secondary modal commands below the normal link commands after a thin separator line. Keep the menu compact (`w-36`), padded (`p-2`), left-aligned, and use blue hover/focus states with white text.
+- Let `admin.action-menu` and the shared admin CSS own item padding, colors, hover, and focus presentation instead of repeating those classes in each list screen. Keep `aria-expanded` current, support Escape close, and return keyboard focus to the trigger.
 - Desktop and tablet list tables with row action menus should keep a minimum table-scroller height, normally `sm:min-h-64`, so one-row result sets still leave enough vertical room for the action menu without immediately hitting the table wrapper edge. Avoid applying this minimum only to mobile layouts, where the responsive table shape already reduces the overflow problem.
 
 ## Dark Mode

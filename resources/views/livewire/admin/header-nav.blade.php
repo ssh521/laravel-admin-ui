@@ -33,7 +33,7 @@
     x-transition:enter-start="transform -translate-y-full" x-transition:enter-end="transform translate-y-0"
     x-transition:leave="transition ease-in duration-300" x-transition:leave-start="transform translate-y-0"
     x-transition:leave-end="transform -translate-y-full"
-    class="fixed top-0 left-0 w-full z-50 bg-white dark:bg-[#000000] border-b border-gray-400 dark:border-gray-800 shadow-lg flex items-center h-16 px-4">
+    class="fixed top-0 left-0 z-50 flex h-16 w-full items-center border-b border-gray-400 bg-white px-2 shadow-lg sm:px-4 dark:border-gray-800 dark:bg-gray-950">
 
     <!-- 햄버거 버튼 -->
     <button class="block lg:hidden mr-0 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-purple-800 transition"
@@ -64,9 +64,9 @@
     </button>
 
     <!-- 로고 -->
-    <a href="{{ route('admin.index') }}" class="flex items-center gap-2" style="text-decoration: none;">
+    <a href="{{ route('admin.index') }}" class="flex shrink-0 items-center gap-2" style="text-decoration: none;">
         <x-laravel-admin::admin.site-logo class="w-[22px] -mb-1 dark:text-purple-200" />
-        <span class="text-md lg:text-xl font-bold text-purple-700 dark:text-purple-200 tracking-tight">관리자 메뉴</span>
+        <span class="hidden whitespace-nowrap text-base font-bold tracking-tight text-purple-700 sm:inline lg:text-xl dark:text-purple-200">관리자 메뉴</span>
     </a>
 
     <x-laravel-admin::admin.dark-mode-toggle class="ml-0" />
@@ -76,7 +76,7 @@
     </div>
 
     <!-- 우측: 드롭다운 메뉴 -->
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-1 sm:gap-4">
         @if (class_exists(\Ssh521\LaravelBroadcastNotification\LaravelBroadcastNotificationServiceProvider::class)
             && view()->exists('laravel-broadcast-notification::components.admin.dropdown'))
             @include('laravel-broadcast-notification::components.admin.dropdown')
@@ -103,7 +103,7 @@
 
         <!-- Teams Dropdown -->
         @if ($hasTeamFeatures)
-        <div class="ms-3 relative">
+        <div class="relative ms-1 sm:ms-3">
             <x-laravel-admin::admin.dropdown
                 align="right"
                 width="60"
@@ -155,7 +155,7 @@
         @endif
 
         <!-- Settings Dropdown -->
-        <div class="ms-3 relative">
+        <div class="relative ms-1 sm:ms-3">
             <x-laravel-admin::admin.dropdown
                 align="right"
                 width="48"
@@ -170,14 +170,15 @@
                     @else
                     <span class="inline-flex rounded-md">
                         <button type="button"
-                            class="inline-flex max-w-44 items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm transition hover:border-indigo-300 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-indigo-500 dark:hover:text-indigo-300 dark:focus:ring-offset-gray-900">
+                            aria-label="{{ __('계정 메뉴') }}"
+                            class="inline-flex max-w-44 items-center gap-2 rounded-md border border-gray-200 bg-white px-2 py-2 text-sm font-medium leading-4 text-gray-700 shadow-sm transition hover:border-indigo-300 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-3 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-indigo-500 dark:hover:text-indigo-300 dark:focus:ring-offset-gray-900">
                             <span class="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-300">
                                 {{ mb_substr($user?->name ?? __('Admin'), 0, 1) }}
                             </span>
-                            <span class="truncate">
+                            <span class="hidden truncate sm:inline">
                             {{ $user?->name ?? __('Admin') }}
                             </span>
-                            <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg class="ms-2 -me-0.5 hidden size-4 sm:block" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>

@@ -96,6 +96,8 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $searchInput = Blade::render('<x-laravel-admin::admin.search-input name="q" value="admin" clear-href="/admin" />');
         $stat = Blade::render('<x-laravel-admin::admin.stat label="회원" value="120" />');
         $notice = Blade::render('<x-laravel-admin::admin.notice type="warning" title="주의" />');
+        $pageSection = Blade::render('<x-laravel-admin::admin.page-section title="목록">본문</x-laravel-admin::admin.page-section>');
+        $tableShell = Blade::render('<x-laravel-admin::admin.table-shell><table></table></x-laravel-admin::admin.table-shell>');
         $fallback = Blade::render('<x-laravel-admin::admin.action-menu><button>열기</button></x-laravel-admin::admin.action-menu>');
 
         $this->assertStringContainsString('btn', $button);
@@ -109,6 +111,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('input input-bordered', $searchInput);
         $this->assertStringContainsString('stat-value', $stat);
         $this->assertStringContainsString('alert-warning', $notice);
+        $this->assertStringContainsString('min-h-[560px] bg-base-100', $pageSection);
+        $this->assertStringNotContainsString('card-body', $pageSection);
+        $this->assertStringContainsString('overflow-x-auto sm:min-h-64', $tableShell);
         $this->assertStringContainsString('작업 메뉴', $fallback);
     }
 
@@ -330,6 +335,9 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('updatePlacement()', $actionMenu);
         $this->assertStringContainsString('fixed z-[70]', $actionMenu);
         $this->assertStringContainsString('panelStyle', $actionMenu);
+        $this->assertStringContainsString('aria-haspopup="menu"', $actionMenu);
+        $this->assertStringContainsString('x-bind:aria-expanded="open.toString()"', $actionMenu);
+        $this->assertStringContainsString('@keydown.escape.stop.prevent="close(true)"', $actionMenu);
         $this->assertStringContainsString('z-[70]', $actionMenu);
         $this->assertStringNotContainsString('absolute z-50 rounded-md shadow-lg', $actionMenu);
         $this->assertStringContainsString('수정', $actionMenu);
@@ -337,6 +345,8 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('데이터 없음', $tableEmptyRow);
         $this->assertStringContainsString('저장 중', $loadingOverlay);
         $this->assertStringContainsString('animate-spin', $loadingOverlay);
+        $this->assertStringContainsString('aria-busy="true"', $loadingOverlay);
+        $this->assertStringContainsString('role="status"', $loadingOverlay);
         $this->assertStringContainsString('주의', $notice);
         $this->assertStringContainsString('삭제 전 확인하세요.', $notice);
         $this->assertStringContainsString('환경', $keyValueGrid);
@@ -425,6 +435,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('variant="secondary"', $index);
         $this->assertStringContainsString('class="sm:hidden"', $index);
         $this->assertStringContainsString('x-bind:aria-expanded="filtersOpen.toString()"', $index);
+        $this->assertStringContainsString('aria-controls="admin-user-filters"', $index);
         $this->assertStringContainsString('@click="filtersOpen = ! filtersOpen"', $index);
         $this->assertStringContainsString('<x-laravel-admin::admin.action-button type="submit" variant="search"', $index);
         $this->assertStringContainsString('class="w-full shrink-0 sm:w-40"', $index);
@@ -442,7 +453,11 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('class="flex flex-wrap justify-center gap-1.5"', $index);
         $this->assertStringContainsString('<x-laravel-admin::admin.badge variant="info">{{ $role }}</x-laravel-admin::admin.badge>', $index);
         $this->assertStringContainsString('class="hidden px-3 py-3 text-center text-sm whitespace-nowrap sm:table-cell"', $index);
-        $this->assertStringContainsString('class="py-3 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0"', $index);
+        $this->assertStringContainsString('w-full table-fixed', $index);
+        $this->assertStringContainsString('sm:table-auto', $index);
+        $this->assertStringContainsString('class="w-12 py-3 pr-2 pl-1 text-right text-sm font-medium whitespace-nowrap sm:pr-0 sm:pl-3"', $index);
+        $this->assertStringContainsString('<x-laravel-admin::admin.table-empty-row colspan="4"', $index);
+        $this->assertStringContainsString('@if($adminUsers->hasPages())', $index);
         $this->assertStringNotContainsString('dark:bg-white dark:text-gray-900', $index);
     }
 
@@ -614,7 +629,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             $source = file_get_contents(__DIR__.'/../../'.$relativePath);
 
             $this->assertStringContainsString('<x-laravel-admin::admin.action-menu>', $source, "{$relativePath} should use the shared row action menu.");
-            $this->assertStringContainsString('class="rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950 hover:!bg-blue-500 hover:!text-white hover:!no-underline focus:!bg-blue-500 focus:!text-white dark:!text-gray-100"', $source, "{$relativePath} should render large dropdown-link action menu items.");
+            $this->assertStringNotContainsString('rounded-lg px-6 py-1 text-left text-base leading-6 !text-gray-950', $source, "{$relativePath} should leave action-menu item presentation to the shared component.");
             $this->assertStringNotContainsString('class="block w-full rounded-lg px-6 py-1', $source, "{$relativePath} should reset native button styling for action menu buttons.");
             $this->assertStringNotContainsString('icon="eye" class="h-auto px-2 py-1"', $source, "{$relativePath} should not expose compact inline view buttons.");
             $this->assertStringNotContainsString('icon="pen-to-square" class="ml-1 h-auto px-2 py-1"', $source, "{$relativePath} should not expose compact inline edit buttons.");
@@ -741,7 +756,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('min-w-0 flex-1 flex flex-col md:mt-2 mx-0 md:mx-4 lg:mx-6', $layout);
         $this->assertStringContainsString('mb-2 border-[0px] border-gray-200 bg-white p-[0px] md:bg-transparent dark:border-gray-700 dark:bg-gray-950 dark:md:bg-transparent', $layout);
         $this->assertStringContainsString('id="page-content" class="border-[0px] border-gray-200 bg-white md:bg-transparent dark:border-gray-700 dark:bg-gray-950 dark:md:bg-transparent"', $layout);
-        $this->assertStringContainsString('border-gray-400 dark:border-gray-800 shadow-lg', $header);
+        $this->assertStringContainsString('border-b border-gray-400 bg-white px-2 shadow-lg sm:px-4 dark:border-gray-800 dark:bg-gray-950', $header);
         $this->assertStringNotContainsString('sidebarBackground', $layout);
         $this->assertStringNotContainsString("e.key === 'Escape' && open", $layout);
         $this->assertStringNotContainsString("route('home')", $legacyHeader);
