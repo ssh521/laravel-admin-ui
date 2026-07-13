@@ -337,7 +337,8 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('panelStyle', $actionMenu);
         $this->assertStringContainsString('aria-haspopup="menu"', $actionMenu);
         $this->assertStringContainsString('x-bind:aria-expanded="open.toString()"', $actionMenu);
-        $this->assertStringContainsString('@keydown.escape.stop.prevent="close(true)"', $actionMenu);
+        $this->assertStringContainsString('@keydown.escape="if (open) { $event.preventDefault(); $event.stopPropagation(); close(true); }"', $actionMenu);
+        $this->assertStringNotContainsString('@keydown.escape.stop.prevent', $actionMenu);
         $this->assertStringContainsString('z-[70]', $actionMenu);
         $this->assertStringNotContainsString('absolute z-50 rounded-md shadow-lg', $actionMenu);
         $this->assertStringContainsString('수정', $actionMenu);

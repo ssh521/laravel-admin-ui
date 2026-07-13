@@ -24,6 +24,7 @@ It provides Blade views, anonymous Blade components, CSS, JavaScript, image asse
 
 Reusable components must keep the `x-laravel-admin::admin.*` Blade API stable.
 Read `docs/style-development-contract.md` before adding or extending a style folder.
+For UI audits, read `docs/admin-ui-design-contract.md` and its Adoption Checklist before reviewing or editing screens; repository contracts take precedence over external guidance.
 
 When a component needs style changes:
 

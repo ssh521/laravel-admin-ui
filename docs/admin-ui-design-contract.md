@@ -296,6 +296,8 @@ When applying this contract to another package:
 
 For each resource migrated in another package:
 
+- Review the current screen and shared components against this contract first, prioritizing contract violations and interaction or accessibility risks over optional visual polish.
+
 1. Confirm the package renders inside the admin layout.
 2. Update the index screen.
 3. Update create/edit forms and shared partials.

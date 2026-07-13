@@ -100,7 +100,7 @@
     }"
     @click.away="close()"
     @close.stop="close()"
-    @keydown.escape.stop.prevent="close(true)"
+    @keydown.escape="if (open) { $event.preventDefault(); $event.stopPropagation(); close(true); }"
     @admin:dropdown-close-all.window="close()"
     @resize.window="open && updatePlacement()"
     @scroll.window="open && updatePlacement()"
