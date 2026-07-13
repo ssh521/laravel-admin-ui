@@ -766,6 +766,13 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('no-store, no-cache, must-revalidate, max-age=0', $login);
         $this->assertStringContainsString('no-store, no-cache, must-revalidate, max-age=0', $expired);
         $this->assertStringContainsString('event.persisted', $login);
+        $this->assertStringContainsString('min-h-screen bg-white font-sans antialiased text-gray-900 dark:bg-gray-950', $login);
+        $this->assertStringContainsString('flex min-h-screen min-h-dvh items-center justify-center px-4 py-6 sm:px-6 sm:py-10 lg:px-8', $login);
+        $this->assertStringContainsString('<div class="w-full max-w-md">', $login);
+        $this->assertStringContainsString('px-6 py-6 sm:px-8 sm:py-8', $login);
+        $this->assertStringContainsString('허가된 관리자만 접근할 수 있습니다. 무단 접근 및 사용은 제한됩니다.', $login);
+        $this->assertStringNotContainsString('개인정보 보호정책', $login);
+        $this->assertStringNotContainsString('mb-10', $login);
         $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $layout);
         $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $login);
         $this->assertStringContainsString("theme === 'dark' || theme === 'system' && prefersDark", $forbidden);
