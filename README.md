@@ -219,11 +219,15 @@ public/images/dtree
 
 CSS 또는 JavaScript를 변경한 뒤에는 호스트 앱에 자산을 다시 퍼블리시하고 Vite 빌드를 갱신해야 실제 화면에 반영됩니다.
 
-## 403 화면
+## 403·419 화면
 
 이 패키지는 관리자 UI 스타일의 기본 403 화면을 제공합니다.
 
 앱에 `resources/views/errors/403.blade.php`가 있으면 Laravel 앱의 뷰가 우선됩니다. 앱에 해당 파일이 없고, JSON 응답이 아닌 403 예외가 발생하면 패키지의 `laravel-admin::errors.403` 뷰가 렌더링됩니다.
+
+기본 419 화면은 일반 요청과 관리자 요청을 구분합니다. 일반 요청은 `login`, 관리자 route·path 및 같은 호스트의 관리자 Livewire 요청은 `admin.login`으로 안내합니다. 호스트 앱이나 `laravel-admin` 세션 미들웨어가 `AdminRequestContext`에 요청 영역을 표시하면 그 값을 가장 먼저 사용합니다.
+
+앱에 `resources/views/errors/419.blade.php`가 있으면 앱의 뷰가 우선되므로, 패키지의 공통 분기와 다른 복구 흐름이 필요한 경우에만 호스트 뷰를 유지합니다.
 
 ## 디자인 기준
 

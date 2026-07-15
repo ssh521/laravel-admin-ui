@@ -1,3 +1,7 @@
+@php
+    $isAdminSession = $isAdminSession ?? \Ssh521\LaravelAdminUi\Support\AdminRequestContext::isAdmin(request());
+    $loginRoute = $loginRoute ?? \Ssh521\LaravelAdminUi\Support\AdminRequestContext::loginRoute(request());
+@endphp
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 <head>
@@ -7,7 +11,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <title>{{ __('세션이 만료되었습니다') }} - {{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $isAdminSession ? __('관리자 세션 만료') : __('로그인 세션 만료') }} - {{ config('app.name', 'Laravel') }}</title>
 
     <script>
         (function() {
@@ -33,13 +37,6 @@
     @include('laravel-admin::partials.assets')
 </head>
 <body class="h-full bg-[#E7E7D6] font-sans antialiased text-gray-950 dark:bg-gray-950 dark:text-white">
-    @php
-        $adminLoginRoute = config('laravel-admin.route_name_prefix', 'admin.').'login';
-        $loginRoute = \Illuminate\Support\Facades\Route::has($adminLoginRoute)
-            ? $adminLoginRoute
-            : (\Illuminate\Support\Facades\Route::has('login') ? 'login' : null);
-    @endphp
-
     <main class="flex min-h-full items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
         <section class="w-full max-w-2xl overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800 sm:px-8">
@@ -48,9 +45,11 @@
                         <x-laravel-admin::admin.icon name="key" class="text-lg" />
                     </div>
                     <div class="min-w-0">
-                        <p class="text-sm font-semibold text-indigo-700 dark:text-indigo-300">419 Page Expired</p>
+                        <p class="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
+                            {{ $isAdminSession ? 'ADMIN SESSION' : 'USER SESSION' }} · 419
+                        </p>
                         <h1 class="mt-1 text-2xl font-bold tracking-normal text-gray-950 dark:text-white">
-                            {{ __('세션이 만료되었습니다.') }}
+                            {{ $isAdminSession ? __('관리자 세션이 만료되었습니다.') : __('로그인 세션이 만료되었습니다.') }}
                         </h1>
                     </div>
                 </div>
@@ -58,7 +57,11 @@
 
             <div class="px-6 py-6 sm:px-8">
                 <p class="text-base leading-7 text-gray-700 dark:text-gray-300">
-                    {{ __('오랫동안 사용하지 않았거나 보안 토큰이 갱신되어 요청을 처리할 수 없습니다. 다시 로그인한 뒤 작업을 계속해 주세요.') }}
+                    @if ($isAdminSession)
+                        {{ __('관리자 화면을 오랫동안 사용하지 않았거나 보안 토큰이 갱신되었습니다. 관리자 계정으로 다시 로그인해 주세요.') }}
+                    @else
+                        {{ __('로그인 후 오랫동안 사용하지 않았거나 보안 토큰이 갱신되었습니다. 일반 사용자 계정으로 다시 로그인해 주세요.') }}
+                    @endif
                 </p>
 
                 <dl class="mt-6 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
@@ -80,7 +83,7 @@
                     @if ($loginRoute)
                         <a href="{{ route($loginRoute) }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">
                             <x-laravel-admin::admin.icon name="right-to-bracket" class="mr-2 text-xs" />
-                            {{ __('로그인 화면으로 이동') }}
+                            {{ $isAdminSession ? __('관리자 로그인') : __('일반 로그인') }}
                         </a>
                     @else
                         <a href="{{ url('/') }}" class="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold !text-white shadow-sm hover:bg-indigo-500 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400">

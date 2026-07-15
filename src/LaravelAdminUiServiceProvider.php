@@ -3,12 +3,14 @@
 namespace Ssh521\LaravelAdminUi;
 
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Ssh521\LaravelAdminUi\Contracts\StyleClassResolver;
 use Ssh521\LaravelAdminUi\Styles\YaverstyleClassResolver;
+use Ssh521\LaravelAdminUi\Support\AdminRequestContext;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
@@ -65,14 +67,31 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
                     return null;
                 }
 
+                $viewData = $status === 419
+                    ? $this->sessionExpiredViewData($request)
+                    : [];
+
                 return response()->view(
                     "laravel-admin::errors.{$status}",
-                    [],
+                    $viewData,
                     $status,
                     $e instanceof HttpExceptionInterface ? $e->getHeaders() : []
                 );
             });
         });
+    }
+
+    /**
+     * @return array{isAdminSession: bool, loginRoute: string|null}
+     */
+    private function sessionExpiredViewData(Request $request): array
+    {
+        $isAdminSession = AdminRequestContext::isAdmin($request);
+
+        return [
+            'isAdminSession' => $isAdminSession,
+            'loginRoute' => AdminRequestContext::loginRoute($request),
+        ];
     }
 
     private function registerPublishes(): void

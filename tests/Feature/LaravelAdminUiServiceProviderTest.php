@@ -2,11 +2,11 @@
 
 namespace Ssh521\LaravelAdminUi\Tests\Feature;
 
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
-use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\ServiceProvider;
 use Ssh521\LaravelAdminUi\LaravelAdminUiServiceProvider;
 use Ssh521\LaravelAdminUi\Tests\TestCase;
@@ -42,23 +42,68 @@ class LaravelAdminUiServiceProviderTest extends TestCase
 
     public function test_it_renders_the_packaged_419_error_page(): void
     {
+        $this->registerLoginRoutes();
         Route::get('/expired', fn () => abort(419));
 
         $this->get('/expired')
             ->assertStatus(419)
-            ->assertSee('419 Page Expired')
-            ->assertSee('세션이 만료되었습니다.')
+            ->assertSee('USER SESSION')
+            ->assertSee('로그인 세션이 만료되었습니다.')
+            ->assertSee('일반 로그인')
+            ->assertSee(route('login'))
+            ->assertDontSee('관리자 로그인')
             ->assertSee('세션 만료 또는 CSRF 토큰 만료');
     }
 
     public function test_it_renders_the_packaged_419_error_page_for_csrf_token_mismatch(): void
     {
+        $this->registerLoginRoutes();
         Route::get('/token-mismatch', fn () => throw new TokenMismatchException);
 
         $this->get('/token-mismatch')
             ->assertStatus(419)
-            ->assertSee('419 Page Expired')
-            ->assertSee('다시 로그인한 뒤 작업을 계속해 주세요.');
+            ->assertSee('로그인 세션이 만료되었습니다.')
+            ->assertSee('일반 사용자 계정으로 다시 로그인해 주세요.');
+    }
+
+    public function test_packaged_419_view_can_be_rendered_directly(): void
+    {
+        $this->registerLoginRoutes();
+
+        $this->view('laravel-admin::errors.419')
+            ->assertSee('로그인 세션이 만료되었습니다.')
+            ->assertSee('일반 로그인');
+    }
+
+    public function test_it_sends_admin_session_expiry_to_the_admin_login(): void
+    {
+        $this->registerLoginRoutes();
+        Route::get('/admin/token-mismatch', fn () => throw new TokenMismatchException)
+            ->name('admin.token-mismatch');
+
+        $this->get('/admin/token-mismatch')
+            ->assertStatus(419)
+            ->assertSee('ADMIN SESSION')
+            ->assertSee('관리자 세션이 만료되었습니다.')
+            ->assertSee('관리자 로그인')
+            ->assertSee(route('admin.login'))
+            ->assertDontSee('일반 로그인');
+    }
+
+    public function test_admin_livewire_session_expiry_keeps_the_admin_login_recovery(): void
+    {
+        $this->registerLoginRoutes();
+        Route::get('/livewire/session-expired', fn () => throw new TokenMismatchException)
+            ->name('livewire.session-expired');
+
+        $this->withHeaders([
+            'X-Livewire' => 'true',
+            'Referer' => url('/admin/users'),
+        ])->get('/livewire/session-expired')
+            ->assertStatus(419)
+            ->assertSee('관리자 세션이 만료되었습니다.')
+            ->assertSee('관리자 로그인')
+            ->assertSee(route('admin.login'));
     }
 
     public function test_it_registers_ui_specific_publish_tags(): void
@@ -69,6 +114,13 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertPublishesTo('laravel-admin-ui-assets', resource_path('vendor/laravel-admin'));
         $this->assertPublishesTo('laravel-admin-ui-assets', public_path('images/dtree'));
         $this->assertPublishesTo('laravel-admin-ui-config', config_path('laravel-admin-ui.php'));
+    }
+
+    private function registerLoginRoutes(): void
+    {
+        Route::get('/login', fn () => 'user-login')->name('login');
+        Route::get('/admin/login', fn () => 'admin-login')->name('admin.login');
+        Route::getRoutes()->refreshNameLookups();
     }
 
     public function test_it_registers_yaverstyle_as_the_default_component_style(): void
