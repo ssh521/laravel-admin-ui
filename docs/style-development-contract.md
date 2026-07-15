@@ -187,13 +187,13 @@ rg -n "LARAVEL_ADMIN_UI_THEME|laravel-admin-ui\\.theme|ThemeContract|ThemeManage
 
 ```bash
 git diff --check
-/Users/ssh521/Projects/Packagist/adminTest/vendor/bin/phpunit --configuration phpunit.xml.dist
+../../../adminTest/vendor/bin/phpunit --configuration phpunit.xml.dist
 ```
 
 4. Verify both default and alternate styles compile:
 
 ```bash
-cd /Users/ssh521/Projects/Packagist/adminTest
+cd ../../../adminTest
 LARAVEL_ADMIN_UI_STYLE=yaverstyle php artisan view:cache
 LARAVEL_ADMIN_UI_STYLE=daisystyle php artisan view:cache
 php artisan view:clear

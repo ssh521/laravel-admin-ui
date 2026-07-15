@@ -52,9 +52,9 @@ When a component needs style changes:
 ```bash
 git diff --check
 composer test
-/Users/ssh521/Projects/Packagist/adminTest/vendor/bin/phpunit --configuration phpunit.xml.dist
+../../../adminTest/vendor/bin/phpunit --configuration phpunit.xml.dist
 ```
 
 If package-local dependencies are unavailable, run the relevant shared host-app test command from the consuming workspace and still run `git diff --check`.
 
-Use `php artisan view:cache` in `/Users/ssh521/Projects/Packagist/adminTest` when Blade component resolution needs verification, then clear cached views after checking.
+Use `php artisan view:cache` in `../../../adminTest` when Blade component resolution needs verification, then clear cached views after checking.

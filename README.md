@@ -254,10 +254,6 @@ composer test
 git diff --check
 ```
 
-패키지 루트에 PHPUnit 의존성이 없을 때는 워크벤치의 공유 runner를 사용할 수 있습니다.
-
-```bash
-/Users/ssh521/Projects/Packagist/adminTest/vendor/bin/phpunit --configuration phpunit.xml.dist
-```
+소비 앱과의 통합 동작은 해당 앱의 테스트 runner에서 패키지 테스트 설정을 지정해 추가로 확인할 수 있습니다.
 
 호스트 앱에서 화면을 검증할 때는 퍼블리시된 override 뷰와 자산이 패키지 원본보다 우선될 수 있다는 점을 함께 확인해야 합니다.
