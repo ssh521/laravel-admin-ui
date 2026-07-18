@@ -4,7 +4,7 @@
 
 `ssh521/laravel-admin-ui` owns the reusable admin presentation layer for `ssh521/laravel-admin`.
 
-It provides Blade views, anonymous Blade components, CSS, JavaScript, image assets, and the packaged 403 page. It does not own admin authentication, guards, routes, policies, models, seeders, console commands, or feature package domain behavior.
+It provides Blade views, anonymous Blade components, CSS, JavaScript, image assets, packaged 403/419 pages, and a publishable standalone 503 maintenance view. It does not own admin authentication, guards, routes, policies, models, seeders, console commands, or feature package domain behavior.
 
 ## Source Of Truth
 
@@ -38,7 +38,8 @@ When a component needs style changes:
 
 - Treat this package as the source of truth for admin UI patterns used by other `ssh521/*` packages.
 - Preserve the `laravel-admin` view namespace and `x-laravel-admin::admin.*` anonymous component namespace.
-- Keep publish tags and host app paths stable: `laravel-admin-ui-config`, `laravel-admin-ui-views`, `laravel-admin-ui-components`, and `laravel-admin-ui-assets`.
+- Keep publish tags and host app paths stable: `laravel-admin-ui-config`, `laravel-admin-ui-views`, `laravel-admin-ui-components`, `laravel-admin-ui-assets`, and `laravel-admin-ui-maintenance-view`.
+- Keep the packaged 503 maintenance view standalone. It must not require Vite, package assets, external CSS, JavaScript, or images, and host apps may override it at `resources/views/errors/503.blade.php`.
 - Do not reintroduce global `admin.*` view names. Runtime views resolve through the `laravel-admin::` namespace.
 - Do not move authentication, authorization, route ownership, model behavior, menu registration, or seeders into this package.
 - Keep visible admin labels Korean by default unless the task explicitly asks for another language.

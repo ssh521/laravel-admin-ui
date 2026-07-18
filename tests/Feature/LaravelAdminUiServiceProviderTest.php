@@ -22,6 +22,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertTrue(View::exists('laravel-admin::partials.assets'));
         $this->assertTrue(View::exists('laravel-admin::errors.403'));
         $this->assertTrue(View::exists('laravel-admin::errors.419'));
+        $this->assertTrue(View::exists('laravel-admin::errors.503'));
 
         $html = Blade::render('<x-laravel-admin::admin.primary-button>Save</x-laravel-admin::admin.primary-button>');
 
@@ -75,6 +76,29 @@ class LaravelAdminUiServiceProviderTest extends TestCase
             ->assertSee('일반 로그인');
     }
 
+    public function test_packaged_503_view_is_self_contained(): void
+    {
+        config()->set('app.name', 'Admin Test');
+
+        Route::get('/service-unavailable', fn () => response()->view('laravel-admin::errors.503', [], 503));
+
+        $response = $this->get('/service-unavailable');
+        $html = $response->getContent();
+
+        $response
+            ->assertServiceUnavailable()
+            ->assertSee('Admin Test')
+            ->assertSee('서비스 업데이트 중입니다')
+            ->assertSee('잠시 후 자동으로 다시 연결됩니다.');
+
+        $this->assertStringContainsString('http-equiv="refresh" content="15"', $html);
+        $this->assertStringContainsString('<style>', $html);
+        $this->assertStringContainsString('<svg', $html);
+        $this->assertStringNotContainsString('<script', $html);
+        $this->assertStringNotContainsString('<link rel="stylesheet"', $html);
+        $this->assertStringNotContainsString('<img', $html);
+    }
+
     public function test_it_sends_admin_session_expiry_to_the_admin_login(): void
     {
         $this->registerLoginRoutes();
@@ -114,6 +138,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertPublishesTo('laravel-admin-ui-assets', resource_path('vendor/laravel-admin'));
         $this->assertPublishesTo('laravel-admin-ui-assets', public_path('images/dtree'));
         $this->assertPublishesTo('laravel-admin-ui-config', config_path('laravel-admin-ui.php'));
+        $this->assertPublishesTo('laravel-admin-ui-maintenance-view', resource_path('views/errors/503.blade.php'));
     }
 
     private function registerLoginRoutes(): void

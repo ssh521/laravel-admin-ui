@@ -114,6 +114,10 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
             __DIR__.'/../public/images/dtree' => public_path('images/dtree'),
         ];
 
+        $maintenanceView = [
+            __DIR__.'/../resources/views/errors/503.blade.php' => resource_path('views/errors/503.blade.php'),
+        ];
+
         $this->publishes([
             __DIR__.'/../config/laravel-admin-ui.php' => config_path('laravel-admin-ui.php'),
         ], 'laravel-admin-ui-config');
@@ -121,5 +125,6 @@ class LaravelAdminUiServiceProvider extends ServiceProvider
         $this->publishes($views, 'laravel-admin-ui-views');
         $this->publishes($components, 'laravel-admin-ui-components');
         $this->publishes($assets, 'laravel-admin-ui-assets');
+        $this->publishes($maintenanceView, 'laravel-admin-ui-maintenance-view');
     }
 }
