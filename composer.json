@@ -1,6 +1,6 @@
 {
     "name": "ssh521/laravel-admin-ui",
-    "description": "Reusable Blade and asset package for ssh521 Laravel Admin.",
+    "description": "Blade components, views, assets, and error pages for ssh521 Laravel Admin.",
     "type": "library",
     "license": "MIT",
     "autoload": {
