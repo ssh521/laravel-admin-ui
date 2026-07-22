@@ -216,6 +216,46 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('text-xs', $html);
     }
 
+    public function test_icon_component_maps_logged_package_icon_names_without_warning(): void
+    {
+        Log::shouldReceive('warning')->never();
+
+        $names = [
+            'fas fa-file-lines',
+            'fas fa-bell',
+            'swatchbook',
+            'fas fa-rectangle-ad',
+            'fas fa-window-restore',
+            'fas fa-paper-plane',
+            'trash',
+            'arrow-up-right-from-square',
+            'fas fa-user-shield',
+        ];
+
+        foreach ($names as $name) {
+            $html = Blade::render('<x-laravel-admin::admin.icon :name="$name" />', compact('name'));
+
+            $this->assertStringContainsString('<svg', $html);
+            $this->assertStringNotContainsString('M12 9v4m0 4h.01', $html);
+        }
+    }
+
+    public function test_admin_dashboard_uses_shared_dark_surfaces_without_placeholder_links(): void
+    {
+        $dashboard = file_get_contents(__DIR__.'/../../resources/views/admin/index.blade.php');
+
+        $this->assertStringContainsString('<x-laravel-admin::admin.page-section>', $dashboard);
+        $this->assertSame(4, substr_count($dashboard, '<x-laravel-admin::admin.stat'));
+        $this->assertSame(5, substr_count($dashboard, '<x-laravel-admin::admin.card'));
+        $this->assertStringContainsString('dark:from-indigo-500/15', $dashboard);
+        $this->assertStringContainsString('dark:to-gray-900', $dashboard);
+        $this->assertStringContainsString('관리자 대시보드', $dashboard);
+        $this->assertStringNotContainsString("{{ __('Dashboard') }}", $dashboard);
+        $this->assertStringNotContainsString('href="#"', $dashboard);
+        $this->assertStringNotContainsString('시스템 로그', $dashboard);
+        $this->assertStringNotContainsString('시스템 설정', $dashboard);
+    }
+
     public function test_admin_reusable_components_render_contract_classes(): void
     {
         $button = Blade::render('<x-laravel-admin::admin.action-button href="/admin" icon="plus">등록하기</x-laravel-admin::admin.action-button>');
