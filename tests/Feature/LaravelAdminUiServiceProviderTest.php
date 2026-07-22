@@ -922,6 +922,54 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertFileDoesNotExist(__DIR__.'/../../resources/js/sidebarBackground.js');
     }
 
+    public function test_admin_navigation_exposes_accessible_controls_and_mobile_focus_management(): void
+    {
+        $layout = file_get_contents(__DIR__.'/../../resources/views/components/yaverstyle/layouts/admin.blade.php');
+        $header = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/header-nav.blade.php');
+        $mobileMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu-mobile.blade.php');
+        $leftMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu.blade.php');
+        $css = file_get_contents(__DIR__.'/../../resources/css/admin.css');
+
+        $this->assertStringContainsString('openMobileMenu(trigger = null)', $layout);
+        $this->assertStringContainsString('closeMobileMenu(restoreFocus = true)', $layout);
+        $this->assertStringContainsString('trapMobileMenuFocus(event)', $layout);
+        $this->assertStringContainsString('historyMobileMenuIsOpen()', $layout);
+        $this->assertStringContainsString('syncMobileMenuState(value)', $layout);
+        $this->assertStringContainsString('window.history.state?.adminMobileSidebarOpen === true', $layout);
+        $this->assertStringContainsString('window.history.replaceState({', $layout);
+        $this->assertStringContainsString('adminMobileSidebarOpen: value', $layout);
+        $this->assertStringNotContainsString('window.sessionStorage', $layout);
+        $this->assertStringContainsString("window.addEventListener('pageshow', this.pageshowHandler)", $layout);
+        $this->assertStringContainsString("this.mobileViewport.addEventListener('change', this.mobileViewportChangeHandler)", $layout);
+        $this->assertStringContainsString("document.getElementById('admin-mobile-menu-trigger')", $layout);
+        $this->assertStringContainsString("document.getElementById('admin-mobile-menu-close')?.focus()", $layout);
+        $this->assertStringContainsString("document.body.classList.toggle('overflow-hidden', value)", $layout);
+        $this->assertStringContainsString('x-bind:inert="isMobileMenuOpen"', $layout);
+        $this->assertStringContainsString('id="admin-desktop-sidebar"', $layout);
+
+        $this->assertStringContainsString('aria-controls="admin-mobile-sidebar"', $header);
+        $this->assertStringContainsString('id="admin-mobile-menu-trigger"', $header);
+        $this->assertStringContainsString('x-bind:aria-expanded="isMobileMenuOpen.toString()"', $header);
+        $this->assertStringContainsString("@click=\"toggleMobileMenu(\$el)\"", $header);
+        $this->assertStringContainsString('aria-controls="admin-desktop-sidebar"', $header);
+        $this->assertStringContainsString('x-bind:aria-expanded="isDesktop.toString()"', $header);
+
+        $this->assertStringContainsString('id="admin-mobile-sidebar"', $mobileMenu);
+        $this->assertStringContainsString('role="dialog"', $mobileMenu);
+        $this->assertStringContainsString('aria-modal="true"', $mobileMenu);
+        $this->assertStringContainsString('x-ref="mobileMenuClose"', $mobileMenu);
+        $this->assertStringContainsString('id="admin-mobile-menu-close"', $mobileMenu);
+        $this->assertStringContainsString('@keydown.tab="trapMobileMenuFocus($event)"', $mobileMenu);
+        $this->assertStringContainsString('@keydown.escape.stop.prevent="closeMobileMenu()"', $mobileMenu);
+        $this->assertStringNotContainsString("\$event.target.closest('a') && closeMobileMenu(false)", $mobileMenu);
+
+        $this->assertStringContainsString('<button type="button"', $leftMenu);
+        $this->assertStringContainsString('x-bind:aria-expanded="isOpen.toString()"', $leftMenu);
+        $this->assertStringContainsString('role="group"', $leftMenu);
+        $this->assertStringNotContainsString('javascript:void(0)', $leftMenu);
+        $this->assertStringContainsString('.dtree button.dTreeNode:focus-visible', $css);
+    }
+
     public function test_left_menu_uses_styleable_controls_for_primary_tree_icons(): void
     {
         $leftMenu = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/left-menu.blade.php');
@@ -937,7 +985,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('h-[calc(100dvh-64px)]', $mobileMenu);
         $this->assertStringContainsString('pb-[calc(env(safe-area-inset-bottom)+24px)]', $mobileMenu);
         $this->assertStringContainsString('<div x-cloak x-show="isMobileMenuOpen"', $mobileMenu);
-        $this->assertStringContainsString('<aside x-cloak x-show="isMobileMenuOpen"', $mobileMenu);
+        $this->assertStringContainsString('x-cloak x-show="isMobileMenuOpen" x-ref="mobileMenuPanel"', $mobileMenu);
         $this->assertStringContainsString('bg-gray-950/35 backdrop-blur-[1px] dark:bg-black/45', $mobileMenu);
         $this->assertStringNotContainsString('bg-black bg-opacity-60', $mobileMenu);
         $this->assertStringContainsString("window.location.href = @js(route('admin.index'))", $leftMenu);

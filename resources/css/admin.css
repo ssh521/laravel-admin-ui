@@ -444,6 +444,19 @@ span.cursor-pointer:hover {
     white-space: nowrap;
     transition: background-color 120ms ease, color 120ms ease;
   }
+  .dtree button.dTreeNode {
+    width: 100%;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+  }
+  .dtree button.dTreeNode:focus-visible {
+    outline: 2px solid #6657c2;
+    outline-offset: 2px;
+  }
   .dtree .dTreeNode:hover,
   .dtree .dTreeNode:focus-within {
     background-color: rgb(134 166 104 / 0.24);

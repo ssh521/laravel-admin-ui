@@ -48,6 +48,10 @@
     <div x-data="{
             isMobileMenuOpen: false,
             isDesktop: false,
+            mobileMenuTrigger: null,
+            mobileViewport: null,
+            mobileViewportChangeHandler: null,
+            pageshowHandler: null,
             sidebarWidth: 256,
             sidebarMinWidth: 160,
             sidebarMaxWidth: 420,
@@ -56,11 +60,16 @@
             sidebarResizeMoveHandler: null,
             sidebarResizeEndHandler: null,
             init() {
+                this.mobileViewport = window.matchMedia('(max-width: 1023px)');
+
                 try {
                     this.isDesktop = window.localStorage?.getItem('adminSidebarOpen') === 'true';
                     this.sidebarWidth = this.clampSidebarWidth(parseInt(window.localStorage?.getItem('adminSidebarWidth') || this.sidebarWidth, 10));
+                    this.isMobileMenuOpen = this.mobileViewport.matches
+                        && this.historyMobileMenuIsOpen();
                 } catch (error) {
                     this.isDesktop = false;
+                    this.isMobileMenuOpen = false;
                 }
 
                 this.$watch('isDesktop', value => {
@@ -70,6 +79,31 @@
                     }
                 });
 
+                this.$watch('isMobileMenuOpen', value => this.syncMobileMenuState(value));
+                this.syncMobileMenuState(this.isMobileMenuOpen);
+
+                this.mobileViewportChangeHandler = event => {
+                    if (! event.matches && this.isMobileMenuOpen) {
+                        this.closeMobileMenu(false);
+                    }
+                };
+
+                this.mobileViewport.addEventListener('change', this.mobileViewportChangeHandler);
+
+                this.pageshowHandler = () => {
+                    const shouldOpen = this.mobileViewport.matches && this.historyMobileMenuIsOpen();
+
+                    if (this.isMobileMenuOpen === shouldOpen) {
+                        this.syncMobileMenuState(shouldOpen);
+
+                        return;
+                    }
+
+                    this.isMobileMenuOpen = shouldOpen;
+                };
+
+                window.addEventListener('pageshow', this.pageshowHandler);
+
                 this.keydownHandler = event => {
                     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'b') {
                         event.preventDefault();
@@ -77,7 +111,7 @@
                     }
 
                     if (event.key === 'Escape' && this.isMobileMenuOpen) {
-                        this.isMobileMenuOpen = false;
+                        this.closeMobileMenu();
                     }
                 };
 
@@ -88,7 +122,90 @@
                     document.removeEventListener('keydown', this.keydownHandler);
                 }
 
+                if (this.mobileViewport && this.mobileViewportChangeHandler) {
+                    this.mobileViewport.removeEventListener('change', this.mobileViewportChangeHandler);
+                }
+
+                if (this.pageshowHandler) {
+                    window.removeEventListener('pageshow', this.pageshowHandler);
+                }
+
+                document.body.classList.remove('overflow-hidden');
                 this.stopSidebarResize(false);
+            },
+            historyMobileMenuIsOpen() {
+                return window.history.state?.adminMobileSidebarOpen === true;
+            },
+            syncMobileMenuState(value) {
+                document.body.classList.toggle('overflow-hidden', value);
+
+                try {
+                    const currentHistoryState = window.history.state && typeof window.history.state === 'object'
+                        ? window.history.state
+                        : {};
+
+                    window.history.replaceState({
+                        ...currentHistoryState,
+                        adminMobileSidebarOpen: value,
+                    }, document.title);
+                } catch (error) {
+                }
+
+                if (value) {
+                    this.mobileMenuTrigger = this.mobileMenuTrigger
+                        || document.getElementById('admin-mobile-menu-trigger');
+                    this.$nextTick(() => document.getElementById('admin-mobile-menu-close')?.focus());
+                }
+            },
+            openMobileMenu(trigger = null) {
+                this.mobileMenuTrigger = trigger || document.activeElement;
+                this.isMobileMenuOpen = true;
+            },
+            closeMobileMenu(restoreFocus = true) {
+                const trigger = this.mobileMenuTrigger;
+
+                this.isMobileMenuOpen = false;
+
+                if (restoreFocus && trigger instanceof window.HTMLElement) {
+                    this.$nextTick(() => trigger.focus());
+                }
+            },
+            toggleMobileMenu(trigger = null) {
+                if (this.isMobileMenuOpen) {
+                    this.closeMobileMenu();
+
+                    return;
+                }
+
+                this.openMobileMenu(trigger);
+            },
+            trapMobileMenuFocus(event) {
+                const panel = this.$refs.mobileMenuPanel || document.getElementById('admin-mobile-sidebar');
+
+                if (! panel) {
+                    return;
+                }
+
+                const focusableElements = Array.from(panel.querySelectorAll(
+                    `a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])`
+                )).filter(element => element.offsetParent !== null);
+
+                if (focusableElements.length === 0) {
+                    event.preventDefault();
+
+                    return;
+                }
+
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                if (event.shiftKey && document.activeElement === firstElement) {
+                    event.preventDefault();
+                    lastElement.focus();
+                } else if (! event.shiftKey && document.activeElement === lastElement) {
+                    event.preventDefault();
+                    firstElement.focus();
+                }
             },
             clampSidebarWidth(width) {
                 const maxWidth = Math.min(this.sidebarMaxWidth, Math.max(this.sidebarMinWidth, window.innerWidth - 360));
@@ -148,13 +265,14 @@
         <livewire:admin.left-menu-mobile />
         <livewire:admin.header-nav />
 
-        <div class="min-h-screen flex pt-16 bg-white md:bg-[#E7E7D6] dark:bg-gray-950">
+        <div x-bind:inert="isMobileMenuOpen" class="min-h-screen flex pt-16 bg-white md:bg-[#E7E7D6] dark:bg-gray-950">
 
             <!-- 왼쪽 사이드바 -->
-            <div x-show="isDesktop" class="admin-sidebar-surface hidden shrink-0 lg:block lg:min-h-[calc(100dvh-4rem)] shadow-lg border-r border-gray-200 dark:border-gray-700"
+            <div id="admin-desktop-sidebar" x-show="isDesktop" x-bind:aria-hidden="(! isDesktop).toString()"
+                class="admin-sidebar-surface hidden shrink-0 lg:block lg:min-h-[calc(100dvh-4rem)] shadow-lg border-r border-gray-200 dark:border-gray-700"
                 :style="`width: ${sidebarWidth}px;`">
                 <!-- 관리자 메뉴 네비게이션 -->
-                <nav class="h-full overflow-y-auto">
+                <nav class="h-full overflow-y-auto" aria-label="{{ __('관리자 주 메뉴') }}">
                     <livewire:admin.left-menu />
                 </nav>
             </div>

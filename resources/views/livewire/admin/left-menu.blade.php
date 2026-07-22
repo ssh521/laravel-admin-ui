@@ -24,18 +24,26 @@
                 <div class="dtree-node" x-data="window.dtreeNode('category-{{ $category->id }}')"
                     data-node-id="category-{{ $category->id }}">
                     {{-- 폴더 노드 (카테고리) --}}
-                    <div class="dTreeNode flex items-center {{ $hasChildren ? 'cursor-pointer select-none' : '' }}"
-                        @if($hasChildren) @click="toggleNode()" @endif>
+                    @if($hasChildren)
+                    <button type="button"
+                        id="dtree-category-{{ $category->id }}-toggle"
+                        class="dTreeNode w-full cursor-pointer select-none text-left"
+                        aria-controls="dtree-category-{{ $category->id }}-children"
+                        x-bind:aria-expanded="isOpen.toString()"
+                        @click="toggleNode()">
+                    @else
+                    <div class="dTreeNode flex items-center">
+                    @endif
                         <span class="dtree-indent flex items-center">
                             @if($hasChildren)
-                                <a href="javascript:void(0)" class="dtree-toggle inline-flex items-center justify-center">
+                                <span class="dtree-toggle inline-flex items-center justify-center" aria-hidden="true">
                                     <span x-show="!isOpen" class="dtree-toggle-control" aria-hidden="true">
                                         <x-laravel-admin::admin.icon name="chevron-right" class="size-3.5" />
                                     </span>
                                     <span x-show="isOpen" x-cloak class="dtree-toggle-control" aria-hidden="true">
                                         <x-laravel-admin::admin.icon name="chevron-down" class="size-3.5" />
                                     </span>
-                                </a>
+                                </span>
                             @else
                                 <img src="{{ $dtreeImg($isLastCategory ? 'joinbottom.gif' : 'join.gif') }}" alt="" class="dtree-img" />
                             @endif
@@ -47,10 +55,16 @@
                             <span class="dtree-folder-icon" aria-hidden="true"></span>
                         @endif
                         <span class="dtree-text ml-1">{{ $category->name }}</span>
+                    @if($hasChildren)
+                    </button>
+                    @else
                     </div>
+                    @endif
                     {{-- 하위 메뉴 --}}
                     @if($hasChildren)
-                    <div x-show="isOpen" x-cloak x-collapse class="dtree-children clip">
+                    <div id="dtree-category-{{ $category->id }}-children"
+                        x-show="isOpen" x-cloak x-collapse class="dtree-children clip"
+                        role="group" aria-labelledby="dtree-category-{{ $category->id }}-toggle">
                         @foreach($menus as $menuIndex => $menu)
                             @php
                                 $isLastMenu = $menuIndex === $menus->count() - 1;

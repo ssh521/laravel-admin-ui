@@ -33,13 +33,18 @@
     x-transition:enter-start="transform -translate-y-full" x-transition:enter-end="transform translate-y-0"
     x-transition:leave="transition ease-in duration-300" x-transition:leave-start="transform translate-y-0"
     x-transition:leave-end="transform -translate-y-full"
+    x-bind:inert="isMobileMenuOpen"
     class="fixed top-0 left-0 z-50 flex h-16 w-full items-center border-b border-gray-400 bg-white px-2 shadow-lg sm:px-4 dark:border-gray-800 dark:bg-gray-950">
 
     <!-- 햄버거 버튼 -->
-    <button class="block lg:hidden mr-0 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-purple-800 transition"
-        @click="isMobileMenuOpen = !isMobileMenuOpen;">
+    <button type="button" id="admin-mobile-menu-trigger"
+        class="block lg:hidden mr-0 p-2 rounded-full hover:bg-purple-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 dark:hover:bg-purple-800 transition"
+        @click="toggleMobileMenu($el)"
+        aria-controls="admin-mobile-sidebar"
+        x-bind:aria-expanded="isMobileMenuOpen.toString()"
+        x-bind:aria-label="isMobileMenuOpen ? @js(__('관리자 메뉴 닫기')) : @js(__('관리자 메뉴 열기'))">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-700 dark:text-purple-300" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor">
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
     </button>
@@ -47,14 +52,20 @@
     <!-- 햄버거 버튼 -->
     <button
         class="hidden lg:block mr-2 p-2 rounded-full hover:bg-purple-100 dark:hover:bg-purple-800 transition relative group"
-        @click="isDesktop = !isDesktop" title="사이드바 토글 (Ctrl+B)">
+        type="button"
+        @click="isDesktop = !isDesktop"
+        aria-controls="admin-desktop-sidebar"
+        x-bind:aria-expanded="isDesktop.toString()"
+        x-bind:aria-label="isDesktop ? @js(__('왼쪽 메뉴 닫기')) : @js(__('왼쪽 메뉴 열기'))"
+        title="사이드바 토글 (Ctrl+B)">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-700 dark:text-purple-300" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor">
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
 
         <!-- 단축키 안내 툴팁 -->
         <div
+            aria-hidden="true"
             class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50">
             Ctrl+B
             <div

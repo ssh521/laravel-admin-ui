@@ -4,16 +4,22 @@
         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
         x-transition:leave="transition-opacity duration-300" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0" class="fixed inset-0 z-40 bg-gray-950/35 backdrop-blur-[1px] dark:bg-black/45"
-        @click="isMobileMenuOpen = false"></div>
+        aria-hidden="true"
+        @click="closeMobileMenu()"></div>
 
     <!-- 좌측 메뉴: YouTube 스타일, 트랜지션 포함 -->
-    <aside x-cloak x-show="isMobileMenuOpen"
+    <aside id="admin-mobile-sidebar" x-cloak x-show="isMobileMenuOpen" x-ref="mobileMenuPanel"
         x-transition:enter="transition-transform duration-300"
         x-transition:enter-start="-translate-x-64"
         x-transition:enter-end="translate-x-0"
         x-transition:leave="transition-transform duration-300"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="-translate-x-64"
+        role="dialog"
+        aria-modal="true"
+        aria-label="{{ __('관리자 메뉴') }}"
+        @keydown.tab="trapMobileMenuFocus($event)"
+        @keydown.escape.stop.prevent="closeMobileMenu()"
         @transitionend="isMobileMenuOpen && typeof window.restoreAllDtreeNodes === 'function' && window.restoreAllDtreeNodes()"
         class="fixed top-0 left-0 h-[100dvh] w-64
             shadow-lg border-r border-gray-200 dark:border-gray-700
@@ -22,10 +28,12 @@
         <!-- 상단: 햄버거+로고 (헤더와 동일) -->
         <div
             class="flex items-center h-16 px-4 border-b border-indigo-200 dark:border-indigo-700 bg-white dark:bg-gray-900">
-            <button class="mr-0 p-2 rounded-full hover:bg-indigo-100 dark:hover:bg-indigo-800 transition"
-                @click="isMobileMenuOpen = false">
+            <button type="button" id="admin-mobile-menu-close" x-ref="mobileMenuClose"
+                class="mr-0 p-2 rounded-full hover:bg-indigo-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 dark:hover:bg-indigo-800 transition"
+                aria-label="{{ __('관리자 메뉴 닫기') }}"
+                @click="closeMobileMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-700 dark:text-purple-300" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
+                viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
             </button>
@@ -38,8 +46,9 @@
 
         <!-- 메뉴 본문: 아이콘+텍스트, 섹션 구분, 스크롤 -->
         <nav class="admin-sidebar-surface overflow-y-auto h-[calc(100dvh-64px)] px-0 pt-0 pb-[calc(env(safe-area-inset-bottom)+24px)]"
-             @click.self="isMobileMenuOpen = false">
-            <div @click="$event.target.closest('a') && (isMobileMenuOpen = false)">
+             aria-label="{{ __('관리자 주 메뉴') }}"
+             @click.self="closeMobileMenu()">
+            <div>
                 @livewire('admin.left-menu')
             </div>
         </nav>
