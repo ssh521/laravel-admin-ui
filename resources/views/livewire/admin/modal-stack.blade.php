@@ -4,16 +4,25 @@
             wire:key="modal-stack-wrapper-{{ $modal['key'] }}"
             class="fixed inset-0 bg-black/50 dark:bg-black/70"
             style="z-index: {{ $this->zIndexFor($index) }};"
+            data-modal-stack-wrapper
+            @if($loop->last)
+                data-modal-stack-top
+            @else
+                inert
+                aria-hidden="true"
+            @endif
             x-data="modalStackModal({
                 width: {{ $modal['width'] }},
                 height: {{ $modal['height'] }},
                 minWidth: {{ $modal['minWidth'] }},
                 minHeight: {{ $modal['minHeight'] }},
                 draggable: {{ $modal['draggable'] ? 'true' : 'false' }},
-                resizable: {{ $modal['resizable'] ? 'true' : 'false' }}
+                resizable: {{ $modal['resizable'] ? 'true' : 'false' }},
+                isTop: {{ $loop->last ? 'true' : 'false' }}
             })"
             @if($loop->last)
-                x-on:keydown.escape.window="$wire.closeTopModal()"
+                x-on:keydown.tab="trapFocus($event)"
+                x-on:keydown.escape.window.prevent.stop="$wire.closeTopModal()"
             @endif
             @if($modal['closeOnBackdrop'] && $loop->last)
                 wire:click.self="closeTopModal"
@@ -24,8 +33,9 @@
                 x-bind:style="style"
                 class="absolute flex max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-900"
                 role="dialog"
-                aria-modal="true"
+                @if($loop->last) aria-modal="true" @endif
                 aria-labelledby="modal-stack-title-{{ $modal['id'] }}"
+                tabindex="-1"
                 wire:ignore.self
             >
                 <header

@@ -32,28 +32,34 @@
                 ])
             </form>
 
-            <div class="mx-auto flex w-full max-w-4xl flex-row items-center justify-between gap-3 px-2">
+            <div class="mx-auto flex w-full max-w-4xl flex-row items-center justify-between gap-2 px-2 sm:gap-3"
+                data-menu-category-edit-actions>
                 <div class="flex shrink-0 justify-start">
                     @can('delete', $menuCategory)
                         <form action="{{ route('admin.menu-categories.destroy', $menuCategory) }}" method="POST" onsubmit="return confirm('{{ __('정말 삭제하시겠습니까?') }}')">
                             @csrf
                             @method('DELETE')
-                            <x-laravel-admin::admin.action-button type="submit" variant="danger" icon="trash-can">
-                                {{ __('삭제하기') }}
+                            <x-laravel-admin::admin.action-button type="submit" variant="danger" icon="trash-can"
+                                aria-label="{{ __('삭제하기') }}" title="{{ __('삭제하기') }}">
+                                <span class="hidden sm:inline">{{ __('삭제하기') }}</span>
                             </x-laravel-admin::admin.action-button>
                         </form>
                     @endcan
                 </div>
 
-                <div class="flex shrink-0 flex-nowrap justify-end gap-3">
-                    <x-laravel-admin::admin.action-button variant="secondary" :href="route('admin.menu-categories.roles', $menuCategory)">
-                        {{ __('권한 관리') }}
+                <div class="flex min-w-0 shrink-0 flex-nowrap justify-end gap-2 sm:gap-3">
+                    <x-laravel-admin::admin.action-button variant="secondary" :href="route('admin.menu-categories.roles', $menuCategory)"
+                        icon="lock" aria-label="{{ __('권한 관리') }}" title="{{ __('권한 관리') }}">
+                        <span class="hidden sm:inline">{{ __('권한 관리') }}</span>
                     </x-laravel-admin::admin.action-button>
-                    <x-laravel-admin::admin.action-button variant="secondary" :href="route('admin.menu-categories.index')">
-                        {{ __('목록보기') }}
+                    <x-laravel-admin::admin.action-button variant="secondary" :href="route('admin.menu-categories.index')"
+                        icon="list" aria-label="{{ __('목록보기') }}" title="{{ __('목록보기') }}">
+                        <span class="hidden sm:inline">{{ __('목록보기') }}</span>
                     </x-laravel-admin::admin.action-button>
-                    <x-laravel-admin::admin.action-button type="submit" form="menu-category-edit-form">
-                        {{ __('수정하기') }}
+                    <x-laravel-admin::admin.action-button type="submit" form="menu-category-edit-form" icon="pen-to-square"
+                        aria-label="{{ __('수정하기') }}" title="{{ __('수정하기') }}">
+                        <span class="sm:hidden">{{ __('수정') }}</span>
+                        <span class="hidden sm:inline">{{ __('수정하기') }}</span>
                     </x-laravel-admin::admin.action-button>
                 </div>
             </div>

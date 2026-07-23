@@ -501,11 +501,22 @@ class LaravelAdminUiServiceProviderTest extends TestCase
 
         $this->assertStringContainsString('createDragHandler', $source);
         $this->assertStringContainsString('createResizeHandler', $source);
+        $this->assertStringContainsString('previouslyFocusedElement', $source);
+        $this->assertStringContainsString('focusModal()', $source);
+        $this->assertStringContainsString('trapFocus(event)', $source);
+        $this->assertStringContainsString("document.querySelector('[data-modal-stack-top] [role=\"dialog\"]')", $source);
+        $this->assertStringContainsString('previouslyFocusedElement.focus({ preventScroll: true })', $source);
         $this->assertStringContainsString("Alpine.data('modalStackModal'", file_get_contents(__DIR__.'/../../resources/js/admin.js'));
         $this->assertStringContainsString('@livewire($modal[\'component\'], $modal[\'params\'], key($modal[\'key\']))', $view);
         $this->assertStringContainsString('wire:ignore.self', $view);
         $this->assertStringContainsString('x-on:mousedown.stop', $view);
         $this->assertStringContainsString('x-on:touchstart.stop', $view);
+        $this->assertStringContainsString('data-modal-stack-top', $view);
+        $this->assertStringContainsString('x-on:keydown.tab="trapFocus($event)"', $view);
+        $this->assertStringContainsString('x-on:keydown.escape.window.prevent.stop="$wire.closeTopModal()"', $view);
+        $this->assertStringContainsString('tabindex="-1"', $view);
+        $this->assertStringContainsString('aria-hidden="true"', $view);
+        $this->assertStringContainsString('inert', $view);
         $this->assertStringContainsString('wire:click="closeModal(\'{{ $modal[\'id\'] }}\')"', $view);
         $this->assertStringContainsString('rounded-full', $view);
         $this->assertStringContainsString('focus:ring-2 focus:ring-blue-500', $view);
@@ -541,6 +552,25 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('<livewire:admin.modal-stack />', $index);
         $this->assertStringContainsString("component: 'admin.menus.menu-order-modal'", $index);
         $this->assertStringContainsString("Livewire.dispatch('admin:modal-stack:push'", $index);
+    }
+
+    public function test_menu_category_edit_actions_fit_mobile_without_losing_accessible_names(): void
+    {
+        $edit = file_get_contents(__DIR__.'/../../resources/views/admin/menu-categories/edit.blade.php');
+        $contract = file_get_contents(__DIR__.'/../../docs/admin-ui-design-contract.md');
+        $rules = file_get_contents(__DIR__.'/../../docs/admin-design-rules.md');
+
+        $this->assertStringContainsString('gap-2 px-2 sm:gap-3', $edit);
+        $this->assertStringContainsString('data-menu-category-edit-actions', $edit);
+        $this->assertStringContainsString('icon="trash-can"', $edit);
+        $this->assertStringContainsString('icon="lock"', $edit);
+        $this->assertStringContainsString('icon="list"', $edit);
+        $this->assertStringContainsString('icon="pen-to-square"', $edit);
+        $this->assertSame(4, substr_count($edit, 'class="hidden sm:inline"'));
+        $this->assertStringContainsString("class=\"sm:hidden\">{{ __('수정') }}</span>", $edit);
+        $this->assertGreaterThanOrEqual(4, substr_count($edit, 'aria-label='));
+        $this->assertStringContainsString('footer must not overflow horizontally', $contract);
+        $this->assertStringContainsString('prevent horizontal overflow', $rules);
     }
 
     public function test_admin_users_search_uses_filter_bar_and_search_action_button(): void

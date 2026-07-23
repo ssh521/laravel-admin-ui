@@ -229,6 +229,8 @@ UI and interaction rules:
 - ModalStack owns drag, resize, z-index ordering, ESC close, backdrop close, and top-modal-only close behavior.
 - The last modal in the stack must render with the highest z-index.
 - ESC, backdrop click, and shell close buttons should affect only the top modal unless an explicit modal id is supplied.
+- Opening a modal must move keyboard focus into the top dialog. Tab and Shift+Tab must remain inside that dialog, and lower stack entries must be inert and hidden from the accessibility tree.
+- Closing a modal must return focus to the element that opened it. Closing a nested modal returns focus to its trigger in the previous dialog; replacing a modal must not steal focus back from the replacement.
 
 Forbidden patterns:
 
@@ -252,6 +254,7 @@ Use consistent action hierarchy:
 - Use `variant="search"` for list filter submit buttons; keep the search button shrink-wrapped on desktop with `shrink-0 whitespace-nowrap` when it sits next to a flexible input.
 - Use `x-laravel-admin::admin.action-menu` for table row actions such as `보기` and `수정`; reserve `variant="link"` for standalone inline links or card/detail actions where an overflow menu is not the expected interaction.
 - Action buttons must expose a pointer cursor on the button/link and its icon/text children. Keep the shared `laravel-admin-action-button` hook in every style implementation and mirror any required cursor CSS into the published admin CSS/build output used by the host app.
+- When an edit footer has too many actions for a narrow viewport, keep the primary action visible and collapse secondary/destructive labels to familiar icons below the `sm` breakpoint. Icon-only states must retain explicit `aria-label` and `title` text, and the footer must not overflow horizontally.
 - Dynamic state controls such as sort mode toggles may keep local `:class`/`x-bind:class` color logic when the visual state itself is the behavior.
 - Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
 - Icons should use the shared `x-laravel-admin::admin.icon` Blade component instead of external icon font packages.

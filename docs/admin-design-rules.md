@@ -140,6 +140,7 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Keep detail-only inspection modals compact. Use explicit `width`, `height`, and minimum size payloads so Livewire does not fall back to ModalStack defaults; user detail modals use `width: 680`, `height: 480`, and `minHeight: 420`.
 - Keep modal footers right-aligned and visually separated with a top border.
 - Use bordered selectable rows for checkbox lists in modals, matching the page form checkbox style.
+- Move focus into the top dialog when it opens, trap Tab and Shift+Tab inside it, mark lower stacked dialogs inert, and restore focus to the opening control when the top dialog closes.
 
 ## Buttons And Links
 
@@ -147,6 +148,7 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Secondary action: white/dark bordered button.
 - Destructive action: red bordered button with a clear icon.
 - Destructive actions should be spatially separated from primary actions, but remain in the same footer row on desktop. Prefer left alignment for delete buttons and right alignment for navigation/edit/save buttons.
+- If a narrow edit footer cannot fit every label, preserve the primary label and collapse secondary/destructive labels to familiar icons below `sm`; keep `aria-label` and `title` text on every icon-only action and prevent horizontal overflow.
 - Use the package Blade icon component for common actions.
 - Override global admin link colors with Tailwind important text classes, for example `!text-white` or `!text-gray-700`, when a link is styled as a button.
 - Buttons, action-menu triggers, and link-style row actions should show the pointer cursor across the whole hit area, including nested SVG icons. If CSS is published into a host app, rebuild or republish the host admin CSS so the cursor rule is present in the loaded asset.
