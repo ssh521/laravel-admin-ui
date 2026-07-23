@@ -63,6 +63,7 @@
                     <x-laravel-admin::admin.form-input id="role-search" name="search" value="{{ request('search') }}" class="w-full h-10 pr-9" placeholder="역할 이름 검색" />
                     @if(request('search'))
                         <a href="{{ route('admin.roles.index') }}"
+                           aria-label="{{ __('검색 초기화') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
                             <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
                         </a>

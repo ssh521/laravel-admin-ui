@@ -4,7 +4,11 @@
     'icon' => null,
 ])
 
-<div {{ $attributes->merge(['class' => 'rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400']) }}>
+<div {{ $attributes->merge([
+    'class' => 'rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
+    'role' => 'status',
+    'aria-live' => 'polite',
+]) }}>
     @if ($icon)
         <x-laravel-admin::admin.icon :name="$icon" class="mx-auto mb-3 size-8 text-gray-400" />
     @endif

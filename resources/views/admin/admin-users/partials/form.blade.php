@@ -27,7 +27,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $adminUser?->name) }}" autocomplete="name" class="w-full" required />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
+                <x-laravel-admin::admin.input-error-message for="name" class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
 
             <div class="sm:col-span-4">
@@ -38,7 +38,7 @@
                 @if ($isProfile)
                     <p class="{{ $helpClass }}">{{ __('프로필 화면에서는 이메일을 변경할 수 없습니다.') }}</p>
                 @endif
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('email')" />
+                <x-laravel-admin::admin.input-error-message for="email" class="mt-2 text-xs" :messages="$errors->get('email')" />
             </div>
         </div>
     </div>
@@ -66,7 +66,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="password" name="password" type="password" autocomplete="new-password" class="w-full" :required="! $adminUser" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('password')" />
+                <x-laravel-admin::admin.input-error-message for="password" class="mt-2 text-xs" :messages="$errors->get('password')" />
             </div>
 
             <div class="sm:col-span-3">
@@ -79,7 +79,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" class="w-full" :required="! $adminUser" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('confirm-password')" />
+                <x-laravel-admin::admin.input-error-message for="confirm-password" class="mt-2 text-xs" :messages="$errors->get('confirm-password')" />
             </div>
         </div>
     </div>
@@ -97,7 +97,7 @@
 
     <div class="mt-6 min-w-0 md:col-span-8 md:mt-0">
         <div class="flex flex-col gap-8">
-            <fieldset>
+            <fieldset @error('roles') aria-invalid="true" aria-describedby="roles-error" @enderror>
                 <legend class="{{ $labelClass }}">{{ __('인증') }}</legend>
                 <div class="mt-3">
                     <x-laravel-admin::admin.checkbox-row for="email_verified" title="{{ __('Email Verified') }}" description="{{ __('체크하면 이메일 인증이 완료된 관리자 계정으로 표시됩니다.') }}" class="{{ $isProfile ? 'cursor-not-allowed opacity-70' : '' }}">
@@ -115,7 +115,7 @@
                         </x-laravel-admin::admin.checkbox-row>
                     @endforeach
                 </div>
-                <x-laravel-admin::admin.input-error-message class="col-span-full mt-1 text-xs" :messages="$errors->get('roles')" />
+                <x-laravel-admin::admin.input-error-message for="roles" class="col-span-full mt-1 text-xs" :messages="$errors->get('roles')" />
             </fieldset>
         </div>
     </div>

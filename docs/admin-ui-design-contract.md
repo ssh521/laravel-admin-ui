@@ -255,6 +255,9 @@ Use consistent action hierarchy:
 - Use `x-laravel-admin::admin.action-menu` for table row actions such as `보기` and `수정`; reserve `variant="link"` for standalone inline links or card/detail actions where an overflow menu is not the expected interaction.
 - Action buttons must expose a pointer cursor on the button/link and its icon/text children. Keep the shared `laravel-admin-action-button` hook in every style implementation and mirror any required cursor CSS into the published admin CSS/build output used by the host app.
 - When an edit footer has too many actions for a narrow viewport, keep the primary action visible and collapse secondary/destructive labels to familiar icons below the `sm` breakpoint. Icon-only states must retain explicit `aria-label` and `title` text, and the footer must not overflow horizontally.
+- Live search and sortable tables must expose their busy state without blocking the existing interaction. Use a polite status message, set `aria-busy` on the changing result region, and put `aria-sort` on each sortable column header.
+- Empty results must use a polite status region so Livewire result replacement is announced. Success and informational messages use `role="status"`; errors and warnings use `role="alert"`.
+- Validation errors must be connected to their input with `aria-invalid="true"` and `aria-describedby`. The referenced error container must have a stable id and alert semantics.
 - Dynamic state controls such as sort mode toggles may keep local `:class`/`x-bind:class` color logic when the visual state itself is the behavior.
 - Korean visible labels should prefer `목록`, `등록하기`, `수정하기`, `저장하기`, and `삭제하기` consistently.
 - Icons should use the shared `x-laravel-admin::admin.icon` Blade component instead of external icon font packages.

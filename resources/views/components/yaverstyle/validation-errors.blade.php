@@ -1,5 +1,5 @@
 @if ($errors->any())
-    <div {{ $attributes }}>
+    <div role="alert" tabindex="-1" {{ $attributes }}>
         <div class="font-medium text-red-600 dark:text-red-400">{{ __('입력 내용을 확인해 주세요.') }}</div>
 
         <ul class="mt-3 list-disc list-inside text-sm text-red-600 dark:text-red-400">

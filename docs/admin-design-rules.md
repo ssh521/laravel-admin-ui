@@ -149,6 +149,9 @@ LARAVEL_ADMIN_UI_STYLE=daisystyle
 - Destructive action: red bordered button with a clear icon.
 - Destructive actions should be spatially separated from primary actions, but remain in the same footer row on desktop. Prefer left alignment for delete buttons and right alignment for navigation/edit/save buttons.
 - If a narrow edit footer cannot fit every label, preserve the primary label and collapse secondary/destructive labels to familiar icons below `sm`; keep `aria-label` and `title` text on every icon-only action and prevent horizontal overflow.
+- Announce Livewire search/result updates with a polite status message, mark the changing region `aria-busy`, and expose the active sort direction with `aria-sort` on sortable table headers.
+- Use polite status regions for empty, success, and informational states. Reserve assertive alerts for errors and warnings.
+- Connect each validation message to its field with a stable error id, `aria-describedby`, and `aria-invalid="true"`.
 - Use the package Blade icon component for common actions.
 - Override global admin link colors with Tailwind important text classes, for example `!text-white` or `!text-gray-700`, when a link is styled as a button.
 - Buttons, action-menu triggers, and link-style row actions should show the pointer cursor across the whole hit area, including nested SVG icons. If CSS is published into a host app, rebuild or republish the host admin CSS so the cursor rule is present in the loaded asset.

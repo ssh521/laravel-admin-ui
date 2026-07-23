@@ -3,11 +3,13 @@
 namespace Ssh521\LaravelAdminUi\Tests\Feature;
 
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ViewErrorBag;
 use Ssh521\LaravelAdminUi\LaravelAdminUiServiceProvider;
 use Ssh521\LaravelAdminUi\Tests\TestCase;
 
@@ -155,6 +157,61 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $html = Blade::render('<x-laravel-admin::admin.action-button>Save</x-laravel-admin::admin.action-button>');
 
         $this->assertStringContainsString('bg-indigo-600', $html);
+    }
+
+    public function test_yaverstyle_announces_states_and_connects_validation_errors(): void
+    {
+        $errors = (new ViewErrorBag)->put('default', new MessageBag([
+            'email' => ['유효한 이메일을 입력해 주세요.'],
+        ]));
+        View::share('errors', $errors);
+        $field = Blade::render(<<<'BLADE'
+            <x-laravel-admin::admin.form-input id="email" name="email" />
+            <x-laravel-admin::admin.input-error-message for="email" :messages="$errors->get('email')" />
+        BLADE);
+        $success = Blade::render('<x-laravel-admin::admin.alert type="success" message="저장했습니다." dismissible />');
+        $error = Blade::render('<x-laravel-admin::admin.alert type="error" message="저장하지 못했습니다." />');
+        $empty = Blade::render('<x-laravel-admin::admin.empty-state>검색 결과가 없습니다.</x-laravel-admin::admin.empty-state>');
+        $emptyRow = Blade::render('<table><tbody><x-laravel-admin::admin.table-empty-row colspan="3" message="데이터 없음" /></tbody></table>');
+        $userTable = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/users/user-table.blade.php');
+        $userSearchModal = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/users/user-search-modal.blade.php');
+        $userIndex = file_get_contents(__DIR__.'/../../resources/views/admin/users/index.blade.php');
+        $adminUserIndex = file_get_contents(__DIR__.'/../../resources/views/admin/admin-users/index.blade.php');
+        $menuIndex = file_get_contents(__DIR__.'/../../resources/views/admin/menus/index.blade.php');
+        $menuCategoryIndex = file_get_contents(__DIR__.'/../../resources/views/admin/menu-categories/index.blade.php');
+        $permissionIndex = file_get_contents(__DIR__.'/../../resources/views/admin/permissions/index.blade.php');
+        $roleIndex = file_get_contents(__DIR__.'/../../resources/views/admin/roles/index.blade.php');
+
+        $this->assertStringContainsString('aria-invalid="true"', $field);
+        $this->assertStringContainsString('aria-describedby="email-error"', $field);
+        $this->assertStringContainsString('id="email-error"', $field);
+        $this->assertStringContainsString('role="alert"', $field);
+        $this->assertStringContainsString('role="status"', $success);
+        $this->assertStringContainsString('aria-live="polite"', $success);
+        $this->assertStringContainsString('aria-label="알림 닫기"', $success);
+        $this->assertStringContainsString('role="alert"', $error);
+        $this->assertStringContainsString('aria-live="assertive"', $error);
+        $this->assertStringContainsString('role="status"', $empty);
+        $this->assertStringContainsString('aria-live="polite"', $emptyRow);
+        $this->assertSame(3, substr_count($userTable, 'aria-sort='));
+        $this->assertStringContainsString('wire:loading.attr="aria-busy"', $userTable);
+        $this->assertStringContainsString("wire:target=\"search,sortBy\"", $userTable);
+        $this->assertStringContainsString('검색 중...', $userTable);
+        $this->assertStringContainsString('검색 결과 갱신 중...', $userSearchModal);
+        $this->assertStringContainsString('wire:loading.attr="aria-busy"', $userSearchModal);
+        $this->assertSame(3, substr_count($userIndex, 'aria-sort='));
+        $this->assertSame(1, substr_count($adminUserIndex, 'aria-sort='));
+        $this->assertSame(4, substr_count($menuIndex, 'aria-sort='));
+        $this->assertSame(4, substr_count($menuCategoryIndex, 'aria-sort='));
+        $this->assertSame(2, substr_count($permissionIndex, 'x-bind:aria-sort='));
+        $this->assertStringContainsString("aria-label=\"{{ __('검색 초기화') }}\"", $userIndex);
+        $this->assertStringContainsString("aria-label=\"{{ __('검색 및 필터 초기화') }}\"", $adminUserIndex);
+        $this->assertStringContainsString("aria-label=\"{{ __('검색 초기화') }}\"", $menuIndex);
+        $this->assertStringContainsString("aria-label=\"{{ __('검색 초기화') }}\"", $menuCategoryIndex);
+        $this->assertStringContainsString("aria-label=\"{{ __('검색 초기화') }}\"", $permissionIndex);
+        $this->assertStringContainsString("aria-label=\"{{ __('검색 초기화') }}\"", $roleIndex);
+
+        View::share('errors', new ViewErrorBag);
     }
 
     public function test_it_can_render_components_with_the_daisyui_style_folder(): void

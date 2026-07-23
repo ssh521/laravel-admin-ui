@@ -25,7 +25,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $menuCategory?->name) }}" autocomplete="name" placeholder="Enter category name" required class="w-full" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
+                <x-laravel-admin::admin.input-error-message for="name" class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
 
             <div class="sm:col-span-5">

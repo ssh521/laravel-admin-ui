@@ -14,10 +14,18 @@
         </div>
         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
             페이지: {{ $users->currentPage() }} / {{ $users->lastPage() }} · 총 {{ $users->total() }}명
+            <span wire:loading wire:target="search,clearSearch,gotoPage,previousPage,nextPage" class="ml-2" role="status" aria-live="polite">
+                검색 결과 갱신 중...
+            </span>
         </p>
     </div>
 
-    <div class="max-h-96 overflow-y-auto pr-1">
+    <div
+        class="max-h-96 overflow-y-auto pr-1 transition-opacity"
+        wire:loading.class="opacity-60"
+        wire:loading.attr="aria-busy"
+        wire:target="search,clearSearch,gotoPage,previousPage,nextPage"
+    >
         @if($users->count() > 0)
             <div class="space-y-2">
                 @foreach($users as $user)

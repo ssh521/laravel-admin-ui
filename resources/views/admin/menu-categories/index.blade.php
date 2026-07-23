@@ -103,6 +103,7 @@
                     />
                     @if(request('search'))
                         <a href="{{ route('admin.menu-categories.index') }}"
+                           aria-label="{{ __('검색 초기화') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
                             <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
                         </a>
@@ -123,19 +124,19 @@
                                     <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
                                         <span class="sr-only">순서</span>
                                     </th>
-                                    <th scope="col" class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
+                                    <th scope="col" aria-sort="{{ $currentSort === 'name' ? ($currentDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
                                         <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'name', 'direction' => $getNextDirection('name')])) }}" class="{{ $sortLinkClass }}">
                                             <span>{{ __('카테고리명') }}</span>
                                             {!! $renderSortIcon('name') !!}
                                         </a>
                                     </th>
-                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
+                                    <th scope="col" aria-sort="{{ $currentSort === 'menus_count' ? ($currentDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
                                         <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'menus_count', 'direction' => $getNextDirection('menus_count')])) }}" class="{{ $sortLinkClass }}">
                                             <span>{{ __('메뉴 개수') }}</span>
                                             {!! $renderSortIcon('menus_count') !!}
                                         </a>
                                     </th>
-                                    <th scope="col" class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
+                                    <th scope="col" aria-sort="{{ $currentSort === 'is_active' ? ($currentDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
                                         <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'is_active', 'direction' => $getNextDirection('is_active')])) }}" class="{{ $sortLinkClass }}">
                                             <span>{{ __('상태') }}</span>
                                             {!! $renderSortIcon('is_active') !!}
@@ -143,7 +144,7 @@
                                     </th>
                                     <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 xl:table-cell dark:text-white">{{ __('허용 역할') }}</th>
                                     <th scope="col" class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">{{ __('권한 수정') }}</th>
-                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
+                                    <th scope="col" aria-sort="{{ $currentSort === 'created_at' ? ($currentDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
                                         <a href="{{ route('admin.menu-categories.index', array_merge(request()->query(), ['sort' => 'created_at', 'direction' => $getNextDirection('created_at')])) }}" class="{{ $sortLinkClass }}">
                                             <span>{{ __('생성일') }}</span>
                                             {!! $renderSortIcon('created_at') !!}

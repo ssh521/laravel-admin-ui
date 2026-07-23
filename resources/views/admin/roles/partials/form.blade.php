@@ -27,7 +27,7 @@
                     <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $role?->name) }}" autocomplete="name" placeholder="{{ __('Enter role name') }}" class="w-full" required />
                 </div>
                 @if ($errors->has('name'))
-                    <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="[$role ? '역할명을 입력해 주세요!' : 'Please enter a role name!']" />
+                    <x-laravel-admin::admin.input-error-message for="name" class="mt-2 text-xs" :messages="[$role ? '역할명을 입력해 주세요!' : 'Please enter a role name!']" />
                 @endif
             </div>
 
@@ -36,7 +36,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-textarea id="description" name="description" rows="4" placeholder="{{ __('Enter role description') }}">{{ old('description', $role->description ?? '') }}</x-laravel-admin::admin.form-textarea>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('description')" />
+                <x-laravel-admin::admin.input-error-message for="description" class="mt-2 text-xs" :messages="$errors->get('description')" />
             </div>
         </div>
     </div>
@@ -53,7 +53,7 @@
     </div>
 
     <div class="mt-6 min-w-0 md:col-span-8 md:mt-0">
-        <fieldset>
+        <fieldset @error('permissions') aria-invalid="true" aria-describedby="permissions-error" @enderror>
             <legend class="sr-only">{{ __('권한') }}</legend>
             @php
                 $resolvePermissionGroup = static function (string $permissionName): string {
@@ -101,7 +101,7 @@
                 @endforeach
             </div>
             @if ($errors->has('permissions'))
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="['Please select at least one permission!']" />
+                <x-laravel-admin::admin.input-error-message for="permissions" class="mt-2 text-xs" :messages="['Please select at least one permission!']" />
             @endif
         </fieldset>
     </div>

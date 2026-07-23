@@ -92,6 +92,7 @@
                     />
                     @if(request('search'))
                         <a href="{{ route('admin.menus.index') }}"
+                           aria-label="{{ __('검색 초기화') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
                             <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
                         </a>
@@ -112,13 +113,13 @@
                                     <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
                                         <span class="sr-only">Select</span>
                                     </th>
-                                    <th scope="col" class="px-3 py-3 text-left text-sm font-semibold text-gray-900 md:text-center dark:text-white">
+                                    <th scope="col" aria-sort="{{ $currentSort === 'name' ? ($currentDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="px-3 py-3 text-left text-sm font-semibold text-gray-900 md:text-center dark:text-white">
                                         <a href="{{ route('admin.menus.index', array_merge(request()->query(), ['sort' => 'name', 'direction' => $getNextDirection('name')])) }}" class="{{ $identitySortLinkClass }}">
                                             <span>{{ __('메뉴명') }}</span>
                                             {!! $renderSortIcon('name') !!}
                                         </a>
                                     </th>
-                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
+                                    <th scope="col" @if(empty(request('search'))) aria-sort="{{ $currentSort === 'category' ? ($currentDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" @endif class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
                                         @if(empty(request('search')))
                                             <a href="{{ route('admin.menus.index', array_merge(request()->query(), ['sort' => 'category', 'direction' => $getNextDirection('category')])) }}" class="{{ $sortLinkClass }}">
                                                 <span>{{ __('카테고리') }}</span>
@@ -128,13 +129,13 @@
                                             {{ __('카테고리') }}
                                         @endif
                                     </th>
-                                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
+                                    <th scope="col" aria-sort="{{ $currentSort === 'route_name' ? ($currentDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
                                         <a href="{{ route('admin.menus.index', array_merge(request()->query(), ['sort' => 'route_name', 'direction' => $getNextDirection('route_name')])) }}" class="{{ $sortLinkClass }}">
                                             <span>{{ __('라우트/URL') }}</span>
                                             {!! $renderSortIcon('route_name') !!}
                                         </a>
                                     </th>
-                                    <th scope="col" class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
+                                    <th scope="col" aria-sort="{{ $currentSort === 'is_active' ? ($currentDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="whitespace-nowrap px-3 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
                                         <a href="{{ route('admin.menus.index', array_merge(request()->query(), ['sort' => 'is_active', 'direction' => $getNextDirection('is_active')])) }}" class="{{ $sortLinkClass }}">
                                             <span>{{ __('상태') }}</span>
                                             {!! $renderSortIcon('is_active') !!}

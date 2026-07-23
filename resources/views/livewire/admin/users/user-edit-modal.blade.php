@@ -15,9 +15,10 @@
                     type="text"
                     class="block h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
                     wire:model.defer="name"
+                    @error('name') aria-invalid="true" aria-describedby="modal-user-name-{{ $modalStackId }}-error" @enderror
                 >
                 @error('name')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                    <x-laravel-admin::admin.input-error-message for="modal-user-name-{{ $modalStackId }}" class="mt-2 text-xs" :messages="[$message]" />
                 @enderror
             </div>
         </div>
@@ -30,9 +31,10 @@
                     type="email"
                     class="block h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
                     wire:model.defer="email"
+                    @error('email') aria-invalid="true" aria-describedby="modal-user-email-{{ $modalStackId }}-error" @enderror
                 >
                 @error('email')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                    <x-laravel-admin::admin.input-error-message for="modal-user-email-{{ $modalStackId }}" class="mt-2 text-xs" :messages="[$message]" />
                 @enderror
             </div>
         </div>
@@ -48,9 +50,10 @@
                     type="password"
                     class="block h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
                     wire:model.defer="password"
+                    @error('password') aria-invalid="true" aria-describedby="modal-user-password-{{ $modalStackId }}-error" @enderror
                 >
                 @error('password')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                    <x-laravel-admin::admin.input-error-message for="modal-user-password-{{ $modalStackId }}" class="mt-2 text-xs" :messages="[$message]" />
                 @enderror
             </div>
         </div>
@@ -70,7 +73,8 @@
             wire:loading.attr="disabled"
             wire:target="save"
         >
-            저장하기
+            <span wire:loading.remove wire:target="save">저장하기</span>
+            <span wire:loading wire:target="save" role="status">저장 중...</span>
         </button>
     </div>
 </form>

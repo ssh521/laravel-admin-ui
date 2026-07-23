@@ -31,9 +31,7 @@
             </div>
 
             @if(session('success'))
-                <div class="mx-auto mt-6 max-w-4xl rounded-md bg-green-50 p-4 text-sm text-green-800 dark:bg-green-500/10 dark:text-green-300" role="alert">
-                    <span class="font-medium">성공</span> {{ session('success') }}
-                </div>
+                <x-laravel-admin::admin.alert class="mx-auto mt-6 max-w-4xl" type="success" :message="session('success')" dismissible />
             @endif
 
             <form action="{{ route('admin.menu-categories.roles.update', $menuCategory) }}" method="POST">

@@ -24,17 +24,19 @@
             <div class="sm:col-span-3">
                 <label for="name" class="{{ $labelClass }}">{{ __('이름') }} <span class="{{ $requiredClass }}" aria-hidden="true">*</span></label>
                 <div class="mt-2">
-                    <input id="name" name="name" type="text" value="{{ old('name', $user?->name) }}" autocomplete="name" placeholder="Enter user name" required class="{{ $inputClass }}">
+                    <input id="name" name="name" type="text" value="{{ old('name', $user?->name) }}" autocomplete="name" placeholder="Enter user name" required class="{{ $inputClass }}"
+                        @error('name') aria-invalid="true" aria-describedby="name-error" @enderror>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
+                <x-laravel-admin::admin.input-error-message for="name" class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
 
             <div class="sm:col-span-4">
                 <label for="email" class="{{ $labelClass }}">{{ __('E-mail') }} <span class="{{ $requiredClass }}" aria-hidden="true">*</span></label>
                 <div class="mt-2">
-                    <input id="email" name="email" type="email" value="{{ old('email', $user?->email) }}" autocomplete="email" placeholder="Enter email address" required class="{{ $inputClass }}">
+                    <input id="email" name="email" type="email" value="{{ old('email', $user?->email) }}" autocomplete="email" placeholder="Enter email address" required class="{{ $inputClass }}"
+                        @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('email')" />
+                <x-laravel-admin::admin.input-error-message for="email" class="mt-2 text-xs" :messages="$errors->get('email')" />
             </div>
         </div>
     </div>
@@ -60,9 +62,10 @@
                     @endunless
                 </label>
                 <div class="mt-2">
-                    <input id="password" name="password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Enter new password' : 'Enter password' }}" @required(! $user) class="{{ $inputClass }}">
+                    <input id="password" name="password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Enter new password' : 'Enter password' }}" @required(! $user) class="{{ $inputClass }}"
+                        @error('password') aria-invalid="true" aria-describedby="password-error" @enderror>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('password')" />
+                <x-laravel-admin::admin.input-error-message for="password" class="mt-2 text-xs" :messages="$errors->get('password')" />
             </div>
 
             <div class="sm:col-span-3">
@@ -73,9 +76,10 @@
                     @endunless
                 </label>
                 <div class="mt-2">
-                    <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Confirm new password' : 'Confirm password' }}" @required(! $user) class="{{ $inputClass }}">
+                    <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Confirm new password' : 'Confirm password' }}" @required(! $user) class="{{ $inputClass }}"
+                        @error('confirm-password') aria-invalid="true" aria-describedby="confirm-password-error" @enderror>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('confirm-password')" />
+                <x-laravel-admin::admin.input-error-message for="confirm-password" class="mt-2 text-xs" :messages="$errors->get('confirm-password')" />
             </div>
         </div>
     </div>

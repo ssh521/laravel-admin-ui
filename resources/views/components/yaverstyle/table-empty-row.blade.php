@@ -9,6 +9,6 @@
 
 <tr>
     <td colspan="{{ $colspan }}" {{ $attributes->merge(['class' => $theme->classes('table-empty-row.cell')]) }}>
-        {{ $message }}
+        <span role="status" aria-live="polite">{{ $message }}</span>
     </td>
 </tr>

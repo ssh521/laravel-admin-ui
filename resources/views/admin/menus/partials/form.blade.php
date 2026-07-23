@@ -25,7 +25,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $menu?->name) }}" autocomplete="name" placeholder="Enter menu name" required class="w-full" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('name')" />
+                <x-laravel-admin::admin.input-error-message for="name" class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
 
             <div class="sm:col-span-3">
@@ -38,7 +38,7 @@
                         @endforeach
                     </x-laravel-admin::admin.form-select>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('category_id')" />
+                <x-laravel-admin::admin.input-error-message for="category_id" class="mt-2 text-xs" :messages="$errors->get('category_id')" />
             </div>
 
             <div class="sm:col-span-3">
@@ -51,7 +51,7 @@
                         @endforeach
                     </x-laravel-admin::admin.form-select>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('parent_id')" />
+                <x-laravel-admin::admin.input-error-message for="parent_id" class="mt-2 text-xs" :messages="$errors->get('parent_id')" />
             </div>
         </div>
     </div>
@@ -74,7 +74,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="route_name" name="route_name" value="{{ old('route_name', $menu?->route_name) }}" placeholder="예: users.index" class="w-full" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('route_name')" />
+                <x-laravel-admin::admin.input-error-message for="route_name" class="mt-2 text-xs" :messages="$errors->get('route_name')" />
             </div>
 
             <div class="sm:col-span-4">
@@ -82,7 +82,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="route_parameters" name="route_parameters" value="{{ old('route_parameters', $menu?->route_parameters) }}" placeholder='예: {"id": 1}' class="w-full" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('route_parameters')" />
+                <x-laravel-admin::admin.input-error-message for="route_parameters" class="mt-2 text-xs" :messages="$errors->get('route_parameters')" />
             </div>
 
             <div class="sm:col-span-4">
@@ -90,7 +90,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="url" name="url" value="{{ old('url', $menu?->getRawUrlAttribute()) }}" placeholder="예: /admin/users" class="w-full" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('url')" />
+                <x-laravel-admin::admin.input-error-message for="url" class="mt-2 text-xs" :messages="$errors->get('url')" />
             </div>
 
             <div class="sm:col-span-3">
@@ -104,7 +104,7 @@
                         <option value="_top" @selected(old('target', $menu?->target) == '_top')>{{ __('최상위 창') }}</option>
                     </x-laravel-admin::admin.form-select>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('target')" />
+                <x-laravel-admin::admin.input-error-message for="target" class="mt-2 text-xs" :messages="$errors->get('target')" />
             </div>
         </div>
     </div>
@@ -127,7 +127,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="sort_order" name="sort_order" type="number" value="{{ old('sort_order', $menu->sort_order ?? 0) }}" min="0" class="w-full" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('sort_order')" />
+                <x-laravel-admin::admin.input-error-message for="sort_order" class="mt-2 text-xs" :messages="$errors->get('sort_order')" />
             </div>
 
             <div class="sm:col-span-3">
@@ -135,7 +135,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-input id="icon" name="icon" value="{{ old('icon', $menu?->icon) }}" placeholder="house" class="w-full" />
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('icon')" />
+                <x-laravel-admin::admin.input-error-message for="icon" class="mt-2 text-xs" :messages="$errors->get('icon')" />
             </div>
 
             <div class="sm:col-span-5">
@@ -149,7 +149,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-textarea id="description" name="description" rows="4">{{ old('description', $menu?->description) }}</x-laravel-admin::admin.form-textarea>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('description')" />
+                <x-laravel-admin::admin.input-error-message for="description" class="mt-2 text-xs" :messages="$errors->get('description')" />
             </div>
         </div>
     </div>

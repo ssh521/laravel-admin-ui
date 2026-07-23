@@ -73,6 +73,7 @@
                     />
                     @if(request('search') || request('role'))
                         <a href="{{ route('admin.admin-users.index') }}"
+                           aria-label="{{ __('검색 및 필터 초기화') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
                             <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
                         </a>
@@ -90,7 +91,7 @@
                         <table class="w-full table-fixed divide-y divide-gray-300 sm:table-auto dark:divide-gray-700">
                             <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                                 <tr>
-                                    <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
+                                    <th scope="col" aria-sort="{{ $currentSortField === 'name' ? ($currentSortDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
                                         <a href="{{ route('admin.admin-users.index', array_merge(request()->query(), ['sortField' => 'name', 'sortDirection' => $getNextSortDirection('name')])) }}"
                                            class="inline-flex items-center justify-start gap-1 !text-gray-900 hover:!text-indigo-600 hover:no-underline md:justify-center dark:!text-white dark:hover:!text-indigo-400">
                                             <span>{{ __('Name') }}</span>

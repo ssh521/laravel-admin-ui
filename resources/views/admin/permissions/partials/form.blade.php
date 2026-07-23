@@ -26,7 +26,7 @@
                     <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $permission?->name) }}" autocomplete="name" placeholder="{{ __('Enter permission name') }}" class="w-full" required />
                 </div>
                 @if ($errors->has('name'))
-                    <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="['Please enter a permission name!']" />
+                    <x-laravel-admin::admin.input-error-message for="name" class="mt-2 text-xs" :messages="['Please enter a permission name!']" />
                 @endif
             </div>
 
@@ -35,7 +35,7 @@
                 <div class="mt-2">
                     <x-laravel-admin::admin.form-textarea id="description" name="description" rows="4" placeholder="{{ __('Enter permission description') }}">{{ old('description', $permission->description ?? '') }}</x-laravel-admin::admin.form-textarea>
                 </div>
-                <x-laravel-admin::admin.input-error-message class="mt-2 text-xs" :messages="$errors->get('description')" />
+                <x-laravel-admin::admin.input-error-message for="description" class="mt-2 text-xs" :messages="$errors->get('description')" />
             </div>
         </div>
     </div>

@@ -60,6 +60,7 @@
                 <x-laravel-admin::admin.form-input id="user-search" name="search" value="{{ $search }}" class="w-full h-10 pr-9" placeholder="이름 또는 이메일 검색" />
                 @if($search)
                     <a href="{{ route('admin.users.index') }}"
+                       aria-label="{{ __('검색 초기화') }}"
                        class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
                         <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
                     </a>
@@ -75,7 +76,7 @@
             <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
                 <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                     <tr>
-                        <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
+                        <th scope="col" aria-sort="{{ $currentSortField === 'name' ? ($currentSortDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
                             <a href="{{ route('admin.users.index', array_merge(request()->query(), ['sortField' => 'name', 'sortDirection' => $getNextSortDirection('name')])) }}" class="{{ $sortLinkClass }}">
                                 <span>{{ __('이름') }}</span>
                                 @if($currentSortField === 'name')
@@ -85,7 +86,7 @@
                                 @endif
                             </a>
                         </th>
-                        <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
+                        <th scope="col" aria-sort="{{ $currentSortField === 'email' ? ($currentSortDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
                             <a href="{{ route('admin.users.index', array_merge(request()->query(), ['sortField' => 'email', 'sortDirection' => $getNextSortDirection('email')])) }}" class="{{ $sortLinkClass }}">
                                 <span>{{ __('이메일') }}</span>
                                 @if($currentSortField === 'email')
@@ -96,7 +97,7 @@
                             </a>
                         </th>
                         <th scope="col" class="px-3 py-3 text-center text-sm font-semibold whitespace-nowrap text-gray-900 dark:text-white">{{ __('메일 인증') }}</th>
-                        <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
+                        <th scope="col" aria-sort="{{ $currentSortField === 'created_at' ? ($currentSortDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
                             <a href="{{ route('admin.users.index', array_merge(request()->query(), ['sortField' => 'created_at', 'sortDirection' => $getNextSortDirection('created_at')])) }}" class="{{ $sortLinkClass }}">
                                 <span>{{ __('가입일') }}</span>
                                 @if($currentSortField === 'created_at')

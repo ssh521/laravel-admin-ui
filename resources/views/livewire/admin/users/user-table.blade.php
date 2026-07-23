@@ -48,29 +48,35 @@
             @endif
         </div>
 
-        <x-laravel-admin::admin.action-button type="button" variant="search" icon="magnifying-glass" class="w-full sm:w-auto">
-            {{ __('검색') }}
-        </x-laravel-admin::admin.action-button>
+        <div class="flex h-10 shrink-0 items-center text-sm text-gray-500 dark:text-gray-400" aria-live="polite" aria-atomic="true">
+            <span wire:loading.remove wire:target="search">{{ __('실시간 검색') }}</span>
+            <span wire:loading wire:target="search" role="status">{{ __('검색 중...') }}</span>
+        </div>
     </x-laravel-admin::admin.filter-bar>
 
-    <x-laravel-admin::admin.table-shell class="mt-6">
+    <x-laravel-admin::admin.table-shell
+        class="mt-6 transition-opacity"
+        wire:loading.class="opacity-60"
+        wire:loading.attr="aria-busy"
+        wire:target="search,sortBy"
+    >
         <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
             <thead class="border-y border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
                 <tr>
-                    <th scope="col" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
+                    <th scope="col" aria-sort="{{ $sortField === 'name' ? ($sortDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 md:text-center dark:text-white">
                         <button type="button" wire:click="sortBy('name')" class="inline-flex cursor-pointer items-center justify-start gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 md:justify-center dark:text-white dark:hover:text-indigo-300">
                             <span>{{ __('이름') }}</span>
                             {!! $renderSortIcon('name') !!}
                         </button>
                     </th>
-                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
+                    <th scope="col" aria-sort="{{ $sortField === 'email' ? ($sortDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
                         <button type="button" wire:click="sortBy('email')" class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
                             <span>{{ __('이메일') }}</span>
                             {!! $renderSortIcon('email') !!}
                         </button>
                     </th>
                     <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 sm:table-cell dark:text-white">{{ __('이메일 인증') }}</th>
-                    <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
+                    <th scope="col" aria-sort="{{ $sortField === 'created_at' ? ($sortDirection === 'asc' ? 'ascending' : 'descending') : 'none' }}" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 lg:table-cell dark:text-white">
                         <button type="button" wire:click="sortBy('created_at')" class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
                             <span>{{ __('가입일') }}</span>
                             {!! $renderSortIcon('created_at') !!}

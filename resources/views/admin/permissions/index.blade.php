@@ -56,6 +56,7 @@
                     <x-laravel-admin::admin.form-input id="permission-search" name="search" value="{{ request('search') }}" class="w-full h-10 pr-9" placeholder="권한 이름 또는 설명 검색" />
                     @if(request('search'))
                         <a href="{{ route('admin.permissions.index') }}"
+                           aria-label="{{ __('검색 초기화') }}"
                            class="absolute right-3 top-1/2 -translate-y-1/2 !text-gray-400 hover:!text-gray-600 hover:no-underline dark:hover:!text-gray-300">
                             <x-laravel-admin::admin.icon name="xmark" class="text-sm" />
                         </a>
@@ -96,7 +97,7 @@
                                         <th scope="col" class="w-10 py-3 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0 dark:text-white">
                                             <span x-show="sortMode === 'drag'" class="text-gray-400">⋮⋮</span>
                                         </th>
-                                        <th scope="col" class="py-3 pr-3 pl-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
+                                        <th scope="col" x-bind:aria-sort="sortMode === 'click' ? (sortField === 'name' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none') : null" class="py-3 pr-3 pl-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
                                             <button type="button" x-show="sortMode === 'click'"
                                                     @click="sortBy('name')"
                                                     class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
@@ -107,7 +108,7 @@
                                             </button>
                                             <span x-show="sortMode === 'drag'">{{ __('권한명') }}</span>
                                         </th>
-                                        <th scope="col" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
+                                        <th scope="col" x-bind:aria-sort="sortMode === 'click' ? (sortField === 'description' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none') : null" class="hidden px-3 py-3 text-center text-sm font-semibold text-gray-900 md:table-cell dark:text-white">
                                             <button type="button" x-show="sortMode === 'click'"
                                                     @click="sortBy('description')"
                                                     class="inline-flex cursor-pointer items-center justify-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600 dark:text-white dark:hover:text-indigo-300">
