@@ -10,13 +10,13 @@
         <div class="border-t border-gray-200 pt-5 dark:border-gray-700">
             <label for="modal-user-name-{{ $modalStackId }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">이름</label>
             <div class="mt-2">
-                <input
+                <x-laravel-admin::admin.form-input
                     id="modal-user-name-{{ $modalStackId }}"
+                    name="name"
                     type="text"
-                    class="block h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                    class="h-10 w-full"
                     wire:model.defer="name"
-                    @error('name') aria-invalid="true" aria-describedby="modal-user-name-{{ $modalStackId }}-error" @enderror
-                >
+                />
                 @error('name')
                     <x-laravel-admin::admin.input-error-message for="modal-user-name-{{ $modalStackId }}" class="mt-2 text-xs" :messages="[$message]" />
                 @enderror
@@ -26,13 +26,13 @@
         <div>
             <label for="modal-user-email-{{ $modalStackId }}" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">이메일</label>
             <div class="mt-2">
-                <input
+                <x-laravel-admin::admin.form-input
                     id="modal-user-email-{{ $modalStackId }}"
+                    name="email"
                     type="email"
-                    class="block h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                    class="h-10 w-full"
                     wire:model.defer="email"
-                    @error('email') aria-invalid="true" aria-describedby="modal-user-email-{{ $modalStackId }}-error" @enderror
-                >
+                />
                 @error('email')
                     <x-laravel-admin::admin.input-error-message for="modal-user-email-{{ $modalStackId }}" class="mt-2 text-xs" :messages="[$message]" />
                 @enderror
@@ -45,13 +45,13 @@
                 <span class="text-xs font-normal text-gray-500 dark:text-gray-400">(변경 시에만 입력)</span>
             </label>
             <div class="mt-2">
-                <input
+                <x-laravel-admin::admin.form-input
                     id="modal-user-password-{{ $modalStackId }}"
+                    name="password"
                     type="password"
-                    class="block h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                    class="h-10 w-full"
                     wire:model.defer="password"
-                    @error('password') aria-invalid="true" aria-describedby="modal-user-password-{{ $modalStackId }}-error" @enderror
-                >
+                />
                 @error('password')
                     <x-laravel-admin::admin.input-error-message for="modal-user-password-{{ $modalStackId }}" class="mt-2 text-xs" :messages="[$message]" />
                 @enderror
@@ -60,21 +60,20 @@
     </div>
 
     <div class="mt-6 flex justify-end gap-2 border-t border-gray-200 pt-4 dark:border-gray-700">
-        <button
+        <x-laravel-admin::admin.action-button
             type="button"
-            class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
+            variant="secondary"
             wire:click="$dispatch('admin:modal-stack:close', { id: '{{ $modalStackId }}' })"
         >
             닫기
-        </button>
-        <button
+        </x-laravel-admin::admin.action-button>
+        <x-laravel-admin::admin.action-button
             type="submit"
-            class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-500 dark:hover:bg-indigo-400"
             wire:loading.attr="disabled"
             wire:target="save"
         >
             <span wire:loading.remove wire:target="save">저장하기</span>
             <span wire:loading wire:target="save" role="status">저장 중...</span>
-        </button>
+        </x-laravel-admin::admin.action-button>
     </div>
 </form>

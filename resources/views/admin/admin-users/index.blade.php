@@ -17,32 +17,27 @@
         $getNextSortDirection = fn (string $field): string => $currentSortField === $field && $currentSortDirection === 'asc' ? 'desc' : 'asc';
     @endphp
 
-    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
-        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900" x-data="{ filtersOpen: false }">
-            <div class="sm:flex sm:items-center sm:justify-between">
-                <div class="sm:flex-auto">
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('관리자 계정 목록') }}</h1>
-                    <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
-                        {{ __('관리자 계정과 역할, 이메일 인증 상태를 확인합니다.') }}
-                    </p>
-                </div>
-                <div class="mt-4 flex gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <x-laravel-admin::admin.action-button :href="route('admin.admin-users.create')" size="sm" icon="plus">
-                        {{ __('등록하기') }}
-                    </x-laravel-admin::admin.action-button>
-                    <x-laravel-admin::admin.action-button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        class="sm:hidden"
-                        x-bind:aria-expanded="filtersOpen.toString()"
-                        aria-controls="admin-user-filters"
-                        @click="filtersOpen = ! filtersOpen"
-                    >
-                        <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
-                    </x-laravel-admin::admin.action-button>
-                </div>
-            </div>
+    <x-laravel-admin::admin.page-section
+        title="{{ __('관리자 계정 목록') }}"
+        description="{{ __('관리자 계정과 역할, 이메일 인증 상태를 확인합니다.') }}"
+        x-data="{ filtersOpen: false }"
+    >
+        <x-slot name="actions">
+            <x-laravel-admin::admin.action-button :href="route('admin.admin-users.create')" size="sm" icon="plus">
+                {{ __('등록하기') }}
+            </x-laravel-admin::admin.action-button>
+            <x-laravel-admin::admin.action-button
+                type="button"
+                variant="secondary"
+                size="sm"
+                class="sm:hidden"
+                x-bind:aria-expanded="filtersOpen.toString()"
+                aria-controls="admin-user-filters"
+                @click="filtersOpen = ! filtersOpen"
+            >
+                <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
+            </x-laravel-admin::admin.action-button>
+        </x-slot>
 
             <x-laravel-admin::admin.session-messages />
 
@@ -173,6 +168,5 @@
                     {{ $adminUsers->withQueryString()->links() }}
                 </div>
             @endif
-        </div>
-    </div>
+    </x-laravel-admin::admin.page-section>
 </x-laravel-admin::admin.layouts.admin>

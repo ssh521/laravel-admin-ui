@@ -14,46 +14,42 @@
 
     </x-slot>
 
-    <div class="w-full bg-white px-2 py-2 dark:bg-gray-900">
-        <div class="min-h-[560px] bg-white px-4 py-6 sm:px-6 lg:px-8 dark:bg-gray-900" x-data="{ filtersOpen: false }">
-            <div class="sm:flex sm:items-center sm:justify-between">
-                <div class="sm:flex-auto">
-                    <h1 class="text-2xl font-semibold leading-7 text-gray-900 dark:text-white">{{ __('역할 목록') }}</h1>
-                    <p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
-                        {{ __('역할과 연결된 권한, 메뉴 카테고리 접근 범위를 관리합니다.') }}
-                    </p>
-                    @if(request('search'))
-                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">"{{ request('search') }}" 검색 결과</p>
-                    @endif
-                </div>
-                <div class="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:ml-16 sm:flex-none">
-                    @can('create', \Spatie\Permission\Models\Role::class)
-                        <x-laravel-admin::admin.action-button :href="route('admin.roles.create')" size="sm" icon="plus">
-                            {{ __('등록하기') }}
-                        </x-laravel-admin::admin.action-button>
-                    @endcan
+    <x-laravel-admin::admin.page-section
+        title="{{ __('역할 목록') }}"
+        description="{{ __('역할과 연결된 권한, 메뉴 카테고리 접근 범위를 관리합니다.') }}"
+        x-data="{ filtersOpen: false }"
+    >
+        <x-slot name="actions">
+            @can('create', \Spatie\Permission\Models\Role::class)
+                <x-laravel-admin::admin.action-button :href="route('admin.roles.create')" size="sm" icon="plus">
+                    {{ __('등록하기') }}
+                </x-laravel-admin::admin.action-button>
+            @endcan
 
-                    <x-laravel-admin::admin.action-button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        icon="folder-open"
-                        onclick="Livewire.dispatch('admin:modal-stack:push', { id: 'menu-category-manager-' + Date.now(), component: 'admin.menu-categories.manager-modal', title: '메뉴 카테고리 관리', size: 'lg', width: 720, height: 620 })"
-                    >
-                        {{ __('메뉴 카테고리 관리') }}
-                    </x-laravel-admin::admin.action-button>
-                    <x-laravel-admin::admin.action-button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        class="sm:hidden"
-                        x-bind:aria-expanded="filtersOpen.toString()"
-                        @click="filtersOpen = ! filtersOpen"
-                    >
-                        <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
-                    </x-laravel-admin::admin.action-button>
-                </div>
-            </div>
+            <x-laravel-admin::admin.action-button
+                type="button"
+                variant="secondary"
+                size="sm"
+                icon="folder-open"
+                onclick="Livewire.dispatch('admin:modal-stack:push', { id: 'menu-category-manager-' + Date.now(), component: 'admin.menu-categories.manager-modal', title: '메뉴 카테고리 관리', size: 'lg', width: 720, height: 620 })"
+            >
+                {{ __('메뉴 카테고리 관리') }}
+            </x-laravel-admin::admin.action-button>
+            <x-laravel-admin::admin.action-button
+                type="button"
+                variant="secondary"
+                size="sm"
+                class="sm:hidden"
+                x-bind:aria-expanded="filtersOpen.toString()"
+                @click="filtersOpen = ! filtersOpen"
+            >
+                <span x-text="filtersOpen ? @js(__('검색/필터 닫기')) : @js(__('검색/필터'))"></span>
+            </x-laravel-admin::admin.action-button>
+        </x-slot>
+
+        @if(request('search'))
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">"{{ request('search') }}" 검색 결과</p>
+        @endif
 
             <x-laravel-admin::admin.session-messages />
 
@@ -118,21 +114,20 @@
                         @endforeach
                     </ul>
                 @else
-                    <div class="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                    <x-laravel-admin::admin.empty-state>
                         @if(request('search'))
                             "{{ request('search') }}"에 대한 검색 결과가 없습니다.
                         @else
                             등록된 역할이 없습니다.
                         @endif
-                    </div>
+                    </x-laravel-admin::admin.empty-state>
                 @endif
             </div>
 
             <div class="mt-6 text-sm">
                 {!! $data->appends(request()->query())->links() !!}
             </div>
-        </div>
-    </div>
+    </x-laravel-admin::admin.page-section>
 
     <livewire:admin.modal-stack />
 

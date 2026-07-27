@@ -32,10 +32,9 @@
                             <x-laravel-admin::admin.badge variant="{{ $category->is_active ? 'success' : 'danger' }}">
                                 {{ $category->is_active ? '활성' : '비활성' }}
                             </x-laravel-admin::admin.badge>
-                            <button type="button" class="inline-flex h-8 cursor-pointer items-center rounded-md px-2.5 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-500/10" wire:click="openRolesModal({{ $category->id }})">
-                                <x-laravel-admin::admin.icon name="pen-to-square" class="mr-1.5 text-xs" />
+                            <x-laravel-admin::admin.action-button type="button" variant="link" size="sm" icon="pen-to-square" class="h-8 px-2.5" wire:click="openRolesModal({{ $category->id }})">
                                 역할 관리
-                            </button>
+                            </x-laravel-admin::admin.action-button>
                         </div>
                     </div>
                 </div>

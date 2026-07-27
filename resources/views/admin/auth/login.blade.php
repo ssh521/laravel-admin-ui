@@ -47,22 +47,11 @@
                     </div>
 
                     @if ($errors->any())
-                        <div class="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">
-                            <ul class="space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <li class="flex gap-2">
-                                        <x-laravel-admin::admin.icon name="circle-exclamation" class="mt-0.5 text-xs" />
-                                        <span>{{ $error }}</span>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        <x-laravel-admin::admin.validation-errors class="mb-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm dark:border-red-500/30 dark:bg-red-500/10" />
                     @endif
 
                     @session('status')
-                        <div class="mb-5 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-500/30 dark:bg-green-500/10 dark:text-green-300">
-                            {{ $value }}
-                        </div>
+                        <x-laravel-admin::admin.alert type="success" :message="$value" class="mb-5" />
                     @endsession
 
                     <form method="POST" action="{{ route($loginRoute) }}" class="space-y-5">
@@ -72,7 +61,7 @@
                             <label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                                 {{ __('Email') }}
                             </label>
-                            <input
+                            <x-laravel-admin::admin.form-input
                                 id="email"
                                 type="email"
                                 name="email"
@@ -80,22 +69,22 @@
                                 required
                                 autofocus
                                 autocomplete="username"
-                                class="mt-2 h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-                            >
+                                class="mt-2 h-10 w-full dark:bg-gray-800"
+                            />
                         </div>
 
                         <div>
                             <label for="password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
                                 {{ __('Password') }}
                             </label>
-                            <input
+                            <x-laravel-admin::admin.form-input
                                 id="password"
                                 type="password"
                                 name="password"
                                 required
                                 autocomplete="current-password"
-                                class="mt-2 h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-                            >
+                                class="mt-2 h-10 w-full dark:bg-gray-800"
+                            />
                         </div>
 
                         <label for="remember_me" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">

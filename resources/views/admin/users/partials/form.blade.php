@@ -2,7 +2,6 @@
     $user = $user ?? null;
     $showActions = $showActions ?? true;
     $submitLabel = $submitLabel ?? __('저장하기');
-    $inputClass = 'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white';
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
     $requiredClass = 'text-red-600 dark:text-red-400';
 @endphp
@@ -24,8 +23,7 @@
             <div class="sm:col-span-3">
                 <label for="name" class="{{ $labelClass }}">{{ __('이름') }} <span class="{{ $requiredClass }}" aria-hidden="true">*</span></label>
                 <div class="mt-2">
-                    <input id="name" name="name" type="text" value="{{ old('name', $user?->name) }}" autocomplete="name" placeholder="Enter user name" required class="{{ $inputClass }}"
-                        @error('name') aria-invalid="true" aria-describedby="name-error" @enderror>
+                    <x-laravel-admin::admin.form-input id="name" name="name" value="{{ old('name', $user?->name) }}" autocomplete="name" placeholder="Enter user name" required class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message for="name" class="mt-2 text-xs" :messages="$errors->get('name')" />
             </div>
@@ -33,8 +31,7 @@
             <div class="sm:col-span-4">
                 <label for="email" class="{{ $labelClass }}">{{ __('E-mail') }} <span class="{{ $requiredClass }}" aria-hidden="true">*</span></label>
                 <div class="mt-2">
-                    <input id="email" name="email" type="email" value="{{ old('email', $user?->email) }}" autocomplete="email" placeholder="Enter email address" required class="{{ $inputClass }}"
-                        @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
+                    <x-laravel-admin::admin.form-input id="email" name="email" type="email" value="{{ old('email', $user?->email) }}" autocomplete="email" placeholder="Enter email address" required class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message for="email" class="mt-2 text-xs" :messages="$errors->get('email')" />
             </div>
@@ -62,8 +59,7 @@
                     @endunless
                 </label>
                 <div class="mt-2">
-                    <input id="password" name="password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Enter new password' : 'Enter password' }}" @required(! $user) class="{{ $inputClass }}"
-                        @error('password') aria-invalid="true" aria-describedby="password-error" @enderror>
+                    <x-laravel-admin::admin.form-input id="password" name="password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Enter new password' : 'Enter password' }}" :required="! $user" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message for="password" class="mt-2 text-xs" :messages="$errors->get('password')" />
             </div>
@@ -76,8 +72,7 @@
                     @endunless
                 </label>
                 <div class="mt-2">
-                    <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Confirm new password' : 'Confirm password' }}" @required(! $user) class="{{ $inputClass }}"
-                        @error('confirm-password') aria-invalid="true" aria-describedby="confirm-password-error" @enderror>
+                    <x-laravel-admin::admin.form-input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="{{ $user ? 'Confirm new password' : 'Confirm password' }}" :required="! $user" class="w-full" />
                 </div>
                 <x-laravel-admin::admin.input-error-message for="confirm-password" class="mt-2 text-xs" :messages="$errors->get('confirm-password')" />
             </div>

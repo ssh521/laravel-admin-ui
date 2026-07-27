@@ -2,15 +2,17 @@
     <div class="mb-5">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
             <label for="modal-user-search" class="sr-only">사용자 검색</label>
-            <input
+            <x-laravel-admin::admin.form-input
                 id="modal-user-search"
+                name="search"
                 type="text"
                 wire:model.live="search"
                 placeholder="이름 또는 이메일로 검색..."
-                class="block h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-600 dark:bg-gray-900 dark:text-white">
-            <button type="button" wire:click="clearSearch" class="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
+                class="h-10 w-full"
+            />
+            <x-laravel-admin::admin.action-button type="button" variant="secondary" wire:click="clearSearch">
                 초기화
-            </button>
+            </x-laravel-admin::admin.action-button>
         </div>
         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
             페이지: {{ $users->currentPage() }} / {{ $users->lastPage() }} · 총 {{ $users->total() }}명
@@ -46,15 +48,15 @@
 
                             <div class="flex shrink-0 items-center justify-end gap-3 text-sm font-medium">
                                 @if($canView($user))
-                                    <button type="button" class="cursor-pointer text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300" wire:click="openUserViewModal({{ $user->id }})">
+                                    <x-laravel-admin::admin.action-button type="button" variant="link" size="sm" class="h-auto px-0 py-0" wire:click="openUserViewModal({{ $user->id }})">
                                         보기
-                                    </button>
+                                    </x-laravel-admin::admin.action-button>
                                 @endif
 
                                 @if($canEdit($user))
-                                    <button type="button" class="cursor-pointer text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" wire:click="openUserEditModal({{ $user->id }})">
+                                    <x-laravel-admin::admin.action-button type="button" variant="link" size="sm" class="h-auto px-0 py-0 !text-gray-700 dark:!text-gray-300" wire:click="openUserEditModal({{ $user->id }})">
                                         수정
-                                    </button>
+                                    </x-laravel-admin::admin.action-button>
                                 @endif
                             </div>
                         </div>

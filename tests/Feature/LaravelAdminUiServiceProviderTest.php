@@ -3,11 +3,11 @@
 namespace Ssh521\LaravelAdminUi\Tests\Feature;
 
 use Illuminate\Session\TokenMismatchException;
-use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\ViewErrorBag;
 use Ssh521\LaravelAdminUi\LaravelAdminUiServiceProvider;
@@ -195,7 +195,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('aria-live="polite"', $emptyRow);
         $this->assertSame(3, substr_count($userTable, 'aria-sort='));
         $this->assertStringContainsString('wire:loading.attr="aria-busy"', $userTable);
-        $this->assertStringContainsString("wire:target=\"search,sortBy\"", $userTable);
+        $this->assertStringContainsString('wire:target="search,sortBy"', $userTable);
         $this->assertStringContainsString('검색 중...', $userTable);
         $this->assertStringContainsString('검색 결과 갱신 중...', $userSearchModal);
         $this->assertStringContainsString('wire:loading.attr="aria-busy"', $userSearchModal);
@@ -873,6 +873,36 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         }
     }
 
+    public function test_conventional_admin_screens_use_shared_yaverstyle_components(): void
+    {
+        $adminUsers = file_get_contents(__DIR__.'/../../resources/views/admin/admin-users/index.blade.php');
+        $roles = file_get_contents(__DIR__.'/../../resources/views/admin/roles/index.blade.php');
+        $login = file_get_contents(__DIR__.'/../../resources/views/admin/auth/login.blade.php');
+        $userForm = file_get_contents(__DIR__.'/../../resources/views/admin/users/partials/form.blade.php');
+        $userEditModal = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/users/user-edit-modal.blade.php');
+        $userSearchModal = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/users/user-search-modal.blade.php');
+        $roleShowModal = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/roles/role-show-modal.blade.php');
+        $menuCategoryManagerModal = file_get_contents(__DIR__.'/../../resources/views/livewire/admin/menu-categories/menu-category-manager-modal.blade.php');
+
+        foreach ([$adminUsers, $roles] as $index) {
+            $this->assertStringContainsString('<x-laravel-admin::admin.page-section', $index);
+            $this->assertStringNotContainsString('<div class="w-full bg-white px-2 py-2 dark:bg-gray-900">', $index);
+        }
+
+        $this->assertStringContainsString('<x-laravel-admin::admin.empty-state>', $roles);
+        $this->assertStringContainsString('<x-laravel-admin::admin.validation-errors', $login);
+        $this->assertStringContainsString('<x-laravel-admin::admin.alert type="success"', $login);
+        $this->assertSame(2, substr_count($login, '<x-laravel-admin::admin.form-input'));
+        $this->assertSame(4, substr_count($userForm, '<x-laravel-admin::admin.form-input'));
+        $this->assertSame(3, substr_count($userEditModal, '<x-laravel-admin::admin.form-input'));
+        $this->assertStringContainsString('wire:target="save"', $userEditModal);
+        $this->assertStringContainsString('wire:model.live="search"', $userSearchModal);
+        $this->assertStringContainsString('<x-laravel-admin::admin.action-button', $userSearchModal);
+        $this->assertStringContainsString('wire:click="openEditModal"', $roleShowModal);
+        $this->assertStringContainsString('wire:click="editRole"', $roleShowModal);
+        $this->assertStringContainsString('wire:click="openRolesModal({{ $category->id }})"', $menuCategoryManagerModal);
+    }
+
     public function test_user_index_shows_email_verification_as_separate_column(): void
     {
         $index = file_get_contents(__DIR__.'/../../resources/views/admin/users/index.blade.php');
@@ -1037,7 +1067,7 @@ class LaravelAdminUiServiceProviderTest extends TestCase
         $this->assertStringContainsString('aria-controls="admin-mobile-sidebar"', $header);
         $this->assertStringContainsString('id="admin-mobile-menu-trigger"', $header);
         $this->assertStringContainsString('x-bind:aria-expanded="isMobileMenuOpen.toString()"', $header);
-        $this->assertStringContainsString("@click=\"toggleMobileMenu(\$el)\"", $header);
+        $this->assertStringContainsString('@click="toggleMobileMenu($el)"', $header);
         $this->assertStringContainsString('aria-controls="admin-desktop-sidebar"', $header);
         $this->assertStringContainsString('x-bind:aria-expanded="isDesktop.toString()"', $header);
 
