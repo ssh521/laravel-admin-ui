@@ -3,6 +3,7 @@
     $rolePermissions = $rolePermissions ?? [];
     $showActions = $showActions ?? true;
     $submitLabel = $submitLabel ?? __('저장하기');
+    $canAssignPermissions = $canAssignPermissions ?? false;
     $labelClass = 'block text-sm font-medium leading-6 text-gray-900 dark:text-white';
     $requiredClass = 'text-red-600 dark:text-red-400';
 @endphp
@@ -53,8 +54,14 @@
     </div>
 
     <div class="mt-6 min-w-0 md:col-span-8 md:mt-0">
+        @if (! $canAssignPermissions)
+            <p class="mb-3 text-sm text-gray-500 dark:text-gray-400">권한 변경은 허용된 관리자만 할 수 있습니다. 기존 권한은 유지됩니다.</p>
+        @endif
         <fieldset @error('permissions') aria-invalid="true" aria-describedby="permissions-error" @enderror>
             <legend class="sr-only">{{ __('권한') }}</legend>
+            @if ($canAssignPermissions)
+                <input type="hidden" name="permissions_present" value="1">
+            @endif
             @php
                 $resolvePermissionGroup = static function (string $permissionName): string {
                     if (str_starts_with($permissionName, 'menu-category-')) {
@@ -87,10 +94,17 @@
                         </div>
                         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach($groupPermissions as $permission)
+                                @php
+                                    $canAssignPermission = $canAssignPermissions && \Illuminate\Support\Facades\Gate::allows('assignToRoles', $permission);
+                                    $isSelected = in_array($permission->id, $canAssignPermission ? old('permissions', $role ? $rolePermissions : []) : $rolePermissions);
+                                @endphp
                                 <x-laravel-admin::admin.checkbox-row for="permission_{{ $permission->id }}" title="{{ $permission->name }}" class="group relative items-center px-4 py-3 text-sm font-medium hover:z-20 focus-within:z-20">
+                                    @if ($canAssignPermissions && ! $canAssignPermission && in_array($permission->id, $rolePermissions))
+                                        <input type="hidden" name="permissions[]" value="{{ $permission->id }}">
+                                    @endif
                                     <input id="permission_{{ $permission->id }}" name="permissions[]" type="checkbox"
-                                           value="{{ $permission->id }}" @checked(in_array($permission->id, old('permissions', $role ? $rolePermissions : [])))
-                                           class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900">
+                                           value="{{ $permission->id }}" @checked($isSelected) @disabled(! $canAssignPermission)
+                                           class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900">
                                     <span class="pointer-events-none absolute left-10 top-full z-30 mt-1 hidden max-w-72 rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium leading-5 text-gray-900 shadow-lg group-hover:block group-focus-within:block dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
                                         {{ $permission->name }}
                                     </span>

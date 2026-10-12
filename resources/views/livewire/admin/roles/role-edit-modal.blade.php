@@ -1,3 +1,7 @@
+@php
+    $canAssignPermissions = $canAssignPermissions ?? false;
+@endphp
+
 <form wire:submit="save" class="p-5">
     <div>
         <h3 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">역할 수정</h3>
@@ -14,15 +18,19 @@
 
     <div class="mt-6">
         <h4 class="text-sm font-semibold text-gray-900 dark:text-white">권한</h4>
+        @if (! $canAssignPermissions)
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">권한 변경은 허용된 관리자만 할 수 있습니다. 기존 권한은 유지됩니다.</p>
+        @endif
         <div class="mt-3 grid max-h-80 grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2"
             @error('permissionIds') aria-invalid="true" aria-describedby="modal-role-permissions-{{ $modalStackId }}-error" @enderror>
             @foreach($availablePermissions as $permission)
                 <x-laravel-admin::admin.checkbox-row title="{{ $permission['name'] }}" class="min-h-11 items-center px-3 py-2 text-sm font-medium">
                     <input
                         type="checkbox"
-                        class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-gray-600 dark:bg-gray-900"
+                        class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900"
                         value="{{ $permission['id'] }}"
                         wire:model.defer="permissionIds"
+                        @disabled(! $canAssignPermissions || ! ($permission['canAssign'] ?? false))
                     >
                 </x-laravel-admin::admin.checkbox-row>
             @endforeach
